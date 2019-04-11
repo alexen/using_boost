@@ -69,7 +69,7 @@ private:
 
 
 template< typename Container >
-using DirectIteratorStream = boost::iostreams::stream< DirectIteratorSource< Container > >;
+using DirectIteratorOstream = boost::iostreams::stream< DirectIteratorSource< Container > >;
 
 template< typename Container >
-using ReverseIteratorStream = boost::iostreams::stream< ReverseIteratorSource< Container > >;
+using ReverseIteratorOstream = boost::iostreams::stream< ReverseIteratorSource< Container > >;
