@@ -8,7 +8,6 @@ add_definitions(-Wall -Werror -Wpedantic)
 set(LOCAL_ROOT $ENV{HOME}/.local)
 set(LOCAL_INCLUDE_DIRS
      ${LOCAL_ROOT}/include
-     ${CMAKE_SOURCE_DIR}
      )
 set(LOCAL_LIBRARY_DIRS
      ${LOCAL_ROOT}/lib
@@ -16,6 +15,8 @@ set(LOCAL_LIBRARY_DIRS
      )
 
 include_directories(SYSTEM ${LOCAL_INCLUDE_DIRS})
+include_directories(${CMAKE_SOURCE_DIR})
+
 link_directories(${LOCAL_LIBRARY_DIRS} ${LOCAL_LIBRARY64_DIR})
 
 find_package(Boost 1.69 REQUIRED
@@ -31,7 +32,11 @@ message(STATUS "Local library directories: ${LOCAL_LIBRARY_DIRS}")
 
 set(CMAKE_CXX_FLAGS_DEBUG "-ggdb3 -O0 -fno-inline")
 
-enable_testing()
+include_directories(${CMAKE_SOURCE_DIR}/googletest/googletest/include)
+
 add_subdirectory(googletest)
+enable_testing()
+
+add_subdirectory(core)
 add_subdirectory(serialization)
 add_subdirectory(iostreams)
