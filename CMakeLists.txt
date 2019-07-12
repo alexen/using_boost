@@ -23,6 +23,8 @@ find_package(Boost 1.69 REQUIRED
      serialization
      iostreams
      date_time
+     coroutine
+     context
      )
 include_directories(SYSTEM ${Boost_INCLUDE_DIRS})
 link_directories(${Boost_LIBRARY_DIRS})
@@ -40,3 +42,4 @@ enable_testing()
 add_subdirectory(core)
 add_subdirectory(serialization)
 add_subdirectory(iostreams)
+add_subdirectory(coroutine2)
