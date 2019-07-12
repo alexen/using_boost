@@ -2,6 +2,7 @@
 /// @brief
 /// @copyright Copyright (c) InfoTeCS. All Rights Reserved.
 
+#include <vector>
 #include <istream>
 #include <stdexcept>
 #include <iostream>
