@@ -1,2 +1,2 @@
 add_executable(first first.cpp)
-target_link_libraries(first ${CMAKE_THREAD_LIBS_INIT})
+target_link_libraries(first ${OPENSSL_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})
