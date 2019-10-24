@@ -21,6 +21,9 @@ find_package(Boost 1.69 REQUIRED
 include_directories(SYSTEM ${Boost_INCLUDE_DIRS})
 link_directories(${Boost_LIBRARY_DIRS})
 
+find_package(OpenSSL REQUIRED)
+include_directories(${OPENSSL_INCLUDE_DIR})
+
 message(STATUS "Local include directories: ${LOCAL_INCLUDE_DIRS}")
 message(STATUS "Local library directories: ${LOCAL_LIBRARY_DIRS}")
 
