@@ -10,23 +10,12 @@
 #include <fstream>
 
 
-using UcharBuffer = std::vector< unsigned char >;
-
-
-std::string toString( const UcharBuffer& buffer )
+template< typename CharT = char >
+static std::basic_string< CharT > makeString( std::initializer_list< unsigned char > ucc )
 {
-     return std::string{ reinterpret_cast< const char* >( buffer.data() ), buffer.size() };
-}
-
-
-template< typename CharT >
-bool isEqual( const std::basic_string< CharT >& str, const UcharBuffer& buffer )
-{
-     /// Для сравнения char и unsigned char используем низкоуровневую функцию
-     /// std::memcmp() из string.h (он же cstring). Алгоритм std::equal() и прочие
-     /// здесь не годятся.
-     return str.size() == buffer.size()
-          && 0 == std::memcmp( str.data(), buffer.data(), str.size() );
+     return std::basic_string< CharT > {
+          reinterpret_cast< const char* >( ucc.begin() ), ucc.size()
+     };
 }
 
 
@@ -47,14 +36,14 @@ TEST( CharsetUtils, Utf8ToFromCp1251 )
      /// Строка текста на русском
      static const auto expectedUtf8Text = "Это строка русского текста."s;
      /// Эта же строка, только в кодировке cp1251
-     static const UcharBuffer expectedCp1251Text {
+     static const auto expectedCp1251Text = makeString({
           0xdd, 0xf2, 0xee, 0x20, 0xf1, 0xf2, 0xf0, 0xee, 0xea, 0xe0, 0x20, 0xf0,
           0xf3, 0xf1, 0xf1, 0xea, 0xee, 0xe3, 0xee, 0x20, 0xf2, 0xe5, 0xea, 0xf1,
           0xf2, 0xe0, 0x2e
-     };
+     });
 
-     ASSERT_TRUE( isEqual( edi::utf8ToCp1251( expectedUtf8Text ), expectedCp1251Text ) );
-     ASSERT_EQ( expectedUtf8Text, edi::cp1251ToUtf8( toString( expectedCp1251Text ) ) );
+     ASSERT_EQ( expectedCp1251Text, edi::utf8ToCp1251( expectedUtf8Text ) );
+     ASSERT_EQ( expectedUtf8Text, edi::cp1251ToUtf8( expectedCp1251Text ) );
 }
 
 
@@ -65,12 +54,12 @@ TEST( CharsetUtils, Utf8ToFromOem )
      /// Строка текста на русском
      static const auto expectedUtf8Text = "Это строка русского текста."s;
      /// Эта же строка, только в кодировке cp866
-     static const UcharBuffer expectedCp866Text {
+     static const auto expectedCp866Text = makeString({
           0x9d, 0xe2, 0xae, 0x20, 0xe1, 0xe2, 0xe0, 0xae, 0xaa, 0xa0, 0x20, 0xe0,
           0xe3, 0xe1, 0xe1, 0xaa, 0xae, 0xa3, 0xae, 0x20, 0xe2, 0xa5, 0xaa, 0xe1,
           0xe2, 0xa0, 0x2e
-     };
+     });
 
-     ASSERT_TRUE( isEqual( edi::utf8ToOem( expectedUtf8Text ), expectedCp866Text ) );
-     ASSERT_EQ( expectedUtf8Text, edi::oemToUtf8( toString( expectedCp866Text ) ) );
+     ASSERT_EQ( expectedCp866Text, edi::utf8ToOem( expectedUtf8Text ) );
+     ASSERT_EQ( expectedUtf8Text, edi::oemToUtf8( expectedCp866Text ) );
 }
