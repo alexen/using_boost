@@ -73,3 +73,142 @@ TEST( IostreamFilters, GenericBlockOutputFilter )
      ASSERT_EQ( expectedData.size(), updateLen );
      ASSERT_EQ( expectedFinalizeData, finalizeParam );
 }
+
+
+using BinaryBuffer = std::vector< std::uint8_t >;
+
+
+bool equal( const BinaryBuffer& lhs, const BinaryBuffer& rhs )
+{
+     return lhs.size() == rhs.size()
+          && std::memcmp( &lhs[ 0 ], &rhs[ 0 ], lhs.size() ) == 0;
+}
+
+
+std::string asHex( const BinaryBuffer& bin )
+{
+     std::ostringstream os;
+     boost::algorithm::hex_lower( bin, std::ostreambuf_iterator< char >{ os } );
+     return os.str();
+}
+
+
+TEST( IostreamFilters, Md5DigestFilter )
+{
+     const std::string sourceData = "My Bonny is over the ocean...";
+     const std::vector< std::uint8_t > expectedDigest {
+          0x7f, 0xe2, 0x2d, 0xaa, 0xed, 0xb4, 0x79, 0xe5, 0xeb, 0x41, 0x7a, 0x0b,
+          0x51, 0x77, 0x66, 0x63
+     };
+     Md5DigestFilter md5filt;
+     std::ofstream null{ "/dev/null" };
+     boost::iostreams::filtering_ostream fos;
+     fos.push( boost::ref( md5filt ) );
+     fos.push( boost::ref( null ) );
+     fos << sourceData << std::flush;
+
+     std::vector< std::uint8_t > actualDigest( md5filt.impl().digestLength(), 0 );
+     md5filt.finalize( &actualDigest[ 0 ] );
+
+     ASSERT_TRUE( equal( expectedDigest, actualDigest ) )
+          << "Expected digest hex: " << asHex( expectedDigest ) << '\n'
+          << "Actual digest hex  : " << asHex( actualDigest ) << '\n';
+}
+
+
+TEST( IostreamFilters, Sha1DigestFilter )
+{
+     const std::string sourceData = "My Bonny is over the ocean...";
+     const std::vector< std::uint8_t > expectedDigest {
+          0xab, 0x38, 0x46, 0x41, 0x73, 0xcb, 0xef, 0xf0, 0xf4, 0xc7, 0xeb, 0x75,
+          0x07, 0xf7, 0x24, 0x12, 0x19, 0x40, 0xf9, 0xe6
+     };
+
+     Sha1DigestFilter sha1filt;
+     std::ofstream null{ "/dev/null" };
+     boost::iostreams::filtering_ostream fos;
+     fos.push( boost::ref( sha1filt ) );
+     fos.push( boost::ref( null ) );
+     fos << sourceData << std::flush;
+
+     std::vector< std::uint8_t > actualDigest( sha1filt.impl().digestLength(), 0 );
+     sha1filt.finalize( &actualDigest[ 0 ] );
+
+     ASSERT_TRUE( equal( expectedDigest, actualDigest ) )
+          << "Expected digest hex: " << asHex( expectedDigest ) << '\n'
+          << "Actual digest hex  : " << asHex( actualDigest ) << '\n';
+}
+
+
+TEST( IostreamFilters, Sha256DigestFilter )
+{
+     const std::string sourceData = "My Bonny is over the ocean...";
+     const std::vector< std::uint8_t > expectedDigest {
+          0xc7, 0xdc, 0x36, 0x3c, 0x39, 0x52, 0x01, 0xdc, 0x52, 0xef, 0x45, 0x33,
+          0x1e, 0xfa, 0xab, 0x30, 0x49, 0xcc, 0x0f, 0x78, 0x34, 0x9a, 0x76, 0x21,
+          0x3b, 0xd8, 0x4c, 0xe2, 0x05, 0xc5, 0xa2, 0xb4
+     };
+
+     Sha256DigestFilter sha256filt;
+     std::ofstream null{ "/dev/null" };
+     boost::iostreams::filtering_ostream fos;
+     fos.push( boost::ref( sha256filt ) );
+     fos.push( boost::ref( null ) );
+     fos << sourceData << std::flush;
+
+     std::vector< std::uint8_t > actualDigest( sha256filt.impl().digestLength(), 0 );
+     sha256filt.finalize( &actualDigest[ 0 ] );
+
+     ASSERT_TRUE( equal( expectedDigest, actualDigest ) )
+          << "Expected digest hex: " << asHex( expectedDigest ) << '\n'
+          << "Actual digest hex  : " << asHex( actualDigest ) << '\n';
+}
+
+
+TEST( IostreamFilters, AllDigestFilter )
+{
+     const std::string sourceData = "My Bonny is over the ocean...";
+     const std::vector< std::uint8_t > expectedMd5Digest {
+          0x7f, 0xe2, 0x2d, 0xaa, 0xed, 0xb4, 0x79, 0xe5, 0xeb, 0x41, 0x7a, 0x0b,
+          0x51, 0x77, 0x66, 0x63
+     };
+     const std::vector< std::uint8_t > expectedSha1Digest {
+          0xab, 0x38, 0x46, 0x41, 0x73, 0xcb, 0xef, 0xf0, 0xf4, 0xc7, 0xeb, 0x75,
+          0x07, 0xf7, 0x24, 0x12, 0x19, 0x40, 0xf9, 0xe6
+     };
+     const std::vector< std::uint8_t > expectedSha256Digest {
+          0xc7, 0xdc, 0x36, 0x3c, 0x39, 0x52, 0x01, 0xdc, 0x52, 0xef, 0x45, 0x33,
+          0x1e, 0xfa, 0xab, 0x30, 0x49, 0xcc, 0x0f, 0x78, 0x34, 0x9a, 0x76, 0x21,
+          0x3b, 0xd8, 0x4c, 0xe2, 0x05, 0xc5, 0xa2, 0xb4
+     };
+
+     Md5DigestFilter md5filt;
+     Sha1DigestFilter sha1filt;
+     Sha256DigestFilter sha256filt;
+     std::ofstream null{ "/dev/null" };
+     boost::iostreams::filtering_ostream fos;
+     fos.push( boost::ref( md5filt ) );
+     fos.push( boost::ref( sha1filt ) );
+     fos.push( boost::ref( sha256filt ) );
+     fos.push( boost::ref( null ) );
+     fos << sourceData << std::flush;
+
+     std::vector< std::uint8_t > actualMd5Digest( md5filt.impl().digestLength(), 0 );
+     md5filt.finalize( &actualMd5Digest[ 0 ] );
+
+     std::vector< std::uint8_t > actualSha1Digest( sha1filt.impl().digestLength(), 0 );
+     sha1filt.finalize( &actualSha1Digest[ 0 ] );
+
+     std::vector< std::uint8_t > actualSha256Digest( sha256filt.impl().digestLength(), 0 );
+     sha256filt.finalize( &actualSha256Digest[ 0 ] );
+
+     ASSERT_TRUE( equal( expectedMd5Digest, actualMd5Digest ) )
+          << "Expected MD5 digest hex: " << asHex( expectedMd5Digest ) << '\n'
+          << "Actual MD5 digest hex  : " << asHex( actualMd5Digest ) << '\n';
+     ASSERT_TRUE( equal( expectedSha1Digest, actualSha1Digest ) )
+          << "Expected SHA1 digest hex: " << asHex( expectedSha1Digest ) << '\n'
+          << "Actual SHA1 digest hex  : " << asHex( actualSha1Digest ) << '\n';
+     ASSERT_TRUE( equal( expectedSha256Digest, actualSha256Digest ) )
+          << "Expected SHA256 digest hex: " << asHex( expectedSha256Digest ) << '\n'
+          << "Actual SHA256 digest hex  : " << asHex( actualSha256Digest ) << '\n';
+}
