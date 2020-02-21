@@ -174,7 +174,6 @@ BOOST_DATA_TEST_CASE(
      , singleton
      )
 {
-     std::cout << "value: " << value << ", singleton: " << singleton << '\n';
      BOOST_TEST( ((0 <= value && value < 3) && (singleton == 2)) );
 }
 
@@ -186,7 +185,6 @@ BOOST_DATA_TEST_CASE(
      , random
      )
 {
-     std::cout << "index: " << index << ", random: " << random << '\n';
      BOOST_TEST( (0 <= index && index < 3) );
      BOOST_TEST( (random != 0.538256) ); /// I feel lucky!
 }
@@ -199,7 +197,6 @@ BOOST_DATA_TEST_CASE(
      , dice
      )
 {
-     std::cout << "attempt: " << step << ", dice: " << dice << '\n';
      BOOST_TEST( (0 <= step && step < 5) );
      BOOST_TEST( (1 <= dice && dice <= 6) );
 }
