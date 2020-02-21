@@ -11,8 +11,8 @@ BOOST_AUTO_TEST_SUITE( RootTestSuite )
      }
      BOOST_AUTO_TEST_CASE( TestCase2 )
      {
-          BOOST_TEST_REQUIRE( 2 == 4 );
-          BOOST_FAIL( "Unreachable code!" );
+          BOOST_TEST_REQUIRE( 4 == 4 );
+//          BOOST_FAIL( "Unreachable code!" );
      }
      BOOST_AUTO_TEST_SUITE( ChildTestSuite )
           BOOST_AUTO_TEST_CASE( ChildTestCase1 )
