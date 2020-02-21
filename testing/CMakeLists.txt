@@ -10,6 +10,7 @@ add_executable(${TESTNAME}
      initialize.cpp
      func_test.cpp
      dataset_test.cpp
+     template_test.cpp
 )
 target_link_libraries(${TESTNAME} ${LIBNAME})
 
