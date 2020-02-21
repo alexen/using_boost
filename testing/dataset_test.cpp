@@ -7,12 +7,6 @@
 #include <boost/test/data/monomorphic.hpp>
 
 
-BOOST_AUTO_TEST_CASE( Generic )
-{
-     BOOST_TEST( true );
-}
-
-
 struct InfiniteSequence
 {
      enum { arity = 1 };
@@ -160,4 +154,52 @@ BOOST_DATA_TEST_CASE(
           default:
                BOOST_TEST( false );
      }
+}
+
+
+BOOST_DATA_TEST_CASE(
+     TestDatasetSingleton
+     , boost::unit_test::data::make( 2 )
+     , singleton
+     )
+{
+     BOOST_TEST( (singleton == 2) );
+}
+
+
+BOOST_DATA_TEST_CASE(
+     TestDatasetSingletonZip
+     , boost::unit_test::data::xrange( 3 ) ^ boost::unit_test::data::make( 2 )
+     , value
+     , singleton
+     )
+{
+     std::cout << "value: " << value << ", singleton: " << singleton << '\n';
+     BOOST_TEST( ((0 <= value && value < 3) && (singleton == 2)) );
+}
+
+
+BOOST_DATA_TEST_CASE(
+     TestDatasetRandomReal
+     , boost::unit_test::data::xrange( 3 ) ^ boost::unit_test::data::random()
+     , index
+     , random
+     )
+{
+     std::cout << "index: " << index << ", random: " << random << '\n';
+     BOOST_TEST( (0 <= index && index < 3) );
+     BOOST_TEST( (random != 0.538256) ); /// I feel lucky!
+}
+
+
+BOOST_DATA_TEST_CASE(
+     TestDatasetRandomDiceRoll
+     , boost::unit_test::data::xrange( 5 ) ^ boost::unit_test::data::random( 1, 6 )
+     , step
+     , dice
+     )
+{
+     std::cout << "attempt: " << step << ", dice: " << dice << '\n';
+     BOOST_TEST( (0 <= step && step < 5) );
+     BOOST_TEST( (1 <= dice && dice <= 6) );
 }
