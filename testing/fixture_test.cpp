@@ -5,63 +5,108 @@
 #include <boost/test/unit_test.hpp>
 
 
-struct Fixture
+struct LocalFixture
 {
-     Fixture()
+     LocalFixture()
      {
-          BOOST_TEST_MESSAGE( "fixture c-tor: " << __PRETTY_FUNCTION__ );
+          ++n_;
+          BOOST_TEST_MESSAGE( __PRETTY_FUNCTION__ << ": set up (" << n_ << ")" );
      }
-     ~Fixture()
+     ~LocalFixture()
      {
-          BOOST_TEST_MESSAGE( "fixture d-tor: " << __PRETTY_FUNCTION__ );
+          BOOST_TEST_MESSAGE( __PRETTY_FUNCTION__ << ": tear down (" << n_ <<")" );
+          --n_;
      }
-     void operate() const
-     {
-          BOOST_TEST_MESSAGE( "operating..." );
-     }
-};
-
-
-struct Fixture2
-{
      void setup()
      {
-          BOOST_TEST_MESSAGE( "setup test fixture " << __PRETTY_FUNCTION__ );
+          BOOST_TEST_MESSAGE( __PRETTY_FUNCTION__ );
      }
      void teardown()
      {
-          BOOST_TEST_MESSAGE( "teardown fixture " << __PRETTY_FUNCTION__ );
+          BOOST_TEST_MESSAGE( __PRETTY_FUNCTION__ );
      }
-
-     void doSmth()
+     int getN() const
      {
-          BOOST_TEST_MESSAGE( "doing smth..." );
+          BOOST_TEST_MESSAGE( __PRETTY_FUNCTION__ << ": getting n (" << n_ << ")" );
+          return n_;
      }
+private:
+     static int n_;
 };
+
+int LocalFixture::n_ = 0;
+
+
+struct GlobalFixture
+{
+     GlobalFixture()
+     {
+          ++n_;
+          BOOST_TEST_MESSAGE( __PRETTY_FUNCTION__ << ": set up (" << n_ << ")" );
+     }
+     ~GlobalFixture()
+     {
+          --n_;
+          BOOST_TEST_MESSAGE( __PRETTY_FUNCTION__ << ": tear down (" << n_ <<")" );
+     }
+     void setup()
+     {
+          BOOST_TEST_MESSAGE( __PRETTY_FUNCTION__ );
+     }
+     void teardown()
+     {
+          BOOST_TEST_MESSAGE( __PRETTY_FUNCTION__ );
+     }
+     int getN() const
+     {
+          BOOST_TEST_MESSAGE( __PRETTY_FUNCTION__ << ": getting n (" << n_ << ")" );
+          return n_;
+     }
+private:
+     static int n_;
+};
+
+int GlobalFixture::n_ = 0;
 
 
 BOOST_TEST_DECORATOR(
      * boost::unit_test::label( "fixture" )
-     * boost::unit_test::description( "Test fixtures usage examples" )
+     * boost::unit_test::description( "Test fixtures (local and global) usage examples" )
      )
+BOOST_TEST_GLOBAL_FIXTURE( GlobalFixture );
 BOOST_AUTO_TEST_SUITE( FixtureTestExamples )
-     BOOST_AUTO_TEST_SUITE( FixtureTest )
-          BOOST_FIXTURE_TEST_CASE( TestCaseA, Fixture )
+     BOOST_AUTO_TEST_SUITE( LocalFixtureTest )
+          BOOST_FIXTURE_TEST_CASE( TestCaseA, LocalFixture )
           {
-               operate();
+               BOOST_TEST_MESSAGE( "n is " << getN() );
                BOOST_TEST( true );
           }
-          BOOST_FIXTURE_TEST_CASE( TestCaseB, Fixture )
+          BOOST_FIXTURE_TEST_CASE( TestCaseB, LocalFixture )
           {
-               operate();
+               BOOST_TEST_MESSAGE( "n is " << getN() );
                BOOST_TEST( true );
           }
      BOOST_AUTO_TEST_SUITE_END()
 
-     BOOST_AUTO_TEST_SUITE( Fixture2Test )
-          BOOST_FIXTURE_TEST_CASE( TestCase001, Fixture2 )
+     BOOST_AUTO_TEST_SUITE( GlobalFixtureTest )
+          BOOST_FIXTURE_TEST_CASE( TestCaseA, GlobalFixture )
           {
-               doSmth();
+               BOOST_TEST_MESSAGE( "n is " << getN() );
+               BOOST_TEST( true );
+          }
+          BOOST_FIXTURE_TEST_CASE( TestCaseB, GlobalFixture )
+          {
+               BOOST_TEST_MESSAGE( "n is " << getN() );
+               BOOST_TEST( true );
+          }
+          BOOST_FIXTURE_TEST_CASE( TestCaseC, GlobalFixture )
+          {
+               BOOST_TEST_MESSAGE( "n is " << getN() );
+               BOOST_TEST( true );
+          }
+          BOOST_FIXTURE_TEST_CASE( TestCaseD, GlobalFixture )
+          {
+               BOOST_TEST_MESSAGE( "n is " << getN() );
                BOOST_TEST( true );
           }
      BOOST_AUTO_TEST_SUITE_END()
