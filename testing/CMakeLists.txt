@@ -13,6 +13,7 @@ add_executable(${TESTNAME}
      template_test.cpp
      test_suites_test.cpp
      fixture_test.cpp
+     general_assertions_test.cpp
 )
 target_link_libraries(${TESTNAME} ${LIBNAME})
 
