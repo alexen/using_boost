@@ -48,6 +48,11 @@ template<> struct is_dataset< InfiniteSequence > : mpl::true_ {};
 } // namespace boost
 
 
+BOOST_AUTO_TEST_SUITE(
+     DatasetTestExamples,
+     * boost::unit_test::label( "dataset" )
+     * boost::unit_test::description( "Tests with datasets for example" )
+     )
 BOOST_DATA_TEST_CASE(
      TestInfiniteSequence
      , InfiniteSequence() ^ boost::unit_test::data::make({ 0,1,2,3,4,5,6,7,8,9,10,11,12 })
@@ -200,3 +205,5 @@ BOOST_DATA_TEST_CASE(
      BOOST_TEST( (0 <= step && step < 5) );
      BOOST_TEST( (1 <= dice && dice <= 6) );
 }
+
+BOOST_AUTO_TEST_SUITE_END()

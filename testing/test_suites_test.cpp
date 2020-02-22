@@ -4,6 +4,11 @@
 
 #include <boost/test/unit_test.hpp>
 
+
+BOOST_TEST_DECORATOR(
+     * boost::unit_test::label( "suites" )
+     * boost::unit_test::description( "Test suites usage examples" )
+     )
 BOOST_AUTO_TEST_SUITE( RootTestSuite )
      BOOST_AUTO_TEST_CASE( TestCase1 )
      {

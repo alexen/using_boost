@@ -14,6 +14,11 @@ using Size4Types = boost::mpl::list<
      , char[ 4 ]
      >;
 
+BOOST_AUTO_TEST_SUITE(
+     TemplateTestExamples,
+     * boost::unit_test::label( "template" )
+     )
+
 BOOST_AUTO_TEST_CASE_TEMPLATE(
      TestTemplateMplList
      , EachT
@@ -38,3 +43,5 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(
 {
      BOOST_TEST( sizeof( EachT ) == 8u );
 }
+
+BOOST_AUTO_TEST_SUITE_END()
