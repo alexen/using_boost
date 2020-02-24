@@ -15,6 +15,7 @@ add_executable(${TESTNAME}
      fixture_test.cpp
      general_assertions_test.cpp
      enabling_disabling_test.cpp
+     throw_test.cpp
 )
 target_link_libraries(${TESTNAME} ${LIBNAME})
 
