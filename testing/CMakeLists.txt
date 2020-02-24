@@ -18,6 +18,7 @@ add_executable(${TESTNAME}
      throw_test.cpp
      timeout_test.cpp
      ostream_test.cpp
+     custom_output_test.cpp
 )
 target_link_libraries(${TESTNAME} ${LIBNAME})
 
