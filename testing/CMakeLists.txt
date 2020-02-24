@@ -17,6 +17,7 @@ add_executable(${TESTNAME}
      enabling_disabling_test.cpp
      throw_test.cpp
      timeout_test.cpp
+     ostream_test.cpp
 )
 target_link_libraries(${TESTNAME} ${LIBNAME})
 
