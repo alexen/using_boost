@@ -2,9 +2,39 @@
 /// @brief
 /// @copyright Copyright (c) InfoTeCS. All Rights Reserved.
 
+#include <ostream>
+#include <vector>
+#include <boost/bind.hpp>
+#include <boost/lexical_cast.hpp>
 #include <boost/test/unit_test.hpp>
 #include <boost/test/data/test_case.hpp>
 #include <boost/test/data/monomorphic.hpp>
+#include <boost/algorithm/string/join.hpp>
+#include <boost/range/adaptor/transformed.hpp>
+
+
+template< typename T >
+auto makeSequence( std::initializer_list< T >&& il )
+{
+     return std::vector< T, std::allocator< T > >{ il.begin(), il.end() };
+}
+
+
+namespace std {
+template< typename T >
+ostream& boost_test_print_type( ostream& os, const vector< T, allocator< T > >& v )
+{
+     const char* sep = "";
+     os << '{';
+     for( auto&& el: v )
+     {
+          os << sep << el;
+          sep = ",";
+     }
+     os << '}';
+     return os;
+}
+} // namespace std
 
 
 struct InfiniteSequence
@@ -180,6 +210,22 @@ BOOST_DATA_TEST_CASE(
      )
 {
      BOOST_TEST( ((0 <= value && value < 3) && (singleton == 2)) );
+}
+
+
+BOOST_DATA_TEST_CASE(
+     TestDatasetOneToManyMapping
+     , boost::unit_test::data::xrange( 3 )
+          ^ boost::unit_test::data::make({
+               makeSequence({ 1,2,3 })
+               , makeSequence({ 9,7,3,5 })
+               , makeSequence({ 4,0 })
+          })
+     , index
+     , value
+     )
+{
+     BOOST_TEST( true );
 }
 
 
