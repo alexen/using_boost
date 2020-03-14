@@ -44,6 +44,15 @@ void tag_wrap( const std::string& tagName, coro_t::pull_type& source, coro_t::pu
 }
 
 
+void put( coro_t::pull_type& source, std::ostream& os )
+{
+     for( auto&& each: source )
+     {
+          os << __FUNCTION__ << ": " << each << std::endl;
+     }
+}
+
+
 int main( int argc, char** argv )
 {
      try
@@ -54,16 +63,15 @@ int main( int argc, char** argv )
                "И опыт, сын ошибок трудных,\n"
                "И гений, парадоксов друг,\n"
                "И случай, бог изобретатель...\n";
+
           const auto& data = russianLyric;
 
           std::istringstream istr{ data };
           coro_t::pull_type reader{ std::bind( readlines, std::ref( istr ), std::placeholders::_1 ) };
-//          coro_t::pull_type tokenizer{ std::bind( tokenize, std::ref( reader ), std::placeholders::_1 ) };
-          coro_t::pull_type tagwrapper{ std::bind( tag_wrap, "line", std::ref( reader ), std::placeholders::_1 ) };
-          for( auto&& line: tagwrapper )
-          {
-               std::cout << line << '\n';
-          }
+          coro_t::pull_type tokenizer{ std::bind( tokenize, std::ref( reader ), std::placeholders::_1 ) };
+          coro_t::pull_type tagwrapper{ std::bind( tag_wrap, "line", std::ref( tokenizer ), std::placeholders::_1 ) };
+          coro_t::pull_type writer{ std::bind( put, std::ref( tagwrapper ), std::ref( std::cout ) ) };
+          writer();
      }
      catch( const std::exception& e )
      {
