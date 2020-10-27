@@ -2,17 +2,20 @@
 /// @brief
 /// @copyright Copyright (c) InfoTeCS. All Rights Reserved.
 
+#include <ctime>
+#include <iomanip>
 #include <stdexcept>
 #include <iostream>
+#include <sstream>
+#include <chrono>
 
+#include <boost/make_shared.hpp>
 #include <boost/core/ignore_unused.hpp>
+#include <boost/date_time/local_time/local_time.hpp>
+#include <boost/date_time/local_time/local_date_time.hpp>
+#include <boost/date_time/posix_time/ptime.hpp>
 #include <boost/exception/diagnostic_information.hpp>
 
-#include <boost/date_time.hpp>
-#include <boost/date_time/local_time/local_time_io.hpp>
-#include <ctime>
-#include <chrono>
-#include <sstream>
 
 struct DateUtils
 {
@@ -50,48 +53,68 @@ struct DateUtils
 };
 
 
-#if 0
-    using CharT = wchar_t;
-    #define T(lit) L##lit
-#else
-    using CharT = char;
-    #define T(lit) lit
-#endif
+template< typename CharT >
+boost::posix_time::ptime toPtime_(
+     const std::basic_string< CharT >& dateTime
+     , const std::basic_string< CharT >& format
+)
+{
+     static const auto tzGmt = boost::make_shared< boost::local_time::posix_time_zone >( "GMT" );
+     boost::local_time::local_date_time value{
+          boost::local_time::special_values::not_a_date_time
+          , tzGmt
+     };
+     std::basic_istringstream< CharT > buffer{ dateTime };
+     buffer.imbue(
+          std::locale{
+               std::locale::classic()
+               , new boost::date_time::time_input_facet< boost::posix_time::ptime, CharT >{ format }
+          }
+     );
+     buffer >> value;
+     auto timeInfo = boost::posix_time::to_tm( value.utc_time() );
+     return boost::posix_time::from_time_t( std::mktime( &timeInfo ) );
+}
+
+
+boost::posix_time::ptime toPtime( const std::string& timestampz, const std::string& format )
+{
+     return toPtime_< typename std::string::value_type >( timestampz, format );
+}
 
 
 int main( int argc, char** argv )
 {
      boost::ignore_unused( argc, argv );
+     static const auto lenLess =
+          []( const char* const lhs, const char* const rhs )
+          {
+               return std::strlen( lhs ) < std::strlen( rhs );
+          };
+
      try
      {
-          using namespace std::chrono_literals;
-          using C = std::chrono::system_clock;
-          std::cout << std::boolalpha << std::unitbuf;
+          const auto timestampzs = {
+               "2020-10-27T22:33:12 PST+04:00"
+               , "2020-10-27T22:33:12 +04:00"
+               , "2020-10-27T22:33:12+04:00"
+               , "2020-10-27T22:33:12"
+          };
+          constexpr auto fmt = "%Y-%m-%dT%H:%M:%S%ZP";
 
-          C::time_point with_zone, without_zone;
-
-          // all three equivalent:
-          with_zone = DateUtils::Parse< CharT >(
-               T( "2016-12-03T07:09:01 PST-05:00" ),
-               T( "%Y-%m-%dT%H:%M:%S%ZP" ) );
-          with_zone = DateUtils::Parse< CharT >(
-               T( "2016-12-03T07:09:01 -05:00" ),
-               T( "%Y-%m-%dT%H:%M:%S%ZP" ) );
-          with_zone = DateUtils::Parse< CharT >(
-               T( "2016-12-03T07:09:01-05:00" ),
-               T( "%Y-%m-%dT%H:%M:%S%ZP" ) );
-          without_zone = DateUtils::Parse< CharT >(
-               T( "2016-12-03T07:09:01" ),
-               T( "%Y-%m-%dT%H:%M:%S" ) );
-          std::cout << "time_point equal? " << (with_zone == without_zone) << "\n";
+          const auto width = std::strlen( std::max( timestampzs, lenLess ) );
+          std::cout << "===== My function:\n";
+          for( auto&& tsz: timestampzs )
           {
-               std::time_t t_with_zone = C::to_time_t( with_zone );
-               std::time_t t_without_zone = C::to_time_t( without_zone );
-
-               std::cout << "time_t equal? " << (t_with_zone == t_without_zone) << "\n";
+               std::cout << std::setw( width ) << std::left
+                    << tsz << ": " << toPtime( tsz, fmt ) << '\n';
           }
-
-          std::cout << (without_zone - with_zone) / 1h << " hours difference\n";
+          std::cout << "===== Example function:\n";
+          for( auto&& tsz: timestampzs )
+          {
+               std::cout << std::setw( width ) << std::left
+                    << tsz << ": " << boost::posix_time::from_time_t( std::chrono::system_clock::to_time_t( DateUtils::Parse< char >( tsz, fmt ) ) ) << '\n';
+          }
      }
      catch( const std::exception& e )
      {
