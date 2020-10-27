@@ -168,7 +168,7 @@ BOOST_DATA_TEST_CASE(
      , second
      )
 {
-     static constexpr auto isPresent =
+     static const auto isPresent =
           []( const std::string& str )
           {
                static constexpr auto end = CSTRS_4 + 4;
