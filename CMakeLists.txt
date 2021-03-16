@@ -1,9 +1,9 @@
-cmake_minimum_required(VERSION 3.5)
+cmake_minimum_required(VERSION 3.15)
 
 project(using_boost)
 
-add_definitions(-std=c++14)
-add_definitions(-Wall -Werror -Wpedantic)
+add_definitions(-std=c++17)
+add_definitions(-Wall -Werror -Wpedantic -Wextra)
 
 set(CMAKE_CXX_FLAGS_DEBUG "-ggdb3 -O0 -fno-inline")
 set(BUILD_SHARED_LIBS ON)
