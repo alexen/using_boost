@@ -70,7 +70,7 @@ int main( int argc, char** argv )
           http::request< http::file_body > request{ http::verb::post, path, httpVersion };
           request.set( http::field::host, host );
           request.set( http::field::user_agent, __PRETTY_FUNCTION__ );
-          request.set( http::field::content_length, body.size() );
+          request.set( http::field::content_length, std::to_string( body.size() ) );
           request.set( http::field::soapaction, soapAction );
           request.set( http::field::content_type, contentType );
           request.body() = std::move( body );
