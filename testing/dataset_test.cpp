@@ -4,7 +4,7 @@
 
 #include <ostream>
 #include <vector>
-#include <boost/bind.hpp>
+#include <boost/bind/bind.hpp>
 #include <boost/lexical_cast.hpp>
 #include <boost/test/unit_test.hpp>
 #include <boost/test/data/test_case.hpp>
@@ -225,6 +225,7 @@ BOOST_DATA_TEST_CASE(
      , value
      )
 {
+     boost::ignore_unused( index, value );
      BOOST_TEST( true );
 }
 
