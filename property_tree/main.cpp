@@ -11,7 +11,6 @@
 #include <boost/property_tree/ptree_fwd.hpp>
 #include <boost/property_tree/ini_parser.hpp>
 #include <boost/property_tree/xml_parser.hpp>
-#include <boost/property_tree/json_parser.hpp>
 #include <boost/core/ignore_unused.hpp>
 #include <boost/date_time/posix_time/posix_time_duration.hpp>
 #include <boost/date_time/posix_time/posix_time_io.hpp>
