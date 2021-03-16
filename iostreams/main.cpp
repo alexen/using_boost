@@ -7,6 +7,7 @@
 #include <stdexcept>
 #include <iostream>
 
+#include <boost/core/ignore_unused.hpp>
 #include <boost/iostreams/copy.hpp>
 #include <boost/iostreams/invert.hpp>
 #include <boost/iostreams/operations.hpp>
@@ -188,6 +189,7 @@ void test_readers()
 
 int main( int argc, char** argv )
 {
+     boost::ignore_unused( argc, argv );
      try
      {
           boost::iostreams::filtering_ostream os;
