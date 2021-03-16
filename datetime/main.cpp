@@ -115,6 +115,12 @@ int main( int argc, char** argv )
                std::cout << std::setw( width ) << std::left
                     << tsz << ": " << boost::posix_time::from_time_t( std::chrono::system_clock::to_time_t( DateUtils::Parse< char >( tsz, fmt ) ) ) << '\n';
           }
+
+          boost::gregorian::date date{ 1978, boost::gregorian::Aug, 2 };
+          std::cout
+               << "===== Misc:\n"
+               << "My birth date: " << date << '\n'
+               << "As ISO: " << boost::gregorian::to_iso_string( date ) << '\n';
      }
      catch( const std::exception& e )
      {
