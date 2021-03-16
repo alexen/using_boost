@@ -6,6 +6,7 @@
 #include <iostream>
 #include <sstream>
 
+#include <boost/core/ignore_unused.hpp>
 #include <boost/tokenizer.hpp>
 #include <boost/coroutine2/all.hpp>
 #include <boost/exception/diagnostic_information.hpp>
@@ -55,6 +56,7 @@ void put( coro_t::pull_type& source, std::ostream& os )
 
 int main( int argc, char** argv )
 {
+     boost::ignore_unused( argc, argv );
      try
      {
           const std::string russianLyric =
