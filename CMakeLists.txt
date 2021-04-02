@@ -19,6 +19,7 @@ find_package(Boost 1.69 REQUIRED
      coroutine
      thread
      locale
+     regex
      )
 include_directories(SYSTEM ${Boost_INCLUDE_DIRS})
 link_directories(${Boost_LIBRARY_DIRS})
