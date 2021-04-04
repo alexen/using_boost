@@ -13,6 +13,7 @@ include_directories(${CMAKE_SOURCE_DIR})
 set(LOCAL_ROOT $ENV{HOME}/.local)
 set(BOOST_ROOT ${LOCAL_ROOT})
 find_package(Boost 1.69 REQUIRED
+     unit_test_framework
      serialization
      iostreams
      date_time
@@ -27,9 +28,9 @@ link_directories(${Boost_LIBRARY_DIRS})
 find_package(OpenSSL REQUIRED)
 include_directories(${OPENSSL_INCLUDE_DIR})
 
-add_subdirectory(googletest)
-include_directories(${CMAKE_SOURCE_DIR}/googletest/googletest/include)
+include(CTest)
 enable_testing()
+message(STATUS "Build testing: ${BUILD_TESTING}")
 
 add_subdirectory(core)
 add_subdirectory(serialization)
