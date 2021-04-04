@@ -13,6 +13,7 @@ include_directories(${CMAKE_SOURCE_DIR})
 set(LOCAL_ROOT $ENV{HOME}/.local)
 set(BOOST_ROOT ${LOCAL_ROOT})
 find_package(Boost 1.69 REQUIRED
+     unit_test_framework
      serialization
      iostreams
      date_time
