@@ -27,8 +27,6 @@ link_directories(${Boost_LIBRARY_DIRS})
 find_package(OpenSSL REQUIRED)
 include_directories(${OPENSSL_INCLUDE_DIR})
 
-add_subdirectory(googletest)
-include_directories(${CMAKE_SOURCE_DIR}/googletest/googletest/include)
 enable_testing()
 
 add_subdirectory(core)
