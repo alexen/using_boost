@@ -2,9 +2,10 @@
 /// @brief
 /// @copyright Copyright (c) InfoTeCS. All Rights Reserved.
 
+#include <boost/test/unit_test.hpp>
+
 #include <locale/charset_utils.h>
 
-#include <gtest/gtest.h>
 #include <cstring>
 #include <vector>
 #include <fstream>
@@ -19,17 +20,16 @@ static std::basic_string< CharT > makeString( std::initializer_list< unsigned ch
 }
 
 
-TEST( CharsetUtils, Utf8ToFromUtf16 )
+BOOST_AUTO_TEST_SUITE( TestCharsetUtils )
+BOOST_AUTO_TEST_CASE( TestUtf8ToFromUtf16 )
 {
      static constexpr auto expectedUtf8Text  =  "Это строка русского текста.";
      static constexpr auto expectedUtf16Text = L"Это строка русского текста.";
 
-     ASSERT_EQ( expectedUtf8Text, edi::utf16ToUtf8( expectedUtf16Text ) );
-     ASSERT_EQ( expectedUtf16Text, edi::utf8ToUtf16( expectedUtf8Text ) );
+     BOOST_TEST( expectedUtf8Text == edi::utf16ToUtf8( expectedUtf16Text ), boost::test_tools::per_element{} );
+     BOOST_TEST( expectedUtf16Text == edi::utf8ToUtf16( expectedUtf8Text ), boost::test_tools::per_element{} );
 }
-
-
-TEST( CharsetUtils, Utf8ToFromCp1251 )
+BOOST_AUTO_TEST_CASE( TestUtf8ToFromCp1251 )
 {
      using namespace std::literals;
 
@@ -42,12 +42,12 @@ TEST( CharsetUtils, Utf8ToFromCp1251 )
           0xf2, 0xe0, 0x2e
      });
 
-     ASSERT_EQ( expectedCp1251Text, edi::utf8ToCp1251( expectedUtf8Text ) );
-     ASSERT_EQ( expectedUtf8Text, edi::cp1251ToUtf8( expectedCp1251Text ) );
+     BOOST_TEST( expectedCp1251Text == edi::utf8ToCp1251( expectedUtf8Text ), boost::test_tools::per_element{} );
+     BOOST_TEST( expectedUtf8Text == edi::cp1251ToUtf8( expectedCp1251Text ), boost::test_tools::per_element{} );
 }
 
 
-TEST( CharsetUtils, Utf8ToFromOem )
+BOOST_AUTO_TEST_CASE( TestUtf8ToFromOem )
 {
      using namespace std::literals;
 
@@ -60,6 +60,7 @@ TEST( CharsetUtils, Utf8ToFromOem )
           0xe2, 0xa0, 0x2e
      });
 
-     ASSERT_EQ( expectedCp866Text, edi::utf8ToOem( expectedUtf8Text ) );
-     ASSERT_EQ( expectedUtf8Text, edi::oemToUtf8( expectedCp866Text ) );
+     BOOST_TEST( expectedCp866Text == edi::utf8ToOem( expectedUtf8Text ), boost::test_tools::per_element{} );
+     BOOST_TEST( expectedUtf8Text == edi::oemToUtf8( expectedCp866Text ), boost::test_tools::per_element{} );
 }
+BOOST_AUTO_TEST_SUITE_END()
