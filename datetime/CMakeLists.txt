@@ -1,4 +1,5 @@
-add_executable(datetime main.cpp)
-target_link_libraries(datetime
+project(datetime)
+add_executable(${PROJECT_NAME} main.cpp)
+target_link_libraries(${PROJECT_NAME}
      ${Boost_DATE_TIME_LIBRARY}
      )

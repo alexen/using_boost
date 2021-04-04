@@ -1,1 +1,4 @@
-add_executable(property_tree main.cpp)
+project(property_tree)
+add_executable(${PROJECT_NAME}
+     main.cpp
+     )
