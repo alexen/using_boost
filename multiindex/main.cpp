@@ -16,13 +16,21 @@ int main( int argc, char** argv )
      boost::ignore_unused( argc, argv );
      try
      {
+          using using_boost::multiindex::Document;
+
           std::cout
-               << using_boost::multiindex::Document::findByText( "УПРУП" ) << '\n'
-               << using_boost::multiindex::Document::findByText( "???" ) << '\n'
-               << using_boost::multiindex::Document::findByText( "ОСП" ) << '\n'
-               << using_boost::multiindex::Document::findByCode( "00UOD" ) << '\n'
-               << using_boost::multiindex::Document::findByCode( "---" ) << '\n'
-               << using_boost::multiindex::Document::findByText( "DER" ) << '\n'
+               << Document::findByText( {} ) << '\n'
+               << Document::findByCode( {} ) << '\n'
+               << Document::findByText( "ОСП" ) << '\n'
+               << Document::findByText( "DER" ) << '\n'
+               << Document::findByText( "УПРУП" ) << '\n'
+               << Document::findByText( "???" ) << '\n'
+               << Document::findByText( "ЗПЭД" ) << '\n'
+               << Document::findByCode( "00UOD" ) << '\n'
+               << Document::findByCode( "---" ) << '\n'
+               << Document::findByText( "DER" ) << '\n'
+               << Document::findByCode( "SZV-ETD" ) << '\n'
+               << Document::findByType( Document::Type::DisconnectingStatement ) << '\n'
                ;
      }
      catch( const std::exception& e )
