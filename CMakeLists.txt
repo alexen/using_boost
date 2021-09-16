@@ -19,6 +19,7 @@ find_package(Boost 1.69 REQUIRED
      thread
      locale
      regex
+     filesystem
      )
 include_directories(SYSTEM ${Boost_INCLUDE_DIRS})
 link_directories(${Boost_LIBRARY_DIRS})
@@ -43,3 +44,4 @@ add_subdirectory(regex)
 add_subdirectory(variant)
 add_subdirectory(range)
 add_subdirectory(multiindex)
+add_subdirectory(filesystem)
