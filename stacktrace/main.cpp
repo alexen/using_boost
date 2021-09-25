@@ -8,25 +8,7 @@
 #include <boost/core/ignore_unused.hpp>
 #include <boost/exception/diagnostic_information.hpp>
 
-#include <boost/stacktrace.hpp>
-
-
-void funcC()
-{
-     std::cout << boost::stacktrace::stacktrace();
-}
-
-
-void funcB()
-{
-     funcC();
-}
-
-
-void funcA()
-{
-     funcB();
-}
+#include <stacktrace/funcs/funcs.h>
 
 
 int main( int argc, char** argv )
