@@ -51,14 +51,12 @@ BOOST_AUTO_TEST_CASE( GenericBlockOutputFilter )
      const std::string expectedFinalizeData = "Finalized";
 
      std::string updateData;
-     std::size_t updateLen = 0u;
      std::string finalizeParam;
 
      BlockOutputFilter< aux::BlockProcessingImpl > filter {
           [ & ]( const char* s, std::size_t l )
           {
-               updateData = s;
-               updateLen = l;
+               updateData.assign( s, l );
           },
           [ & ]( const std::string& s )
           {
@@ -73,7 +71,6 @@ BOOST_AUTO_TEST_CASE( GenericBlockOutputFilter )
      filter.finalize( expectedFinalizeData );
 
      BOOST_TEST( expectedData == updateData );
-     BOOST_TEST( expectedData.size() == updateLen );
      BOOST_TEST( expectedFinalizeData == finalizeParam );
 }
 
