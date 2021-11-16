@@ -4,8 +4,10 @@
 
 #include <vector>
 #include <istream>
+#include <fstream>
 #include <stdexcept>
 #include <iostream>
+#include <algorithm>
 
 #include <boost/core/ignore_unused.hpp>
 #include <boost/iostreams/copy.hpp>
@@ -187,15 +189,42 @@ void test_readers()
 }
 
 
+struct VowelRemover : boost::iostreams::multichar_input_filter
+{
+     template< typename Source >
+     std::streamsize read( Source& src, [[maybe_unused]] char* s, std::streamsize n )
+     {
+          if( (n = boost::iostreams::read( src, block, std::min( n, blockLen ) )) > 0 )
+          {
+               std::copy_n( block, n, s );
+          }
+          return n;
+     }
+
+private:
+     static constexpr std::streamsize blockLen = 2048;
+     char block[ blockLen ];
+};
+
+
 int main( int argc, char** argv )
 {
      boost::ignore_unused( argc, argv );
      try
      {
-          boost::iostreams::filtering_ostream os;
-          os.push( boost::iostreams::gzip_compressor{} );
-          os.push( std::cout );
-          os << aux::russianLyric << std::flush;
+          const std::string text =
+               "Lorem ipsum dolor sit amet, consectetur adipisicing elit, "
+               "sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.";
+
+          std::istringstream is{ text };
+
+          boost::iostreams::filtering_istream fis;
+          fis.push( VowelRemover{} );
+          fis.push( is );
+
+//          std::ofstream null{ "/dev/null" };
+          boost::iostreams::copy( fis, std::cout );
+          std::cout << std::endl;
      }
      catch( const std::exception& e )
      {
