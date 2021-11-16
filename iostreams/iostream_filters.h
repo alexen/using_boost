@@ -16,7 +16,7 @@ template< typename Impl >
 struct BlockOutputFilter : boost::iostreams::multichar_output_filter
 {
      template< typename ...Args >
-     BlockOutputFilter( Args... args ) : impl_{ std::forward< Args >( args )... } {}
+     BlockOutputFilter( Args&& ...args ) : impl_{ std::forward< Args >( args )... } {}
 
      template< typename Sink >
      std::streamsize write( Sink& sink, const char* s, std::streamsize size )
@@ -29,7 +29,7 @@ struct BlockOutputFilter : boost::iostreams::multichar_output_filter
      }
 
      template< typename ...Args >
-     void finalize( Args... args )
+     void finalize( Args&& ...args )
      {
           impl_.finalize( std::forward< Args >( args )... );
      }
