@@ -9,7 +9,9 @@
 #include <boost/iostreams/device/array.hpp>
 #include <boost/iostreams/device/null.hpp>
 #include <boost/archive/iterators/base64_from_binary.hpp>
+#include <boost/archive/iterators/binary_from_base64.hpp>
 #include <boost/archive/iterators/transform_width.hpp>
+#include <boost/iostreams/device/back_inserter.hpp>
 #include <boost/iostreams/filtering_stream.hpp>
 #include <boost/iostreams/stream.hpp>
 #include <boost/numeric/conversion/cast.hpp>
@@ -39,7 +41,7 @@ std::int64_t operator ""_MB( unsigned long long mb )
 }
 
 
-class TestFixture : public celero::TestFixture
+class EncodingTestFixture : public celero::TestFixture
 {
 public:
      CeleroExperimentValues getExperimentValues() const override
@@ -50,6 +52,12 @@ public:
      void setUp( const CeleroExperimentValue& value ) override
      {
           prepareData( boost::numeric_cast< std::uint64_t >( value.Value ) );
+     }
+
+     void tearDown() override
+     {
+          buffer_.clear();
+          BOOST_ASSERT( buffer_.empty() );
      }
 
      const Buffer& data() const noexcept
@@ -63,17 +71,26 @@ public:
      }
 
 private:
+     static void clear( Buffer& out )
+     {
+          out.clear();
+          BOOST_ASSERT( out.empty() );
+     }
+     static void generateData( Buffer& out, const std::uint64_t bytes )
+     {
+          BOOST_ASSERT( out.empty() );
+
+          out.reserve( bytes );
+
+          std::ifstream ifile{ "/dev/urandom", std::ios::binary };
+          std::copy_n( std::istreambuf_iterator{ ifile }, bytes, std::back_inserter( out ) );
+
+          BOOST_ASSERT( out.size() == bytes );
+     }
      void prepareData( const std::uint64_t bytes )
      {
-          buffer_.clear();
-          buffer_.resize( bytes );
-
-          BOOST_ASSERT( buffer_.empty() );
-
-          std::ifstream{ "/dev/urandom", std::ios::binary }
-               .read( buffer_.data(), buffer_.size() );
-
-          BOOST_ASSERT( buffer_.size() == bytes );
+          clear( buffer_ );
+          generateData( buffer_, bytes );
      }
 
      Buffer buffer_;
@@ -81,7 +98,72 @@ private:
 };
 
 
-BASELINE_F( Base64Encoding, BoostOnIterators, TestFixture, 3, 300 )
+class DecodingTestFixture : public celero::TestFixture
+{
+public:
+     CeleroExperimentValues getExperimentValues() const override
+     {
+          return { 300_KB, 800_KB, 1_MB };
+     }
+
+     void setUp( const CeleroExperimentValue& value ) override
+     {
+          prepareData( boost::numeric_cast< std::uint64_t >( value.Value ) );
+     }
+
+     void tearDown() override
+     {
+          buffer_.clear();
+          BOOST_ASSERT( buffer_.empty() );
+     }
+
+     const Buffer& data() const noexcept
+     {
+          return buffer_;
+     }
+
+     std::ostream& null()
+     {
+          return null_;
+     }
+
+private:
+     static void clear( Buffer& out )
+     {
+          out.clear();
+          BOOST_ASSERT( out.empty() );
+     }
+     static void generateData( Buffer& out, const std::uint64_t bytes )
+     {
+          BOOST_ASSERT( out.empty() );
+
+          out.reserve( bytes );
+
+          std::ifstream ifile{ "/dev/urandom", std::ios::binary };
+          std::copy_n( std::istreambuf_iterator{ ifile }, bytes, std::back_inserter( out ) );
+
+          BOOST_ASSERT( out.size() == bytes );
+     }
+     static void encode( const Buffer& in, Buffer& out )
+     {
+          boost::iostreams::filtering_istream is{ boost::make_iterator_range( in ) };
+          boost::iostreams::filtering_ostream os{ boost::iostreams::back_inserter( out ) };
+          base64::encode( is, os );
+          BOOST_ASSERT( out.size() > in.size() );
+     }
+     void prepareData( const std::uint64_t bytes )
+     {
+          Buffer binary;
+          generateData( binary, bytes );
+          encode( binary, buffer_ );
+     }
+
+     Buffer buffer_;
+     boost::iostreams::stream< boost::iostreams::null_sink > null_;
+};
+
+
+BASELINE_F( Base64Encoding, BoostOnIterators, EncodingTestFixture, 3, 300 )
 {
      using Base64EncodingIterator =
           boost::archive::iterators::base64_from_binary<
@@ -102,7 +184,7 @@ BASELINE_F( Base64Encoding, BoostOnIterators, TestFixture, 3, 300 )
 }
 
 
-BENCHMARK_F( Base64Encoding, BoostOnPtrs, TestFixture, 3, 300 )
+BENCHMARK_F( Base64Encoding, BoostOnPtrs, EncodingTestFixture, 3, 300 )
 {
      using Base64EncodingIterator =
           boost::archive::iterators::base64_from_binary<
@@ -122,10 +204,64 @@ BENCHMARK_F( Base64Encoding, BoostOnPtrs, TestFixture, 3, 300 )
 }
 
 
-BENCHMARK_F( Base64Encoding, Custom, TestFixture, 3, 300 )
+BENCHMARK_F( Base64Encoding, Custom, EncodingTestFixture, 3, 300 )
 {
      boost::iostreams::filtering_istream is{ boost::make_iterator_range( data() ) };
      std::ostream& os = null();
 
      base64::encode( is, os );
 }
+
+
+BASELINE_F( Base64Decoding, BoostOnIterators, DecodingTestFixture, 3, 300 )
+{
+     using Base64DecodingIterator =
+          boost::archive::iterators::transform_width<
+               boost::archive::iterators::binary_from_base64<
+                    std::istreambuf_iterator< char >
+               >
+               , 8
+               , 6
+               >;
+
+     boost::iostreams::filtering_istream is{ boost::make_iterator_range( data() ) };
+     std::ostream& os = null();
+
+     std::copy(
+          Base64DecodingIterator{ std::istreambuf_iterator< char >{ is } }
+          , Base64DecodingIterator{ std::istreambuf_iterator< char >{} }
+          , std::ostreambuf_iterator< char >{ os }
+          );
+}
+
+
+BENCHMARK_F( Base64Decoding, BoostOnPtrs, DecodingTestFixture, 3, 300 )
+{
+     using Base64DecodingIterator =
+     boost::archive::iterators::transform_width<
+          boost::archive::iterators::binary_from_base64<
+               const char*
+          >
+          , 8
+          , 6
+          >;
+
+     boost::iostreams::filtering_istream is{ boost::make_iterator_range( data() ) };
+     std::ostream& os = null();
+
+     std::copy(
+          Base64DecodingIterator{ data().data() }
+          , Base64DecodingIterator{ data().data() + data().size() }
+          , std::ostreambuf_iterator< char >{ os }
+          );
+}
+
+
+BENCHMARK_F( Base64Decoding, Custom, DecodingTestFixture, 3, 300 )
+{
+     boost::iostreams::filtering_istream is{ boost::make_iterator_range( data() ) };
+     std::ostream& os = null();
+
+     base64::decode( is, os );
+}
+
