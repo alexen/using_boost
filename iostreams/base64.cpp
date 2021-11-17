@@ -9,7 +9,6 @@
 #include <boost/archive/iterators/transform_width.hpp>
 #include <boost/archive/iterators/base64_from_binary.hpp>
 #include <boost/archive/iterators/binary_from_base64.hpp>
-#include <boost/iostreams/filter/counter.hpp>
 #include <boost/iostreams/filtering_stream.hpp>
 #include <boost/iostreams/char_traits.hpp>
 
@@ -98,6 +97,28 @@ private:
 };
 
 
+struct CharCounter : boost::iostreams::multichar_input_filter
+{
+     explicit CharCounter( unsigned n = 0 ) : chars_{ n } {}
+
+     template< typename Source >
+     std::streamsize read( Source& src, char* s, std::streamsize n )
+     {
+          const auto result = boost::iostreams::read( src, s, n );
+          chars_ += result > 0 ? result : 0;
+          return result;
+     }
+
+     unsigned chars() const noexcept
+     {
+          return chars_;
+     }
+
+private:
+     unsigned chars_ = 0;
+};
+
+
 } // namespace input_filters
 } // namespace impl
 } // namespace {unnamed}
@@ -107,13 +128,13 @@ void encode( std::istream& is, std::ostream& os )
 {
      boost::iostreams::filtering_istream fis;
 
-     boost::iostreams::counter counter;
+     impl::input_filters::CharCounter counter;
      fis.push( boost::ref( counter ) );
      fis.push( is );
 
      impl::encode( fis, os );
 
-     const auto n = counter.characters() % 3;
+     const auto n = counter.chars() % 3;
      std::fill_n( std::ostreambuf_iterator< char >{ os }, n ? 3 - n : 0, '=' );
 }
 
