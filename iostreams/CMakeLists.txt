@@ -20,3 +20,7 @@ if(BUILD_TESTING)
           )
      add_test(${PROJECT_NAME} ${TEST_NAME})
 endif()
+
+if(BUILD_BENCHMARKS)
+     add_subdirectory(benchmark)
+endif()
