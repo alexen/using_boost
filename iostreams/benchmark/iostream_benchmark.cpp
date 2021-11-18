@@ -187,7 +187,7 @@ private:
 } // namespace {unnamed}
 
 
-BENCHMARK_F( IoFilter, CustomOCounter, TestFixture, 1, 500 )
+BENCHMARK_F( IoFilter, CustomICounter, TestFixture, 1, 500 )
 {
      boost::iostreams::filtering_istream is{ boost::make_iterator_range( buffer() ) };
      std::ostream& os = null();
@@ -203,7 +203,7 @@ BENCHMARK_F( IoFilter, CustomOCounter, TestFixture, 1, 500 )
 }
 
 
-BENCHMARK_F( IoFilter, CustomICounter, TestFixture, 1, 500 )
+BENCHMARK_F( IoFilter, CustomOCounter, TestFixture, 1, 500 )
 {
      boost::iostreams::filtering_istream is{ boost::make_iterator_range( buffer() ) };
      std::ostream& os = null();
