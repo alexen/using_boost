@@ -76,13 +76,26 @@ struct IgnoredCharsRemover : boost::iostreams::input_filter, boost::noncopyable
 {
      template< typename ...Args >
      explicit IgnoredCharsRemover( Args&& ...args )
-          : ignored_{ std::forward< Args >( args )... } {}
+          : ignored_{ std::forward< Args >( args )... }
+     {
+          BOOST_ASSERT_MSG(
+               !ignored_.count( EOF )
+               && !ignored_.count( boost::iostreams::WOULD_BLOCK )
+               , "service characters cannot be specified as ignored"
+               );
+     }
 
      template< typename Source >
      int get( Source& src )
      {
-          const auto c = boost::iostreams::get( src );
-          return ignored_.count( c ) ? boost::iostreams::WOULD_BLOCK : c;
+          while( true )
+          {
+               const auto c = boost::iostreams::get( src );
+               if( !ignored_.count( c ) )
+               {
+                    return c;
+               }
+          }
      }
 
 private:
