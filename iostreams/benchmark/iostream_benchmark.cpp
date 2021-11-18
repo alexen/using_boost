@@ -251,7 +251,7 @@ BENCHMARK_F( IoFilter, BoostICounter, TestFixture, N_SAMPLES, N_ITERATIONS )
 
      boost::iostreams::copy( fis, os );
 
-     BOOST_ASSERT( c.characters() == buffer().size() );
+     BOOST_ASSERT( boost::numeric_cast< std::size_t >( c.characters() ) == buffer().size() );
 }
 
 
@@ -267,7 +267,7 @@ BENCHMARK_F( IoFilter, BoostOCounter, TestFixture, N_SAMPLES, N_ITERATIONS )
 
      boost::iostreams::copy( is, fos );
 
-     BOOST_ASSERT( c.characters() == buffer().size() );
+     BOOST_ASSERT( boost::numeric_cast< std::size_t >( c.characters() ) == buffer().size() );
 }
 
 

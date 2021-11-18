@@ -41,14 +41,16 @@ using CeleroExperimentValues = std::vector< CeleroExperimentValue >;
 using Buffer = std::vector< char >;
 
 
-static constexpr auto N_SAMPLES = 2u;
-static constexpr auto N_ITERATIONS = 300u;
+static constexpr auto N_SAMPLES = 3u;
+static constexpr auto N_ITERATIONS = 400u;
 static const CeleroExperimentValues BUFFER_SIZES{ 100_KB, 300_KB, 800_KB };
 
 
 class EncodingTestFixture : public celero::TestFixture
 {
 public:
+     EncodingTestFixture() : null_{ {} } {}
+
      CeleroExperimentValues getExperimentValues() const override
      {
           return BUFFER_SIZES;
@@ -61,8 +63,7 @@ public:
 
      void tearDown() override
      {
-          buffer_.clear();
-          BOOST_ASSERT( buffer_.empty() );
+          clearData();
      }
 
      const Buffer& data() const noexcept
@@ -97,6 +98,10 @@ private:
           clear( buffer_ );
           generateData( buffer_, bytes );
      }
+     void clearData()
+     {
+          clear( buffer_ );
+     }
 
      Buffer buffer_;
      boost::iostreams::stream< boost::iostreams::null_sink > null_;
@@ -106,6 +111,8 @@ private:
 class DecodingTestFixture : public celero::TestFixture
 {
 public:
+     DecodingTestFixture() : null_{ {} } {}
+
      CeleroExperimentValues getExperimentValues() const override
      {
           return BUFFER_SIZES;
@@ -118,8 +125,7 @@ public:
 
      void tearDown() override
      {
-          buffer_.clear();
-          BOOST_ASSERT( buffer_.empty() );
+          clearData();
      }
 
      const Buffer& data() const noexcept
@@ -161,6 +167,10 @@ private:
           Buffer binary;
           generateData( binary, bytes );
           encode( binary, buffer_ );
+     }
+     void clearData()
+     {
+          clear( buffer_ );
      }
 
      Buffer buffer_;
