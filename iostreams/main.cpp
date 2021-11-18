@@ -240,21 +240,24 @@ struct VowelRemover : boost::iostreams::multichar_input_filter
      {
           for( std::streamsize i = 0; i < n; ++i )
           {
-               const auto c = boost::iostreams::get( src );
-               if( c == EOF )
+               while( true )
                {
-                    return i ? i : EOF;
-               }
-               else if( c == boost::iostreams::WOULD_BLOCK )
-               {
-                    return i;
-               }
-               else if( impl::isVowel( c ) )
-               {
-                    s[ i ] = boost::iostreams::WOULD_BLOCK;
+                    const auto c = boost::iostreams::get( src );
+                    if( c == EOF )
+                    {
+                         return i ? i : EOF;
+                    }
+                    else if( c == boost::iostreams::WOULD_BLOCK )
+                    {
+                         return i;
+                    }
+                    else if( impl::isVowel( c ) )
+                    {
+                         continue;
+                    }
+                    s[ i ] = c;
                     break;
                }
-               s[ i ] = c;
           }
           return n;
      }
@@ -279,17 +282,27 @@ int main( int argc, char** argv )
                "cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non "
                "proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
 
+          const auto expected =
+               "Lrm psm dlr st mt, cnscttr dpscng lt, sd d smd tmpr ncddnt t lbr t dlr mgn lq. "
+               "t nm d mnm vnm, qs nstrd xrcttn llmc lbrs ns t lqp x  cmmd cnsqt. Ds t rr dlr "
+               "n rprhndrt n vlptt vlt ss cllm dlr  fgt nll prtr. xcptr snt ccct cpdtt nn prdnt, "
+               "snt n clp q ffc dsrnt mllt nm d st lbrm.";
+
           std::cout << "Source: " << text << '\n';
 
           std::istringstream is{ text };
           boost::iostreams::filtering_istream fis;
           fis.push( custom_filters::single_char::VowelRemover{} );
-//          fis.push( custom_filters::multichar::VowelRemover{} );
+          fis.push( custom_filters::multichar::VowelRemover{} );
           fis.push( is );
 
-          std::cout << "Result: ";
-          boost::iostreams::copy( fis, std::cout );
-          std::cout << '\n';
+          std::ostringstream oss;
+          boost::iostreams::copy( fis, oss );
+          std::cout << "Result: " << oss.str() << '\n';
+          if( oss.str() != expected )
+          {
+               BOOST_THROW_EXCEPTION( std::runtime_error{ "bad result" } );
+          }
      }
      catch( const std::exception& e )
      {
