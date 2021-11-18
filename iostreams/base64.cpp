@@ -4,7 +4,7 @@
 
 #include <iostreams/base64.h>
 
-#include <unordered_set>
+#include <set>
 
 #include <boost/archive/iterators/transform_width.hpp>
 #include <boost/archive/iterators/base64_from_binary.hpp>
@@ -59,15 +59,15 @@ static void decode( std::istream& is, std::ostream& os )
 namespace input_filters {
 
 
-struct Base64StreamEndSearcher : boost::iostreams::input_filter, boost::noncopyable
+struct Base64StreamEndDetector : boost::iostreams::input_filter, boost::noncopyable
 {
-     static constexpr auto base64End = '=';
+     static constexpr auto END_OF_BASE64 = '=';
 
      template< typename Source >
      int get( Source& src )
      {
           const auto c = boost::iostreams::get( src );
-          return c == base64End ? boost::iostreams::char_traits< char >::eof() : c;
+          return c == END_OF_BASE64 ? EOF : c;
      }
 };
 
@@ -81,19 +81,12 @@ struct IgnoredCharsRemover : boost::iostreams::input_filter, boost::noncopyable
      template< typename Source >
      int get( Source& src )
      {
-          while( true )
-          {
-               const auto c = boost::iostreams::get( src );
-               if( ignored_.count( c ) )
-               {
-                    continue;
-               }
-               return c;
-          }
+          const auto c = boost::iostreams::get( src );
+          return ignored_.count( c ) ? boost::iostreams::WOULD_BLOCK : c;
      }
 
 private:
-     const std::unordered_set< char > ignored_;
+     std::set< char > ignored_;
 };
 
 
@@ -141,12 +134,12 @@ void encode( std::istream& is, std::ostream& os )
 
 void decode( std::istream& is, std::ostream& os, std::initializer_list< char > ignored )
 {
-     static impl::input_filters::Base64StreamEndSearcher streamEndSearcher;
+     static impl::input_filters::Base64StreamEndDetector streamEndDetector;
      impl::input_filters::IgnoredCharsRemover ignoredCharsRemover{ ignored };
 
      boost::iostreams::filtering_istream fis;
 
-     fis.push( boost::ref( streamEndSearcher ) );
+     fis.push( boost::ref( streamEndDetector ) );
      fis.push( boost::ref( ignoredCharsRemover ) );
      fis.push( is );
 
