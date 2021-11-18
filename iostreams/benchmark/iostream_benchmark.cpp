@@ -74,6 +74,123 @@ private:
 };
 
 
+namespace {
+namespace custom {
+namespace filters {
+namespace single_char {
+
+
+struct Transparent : boost::iostreams::dual_use_filter
+{
+     template< typename Source >
+     int get( Source& src )
+     {
+          return boost::iostreams::get( src );
+     }
+
+     template< typename Sink >
+     bool put( Sink& snk, int c )
+     {
+          return boost::iostreams::put( snk, c );
+     }
+};
+
+
+} // namespace single_char
+namespace multichar {
+namespace by_char {
+
+
+struct Transparent : boost::iostreams::multichar_dual_use_filter
+{
+     template< typename Source >
+     std::streamsize read( Source& src, char* s, const std::streamsize n )
+     {
+          for( std::streamsize i = 0; i < n; ++i )
+          {
+               const auto c = boost::iostreams::get( src );
+               if( c < 0 )
+               {
+                    return c;
+               }
+               s[ i ] = c;
+          }
+          return n;
+     }
+
+     template< typename Sink >
+     std::streamsize write( Sink& snk, const char* s, const std::streamsize n )
+     {
+          for( std::streamsize i = 0; i < n; ++i )
+          {
+               const int c = s[ i ];
+               if( not boost::iostreams::put( snk, c ) )
+               {
+                    return i;
+               }
+          }
+          return n;
+     }
+};
+
+
+} // namespace by_char
+namespace by_block {
+
+
+struct Counter : boost::iostreams::multichar_dual_use_filter
+{
+     explicit Counter( unsigned n = 0 ) : chars_{ n } {}
+
+     template< typename Source >
+     std::streamsize read( Source& src, char* s, std::streamsize n )
+     {
+          const auto result = boost::iostreams::read( src, s, n );
+          chars_ += result > 0 ? result : 0;
+          return result;
+     }
+
+     template< typename Sink >
+     std::streamsize write( Sink& snk, const char* s, std::streamsize n )
+     {
+          const auto result = boost::iostreams::write( snk, s, n );
+          chars_ += result > 0 ? result : 0;
+          return result;
+     }
+
+     unsigned chars() const noexcept
+     {
+          return chars_;
+     }
+
+private:
+     unsigned chars_ = 0;
+};
+
+
+struct Transparent : boost::iostreams::multichar_dual_use_filter
+{
+     template< typename Source >
+     std::streamsize read( Source& src, char* s, const std::streamsize n )
+     {
+          return boost::iostreams::read( src, s, n );
+     }
+
+     template< typename Sink >
+     std::streamsize write( Sink& snk, const char* s, const std::streamsize n )
+     {
+          return boost::iostreams::write( snk, s, n );
+     }
+};
+
+
+} // namespace by_block
+} // namespace multichar
+} // namespace filters
+} // namespace custom
+} // namespace {unnamed}
+
+
 BASELINE_F( CopyStream, BoostCopy, TestFixture, 3, 300 )
 {
      boost::iostreams::filtering_istream is{ boost::make_iterator_range( buffer() ) };
@@ -149,50 +266,12 @@ BENCHMARK_F( IoFilter, BoostOCounter, TestFixture, 1, 500 )
 }
 
 
-namespace {
-namespace custom {
-
-
-struct Counter : boost::iostreams::multichar_dual_use_filter
-{
-     explicit Counter( unsigned n = 0 ) : chars_{ n } {}
-
-     template< typename Source >
-     std::streamsize read( Source& src, char* s, std::streamsize n )
-     {
-          const auto result = boost::iostreams::read( src, s, n );
-          chars_ += result > 0 ? result : 0;
-          return result;
-     }
-
-     template< typename Sink >
-     std::streamsize write( Sink& snk, const char* s, std::streamsize n )
-     {
-          const auto result = boost::iostreams::write( snk, s, n );
-          chars_ += result > 0 ? result : 0;
-          return result;
-     }
-
-     unsigned chars() const noexcept
-     {
-          return chars_;
-     }
-
-private:
-     unsigned chars_ = 0;
-};
-
-
-} // namespace custom
-} // namespace {unnamed}
-
-
 BENCHMARK_F( IoFilter, CustomICounter, TestFixture, 1, 500 )
 {
      boost::iostreams::filtering_istream is{ boost::make_iterator_range( buffer() ) };
      std::ostream& os = null();
 
-     custom::Counter c;
+     custom::filters::multichar::by_block::Counter c;
      boost::iostreams::filtering_istream fis;
      fis.push( boost::ref( c ) );
      fis.push( is );
@@ -208,7 +287,7 @@ BENCHMARK_F( IoFilter, CustomOCounter, TestFixture, 1, 500 )
      boost::iostreams::filtering_istream is{ boost::make_iterator_range( buffer() ) };
      std::ostream& os = null();
 
-     custom::Counter c;
+     custom::filters::multichar::by_block::Counter c;
      boost::iostreams::filtering_ostream fos;
      fos.push( boost::ref( c ) );
      fos.push( os );
@@ -217,93 +296,6 @@ BENCHMARK_F( IoFilter, CustomOCounter, TestFixture, 1, 500 )
 
      BOOST_ASSERT( c.chars() == buffer().size() );
 }
-
-
-namespace {
-namespace custom {
-namespace filters {
-namespace single_char {
-
-
-struct Transparent : boost::iostreams::dual_use_filter
-{
-     template< typename Source >
-     int get( Source& src )
-     {
-          return boost::iostreams::get( src );
-     }
-
-     template< typename Sink >
-     bool put( Sink& snk, int c )
-     {
-          return boost::iostreams::put( snk, c );
-     }
-};
-
-
-} // namespace single_char
-namespace multichar {
-namespace by_char {
-
-
-struct Transparent : boost::iostreams::multichar_dual_use_filter
-{
-     template< typename Source >
-     std::streamsize read( Source& src, char* s, const std::streamsize n )
-     {
-          for( std::streamsize i = 0; i < n; ++i )
-          {
-               const auto c = boost::iostreams::get( src );
-               if( c < 0 )
-               {
-                    return c;
-               }
-               s[ i ] = c;
-          }
-          return n;
-     }
-
-     template< typename Sink >
-     std::streamsize write( Sink& snk, const char* s, const std::streamsize n )
-     {
-          for( std::streamsize i = 0; i < n; ++i )
-          {
-               const int c = s[ i ];
-               if( not boost::iostreams::put( snk, c ) )
-               {
-                    return i;
-               }
-          }
-          return n;
-     }
-};
-
-
-} // namespace by_char
-namespace by_block {
-
-
-struct Transparent : boost::iostreams::multichar_dual_use_filter
-{
-     template< typename Source >
-     std::streamsize read( Source& src, char* s, const std::streamsize n )
-     {
-          return boost::iostreams::read( src, s, n );
-     }
-
-     template< typename Sink >
-     std::streamsize write( Sink& snk, const char* s, const std::streamsize n )
-     {
-          return boost::iostreams::write( snk, s, n );
-     }
-};
-
-
-} // namespace by_block
-} // namespace multichar
-} // namespace filters
-} // namespace custom
-} // namespace {unnamed}
 
 
 BENCHMARK_F( IoFilter, SingleCharIFilter, TestFixture, 1, 500 )
