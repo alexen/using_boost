@@ -9,4 +9,5 @@ foreach(EACH_SRC ${SRC})
           ../base64.cpp
           )
      target_link_libraries(${TARGET} celero)
+     add_dependencies(${PROJECT_NAME} ${TARGET})
 endforeach()
