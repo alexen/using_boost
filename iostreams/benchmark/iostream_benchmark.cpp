@@ -243,6 +243,7 @@ struct Transparent : boost::iostreams::dual_use_filter
 
 } // namespace single_char
 namespace multichar {
+namespace by_char {
 
 
 struct Transparent : boost::iostreams::multichar_dual_use_filter
@@ -278,6 +279,27 @@ struct Transparent : boost::iostreams::multichar_dual_use_filter
 };
 
 
+} // namespace by_char
+namespace by_block {
+
+
+struct Transparent : boost::iostreams::multichar_dual_use_filter
+{
+     template< typename Source >
+     std::streamsize read( Source& src, char* s, const std::streamsize n )
+     {
+          return boost::iostreams::read( src, s, n );
+     }
+
+     template< typename Sink >
+     std::streamsize write( Sink& snk, const char* s, const std::streamsize n )
+     {
+          return boost::iostreams::write( snk, s, n );
+     }
+};
+
+
+} // namespace by_block
 } // namespace multichar
 } // namespace filters
 } // namespace custom
@@ -312,12 +334,12 @@ BENCHMARK_F( IoFilter, SingleCharOFilter, TestFixture, 1, 500 )
 }
 
 
-BENCHMARK_F( IoFilter, MulticharIFilter, TestFixture, 1, 500 )
+BENCHMARK_F( IoFilter, MulticharCharIFilter, TestFixture, 1, 500 )
 {
      boost::iostreams::filtering_istream is{ boost::make_iterator_range( buffer() ) };
      std::ostream& os = null();
 
-     custom::filters::multichar::Transparent f;
+     custom::filters::multichar::by_char::Transparent f;
      boost::iostreams::filtering_istream fis;
      fis.push( boost::ref( f ) );
      fis.push( is );
@@ -326,12 +348,40 @@ BENCHMARK_F( IoFilter, MulticharIFilter, TestFixture, 1, 500 )
 }
 
 
-BENCHMARK_F( IoFilter, MulticharOFilter, TestFixture, 1, 500 )
+BENCHMARK_F( IoFilter, MulticharCharOFilter, TestFixture, 1, 500 )
 {
      boost::iostreams::filtering_istream is{ boost::make_iterator_range( buffer() ) };
      std::ostream& os = null();
 
-     custom::filters::multichar::Transparent f;
+     custom::filters::multichar::by_char::Transparent f;
+     boost::iostreams::filtering_ostream fos;
+     fos.push( boost::ref( f ) );
+     fos.push( os );
+
+     boost::iostreams::copy( is, fos );
+}
+
+
+BENCHMARK_F( IoFilter, MulticharBlockIFilter, TestFixture, 1, 500 )
+{
+     boost::iostreams::filtering_istream is{ boost::make_iterator_range( buffer() ) };
+     std::ostream& os = null();
+
+     custom::filters::multichar::by_block::Transparent f;
+     boost::iostreams::filtering_istream fis;
+     fis.push( boost::ref( f ) );
+     fis.push( is );
+
+     boost::iostreams::copy( fis, os );
+}
+
+
+BENCHMARK_F( IoFilter, MulticharBlockOFilter, TestFixture, 1, 500 )
+{
+     boost::iostreams::filtering_istream is{ boost::make_iterator_range( buffer() ) };
+     std::ostream& os = null();
+
+     custom::filters::multichar::by_block::Transparent f;
      boost::iostreams::filtering_ostream fos;
      fos.push( boost::ref( f ) );
      fos.push( os );
