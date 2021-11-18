@@ -24,6 +24,7 @@
 #include <boost/iostreams/device/array.hpp>
 #include <boost/iostreams/device/back_inserter.hpp>
 #include <boost/exception/diagnostic_information.hpp>
+#include <boost/utility/string_view.hpp>
 
 #include "iterator_source.h"
 
@@ -189,22 +190,80 @@ void test_readers()
 }
 
 
+namespace custom_filters {
+
+
+namespace {
+namespace impl {
+
+
+bool isVowel( const int c ) noexcept
+{
+     static constexpr auto vowels = "aeiouAEIOU";
+     return std::strchr( vowels, c ) != nullptr;
+}
+
+
+} // namespace impl
+} // namespace {unnamed}
+
+
+namespace single_char {
+
+
+struct VowelRemover : boost::iostreams::input_filter
+{
+     template< typename Source >
+     int get( Source& src )
+     {
+          while( true )
+          {
+               const auto c = boost::iostreams::get( src );
+               if( !impl::isVowel( c ) )
+               {
+                    return c;
+               }
+          }
+          BOOST_ASSERT_MSG( false, "this code must be UNREACHABLE" );
+     }
+};
+
+
+} // namespace single_char
+namespace multichar {
+
+
 struct VowelRemover : boost::iostreams::multichar_input_filter
 {
      template< typename Source >
-     std::streamsize read( Source& src, [[maybe_unused]] char* s, std::streamsize n )
+     std::streamsize read( Source& src, char* s, std::streamsize n )
      {
-          if( (n = boost::iostreams::read( src, block, std::min( n, blockLen ) )) > 0 )
+          for( std::streamsize i = 0; i < n; ++i )
           {
-               std::copy_n( block, n, s );
+               const auto c = boost::iostreams::get( src );
+               if( c == EOF )
+               {
+                    return i ? i : EOF;
+               }
+               else if( c == boost::iostreams::WOULD_BLOCK )
+               {
+                    return i;
+               }
+               else if( impl::isVowel( c ) )
+               {
+                    s[ i ] = boost::iostreams::WOULD_BLOCK;
+                    break;
+               }
+               s[ i ] = c;
           }
           return n;
      }
-
-private:
-     static constexpr std::streamsize blockLen = 2048;
-     char block[ blockLen ];
 };
+
+
+} // namespace multichar
+} // namespace custom_filters
+
 
 
 int main( int argc, char** argv )
@@ -213,18 +272,24 @@ int main( int argc, char** argv )
      try
      {
           const std::string text =
-               "Lorem ipsum dolor sit amet, consectetur adipisicing elit, "
-               "sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.";
+               "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod "
+               "tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, "
+               "quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo "
+               "consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse "
+               "cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non "
+               "proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
+
+          std::cout << "Source: " << text << '\n';
 
           std::istringstream is{ text };
-
           boost::iostreams::filtering_istream fis;
-          fis.push( VowelRemover{} );
+          fis.push( custom_filters::single_char::VowelRemover{} );
+//          fis.push( custom_filters::multichar::VowelRemover{} );
           fis.push( is );
 
-//          std::ofstream null{ "/dev/null" };
+          std::cout << "Result: ";
           boost::iostreams::copy( fis, std::cout );
-          std::cout << std::endl;
+          std::cout << '\n';
      }
      catch( const std::exception& e )
      {
