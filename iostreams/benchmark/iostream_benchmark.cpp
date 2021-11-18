@@ -24,6 +24,11 @@ CELERO_MAIN
 #define MB( n ) (KB( n ) * 1024)
 
 
+static constexpr auto N_SAMPLES = 4u;
+static constexpr auto N_ITERATIONS = 500u;
+static constexpr auto N_THREADS = 8u;
+
+
 class TestFixture : public celero::TestFixture
 {
 public:
@@ -191,7 +196,7 @@ struct Transparent : boost::iostreams::multichar_dual_use_filter
 } // namespace {unnamed}
 
 
-BASELINE_F( CopyStream, BoostCopy, TestFixture, 3, 300 )
+BASELINE_F( CopyStream, BoostCopy, TestFixture, N_SAMPLES, N_ITERATIONS )
 {
      boost::iostreams::filtering_istream is{ boost::make_iterator_range( buffer() ) };
      std::ostream& os = null();
@@ -200,7 +205,7 @@ BASELINE_F( CopyStream, BoostCopy, TestFixture, 3, 300 )
 }
 
 
-BENCHMARK_F( CopyStream, StdStreamIt, TestFixture, 3, 300 )
+BENCHMARK_F( CopyStream, StdStreamIt, TestFixture, N_SAMPLES, N_ITERATIONS )
 {
      boost::iostreams::filtering_istream is{ boost::make_iterator_range( buffer() ) };
      std::ostream& os = null();
@@ -213,7 +218,7 @@ BENCHMARK_F( CopyStream, StdStreamIt, TestFixture, 3, 300 )
 }
 
 
-BENCHMARK_F( CopyStream, StdStreambufIt, TestFixture, 3, 300 )
+BENCHMARK_F( CopyStream, StdStreambufIt, TestFixture, N_SAMPLES, N_ITERATIONS )
 {
      boost::iostreams::filtering_istream is{ boost::make_iterator_range( buffer() ) };
      std::ostream& os = null();
@@ -226,7 +231,7 @@ BENCHMARK_F( CopyStream, StdStreambufIt, TestFixture, 3, 300 )
 }
 
 
-BASELINE_F( IoFilter, NoFilters, TestFixture, 1, 500 )
+BASELINE_F( IoFilter, NoFilters, TestFixture, N_SAMPLES, N_ITERATIONS )
 {
      boost::iostreams::filtering_istream is{ boost::make_iterator_range( buffer() ) };
      std::ostream& os = null();
@@ -234,7 +239,7 @@ BASELINE_F( IoFilter, NoFilters, TestFixture, 1, 500 )
 }
 
 
-BENCHMARK_F( IoFilter, BoostICounter, TestFixture, 1, 500 )
+BENCHMARK_F( IoFilter, BoostICounter, TestFixture, N_SAMPLES, N_ITERATIONS )
 {
      boost::iostreams::filtering_istream is{ boost::make_iterator_range( buffer() ) };
      std::ostream& os = null();
@@ -250,7 +255,7 @@ BENCHMARK_F( IoFilter, BoostICounter, TestFixture, 1, 500 )
 }
 
 
-BENCHMARK_F( IoFilter, BoostOCounter, TestFixture, 1, 500 )
+BENCHMARK_F( IoFilter, BoostOCounter, TestFixture, N_SAMPLES, N_ITERATIONS )
 {
      boost::iostreams::filtering_istream is{ boost::make_iterator_range( buffer() ) };
      std::ostream& os = null();
@@ -266,7 +271,7 @@ BENCHMARK_F( IoFilter, BoostOCounter, TestFixture, 1, 500 )
 }
 
 
-BENCHMARK_F( IoFilter, CustomICounter, TestFixture, 1, 500 )
+BENCHMARK_F( IoFilter, CustomICounter, TestFixture, N_SAMPLES, N_ITERATIONS )
 {
      boost::iostreams::filtering_istream is{ boost::make_iterator_range( buffer() ) };
      std::ostream& os = null();
@@ -282,7 +287,7 @@ BENCHMARK_F( IoFilter, CustomICounter, TestFixture, 1, 500 )
 }
 
 
-BENCHMARK_F( IoFilter, CustomOCounter, TestFixture, 1, 500 )
+BENCHMARK_F( IoFilter, CustomOCounter, TestFixture, N_SAMPLES, N_ITERATIONS )
 {
      boost::iostreams::filtering_istream is{ boost::make_iterator_range( buffer() ) };
      std::ostream& os = null();
@@ -298,7 +303,7 @@ BENCHMARK_F( IoFilter, CustomOCounter, TestFixture, 1, 500 )
 }
 
 
-BENCHMARK_F( IoFilter, SingleCharIFilter, TestFixture, 1, 500 )
+BENCHMARK_F( IoFilter, SingleCharIFilter, TestFixture, N_SAMPLES, N_ITERATIONS )
 {
      boost::iostreams::filtering_istream is{ boost::make_iterator_range( buffer() ) };
      std::ostream& os = null();
@@ -312,7 +317,7 @@ BENCHMARK_F( IoFilter, SingleCharIFilter, TestFixture, 1, 500 )
 }
 
 
-BENCHMARK_F( IoFilter, SingleCharOFilter, TestFixture, 1, 500 )
+BENCHMARK_F( IoFilter, SingleCharOFilter, TestFixture, N_SAMPLES, N_ITERATIONS )
 {
      boost::iostreams::filtering_istream is{ boost::make_iterator_range( buffer() ) };
      std::ostream& os = null();
@@ -326,7 +331,7 @@ BENCHMARK_F( IoFilter, SingleCharOFilter, TestFixture, 1, 500 )
 }
 
 
-BENCHMARK_F( IoFilter, MulticharCharIFilter, TestFixture, 1, 500 )
+BENCHMARK_F( IoFilter, MulticharCharIFilter, TestFixture, N_SAMPLES, N_ITERATIONS )
 {
      boost::iostreams::filtering_istream is{ boost::make_iterator_range( buffer() ) };
      std::ostream& os = null();
@@ -340,7 +345,7 @@ BENCHMARK_F( IoFilter, MulticharCharIFilter, TestFixture, 1, 500 )
 }
 
 
-BENCHMARK_F( IoFilter, MulticharCharOFilter, TestFixture, 1, 500 )
+BENCHMARK_F( IoFilter, MulticharCharOFilter, TestFixture, N_SAMPLES, N_ITERATIONS )
 {
      boost::iostreams::filtering_istream is{ boost::make_iterator_range( buffer() ) };
      std::ostream& os = null();
@@ -354,7 +359,7 @@ BENCHMARK_F( IoFilter, MulticharCharOFilter, TestFixture, 1, 500 )
 }
 
 
-BENCHMARK_F( IoFilter, MulticharBlockIFilter, TestFixture, 1, 500 )
+BENCHMARK_F( IoFilter, MulticharBlockIFilter, TestFixture, N_SAMPLES, N_ITERATIONS )
 {
      boost::iostreams::filtering_istream is{ boost::make_iterator_range( buffer() ) };
      std::ostream& os = null();
@@ -368,7 +373,7 @@ BENCHMARK_F( IoFilter, MulticharBlockIFilter, TestFixture, 1, 500 )
 }
 
 
-BENCHMARK_F( IoFilter, MulticharBlockOFilter, TestFixture, 1, 500 )
+BENCHMARK_F( IoFilter, MulticharBlockOFilter, TestFixture, N_SAMPLES, N_ITERATIONS )
 {
      boost::iostreams::filtering_istream is{ boost::make_iterator_range( buffer() ) };
      std::ostream& os = null();

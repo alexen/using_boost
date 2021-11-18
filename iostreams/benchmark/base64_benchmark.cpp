@@ -24,11 +24,6 @@
 CELERO_MAIN
 
 
-using CeleroExperimentValue = celero::TestFixture::ExperimentValue;
-using CeleroExperimentValues = std::vector< CeleroExperimentValue >;
-using Buffer = std::vector< char >;
-
-
 std::int64_t operator ""_KB( unsigned long long kb )
 {
      return kb * 1024;
@@ -41,12 +36,22 @@ std::int64_t operator ""_MB( unsigned long long mb )
 }
 
 
+using CeleroExperimentValue = celero::TestFixture::ExperimentValue;
+using CeleroExperimentValues = std::vector< CeleroExperimentValue >;
+using Buffer = std::vector< char >;
+
+
+static constexpr auto N_SAMPLES = 2u;
+static constexpr auto N_ITERATIONS = 300u;
+static const CeleroExperimentValues BUFFER_SIZES{ 100_KB, 300_KB, 800_KB };
+
+
 class EncodingTestFixture : public celero::TestFixture
 {
 public:
      CeleroExperimentValues getExperimentValues() const override
      {
-          return { 300_KB, 800_KB, 1_MB };
+          return BUFFER_SIZES;
      }
 
      void setUp( const CeleroExperimentValue& value ) override
@@ -103,7 +108,7 @@ class DecodingTestFixture : public celero::TestFixture
 public:
      CeleroExperimentValues getExperimentValues() const override
      {
-          return { 300_KB, 800_KB, 1_MB };
+          return BUFFER_SIZES;
      }
 
      void setUp( const CeleroExperimentValue& value ) override
@@ -163,7 +168,7 @@ private:
 };
 
 
-BASELINE_F( Base64Encoding, BoostOnIterators, EncodingTestFixture, 3, 300 )
+BASELINE_F( Base64Encoding, BoostOnIterators, EncodingTestFixture, N_SAMPLES, N_ITERATIONS )
 {
      using Base64EncodingIterator =
           boost::archive::iterators::base64_from_binary<
@@ -184,7 +189,7 @@ BASELINE_F( Base64Encoding, BoostOnIterators, EncodingTestFixture, 3, 300 )
 }
 
 
-BENCHMARK_F( Base64Encoding, BoostOnPtrs, EncodingTestFixture, 3, 300 )
+BENCHMARK_F( Base64Encoding, BoostOnPtrs, EncodingTestFixture, N_SAMPLES, N_ITERATIONS )
 {
      using Base64EncodingIterator =
           boost::archive::iterators::base64_from_binary<
@@ -204,7 +209,7 @@ BENCHMARK_F( Base64Encoding, BoostOnPtrs, EncodingTestFixture, 3, 300 )
 }
 
 
-BENCHMARK_F( Base64Encoding, Custom, EncodingTestFixture, 3, 300 )
+BENCHMARK_F( Base64Encoding, Custom, EncodingTestFixture, N_SAMPLES, N_ITERATIONS )
 {
      boost::iostreams::filtering_istream is{ boost::make_iterator_range( data() ) };
      std::ostream& os = null();
@@ -213,7 +218,7 @@ BENCHMARK_F( Base64Encoding, Custom, EncodingTestFixture, 3, 300 )
 }
 
 
-BASELINE_F( Base64Decoding, BoostOnIterators, DecodingTestFixture, 3, 300 )
+BASELINE_F( Base64Decoding, BoostOnIterators, DecodingTestFixture, N_SAMPLES, N_ITERATIONS )
 {
      using Base64DecodingIterator =
           boost::archive::iterators::transform_width<
@@ -235,7 +240,7 @@ BASELINE_F( Base64Decoding, BoostOnIterators, DecodingTestFixture, 3, 300 )
 }
 
 
-BENCHMARK_F( Base64Decoding, BoostOnPtrs, DecodingTestFixture, 3, 300 )
+BENCHMARK_F( Base64Decoding, BoostOnPtrs, DecodingTestFixture, N_SAMPLES, N_ITERATIONS )
 {
      using Base64DecodingIterator =
      boost::archive::iterators::transform_width<
@@ -257,7 +262,7 @@ BENCHMARK_F( Base64Decoding, BoostOnPtrs, DecodingTestFixture, 3, 300 )
 }
 
 
-BENCHMARK_F( Base64Decoding, Custom, DecodingTestFixture, 3, 300 )
+BENCHMARK_F( Base64Decoding, Custom, DecodingTestFixture, N_SAMPLES, N_ITERATIONS )
 {
      boost::iostreams::filtering_istream is{ boost::make_iterator_range( data() ) };
      std::ostream& os = null();
