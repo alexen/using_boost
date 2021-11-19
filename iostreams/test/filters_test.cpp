@@ -40,6 +40,11 @@ prdnt, snt n clp q ffc dsrnt mllt nm d st lbrm.
 
 
 } /// namespace text
+
+
+constexpr auto vowels = { 'a','e','i','o','u','A','E','I','O','U' };
+
+
 } /// namespace test_env
 } /// namespace {unnamed}
 
@@ -246,16 +251,16 @@ BOOST_AUTO_TEST_SUITE_END() /// Multichar
 BOOST_AUTO_TEST_SUITE_END() /// NonModifying
 BOOST_AUTO_TEST_SUITE( Modifying )
 BOOST_AUTO_TEST_SUITE( SingleChar )
-BOOST_AUTO_TEST_SUITE( VowelRemover )
+BOOST_AUTO_TEST_SUITE( CharRemover )
 
-using using_boost::iostreams::filters::single_char::VowelRemover;
+using using_boost::iostreams::filters::single_char::CharRemover;
 
 BOOST_AUTO_TEST_CASE( EmptyData )
 {
      std::istringstream iss;
 
      boost::iostreams::filtering_istream is;
-     is.push( VowelRemover{} );
+     is.push( CharRemover{ test_env::vowels } );
      is.push( iss );
 
      boost::test_tools::output_test_stream os;
@@ -268,7 +273,7 @@ BOOST_AUTO_TEST_CASE( TextData )
      std::istringstream iss{ test_env::text::source };
 
      boost::iostreams::filtering_istream is;
-     is.push( VowelRemover{} );
+     is.push( CharRemover{ test_env::vowels } );
      is.push( iss );
 
      boost::test_tools::output_test_stream os;
@@ -276,19 +281,19 @@ BOOST_AUTO_TEST_CASE( TextData )
 
      BOOST_TEST( os.is_equal( test_env::text::modified ) );
 }
-BOOST_AUTO_TEST_SUITE_END() /// VowelRemover
+BOOST_AUTO_TEST_SUITE_END() /// CharRemover
 BOOST_AUTO_TEST_SUITE_END() /// SingleChar
 BOOST_AUTO_TEST_SUITE( Multichar )
-BOOST_AUTO_TEST_SUITE( VowelRemover )
+BOOST_AUTO_TEST_SUITE( CharRemover )
 
-using using_boost::iostreams::filters::multichar::VowelRemover;
+using using_boost::iostreams::filters::multichar::CharRemover;
 
 BOOST_AUTO_TEST_CASE( EmptyData )
 {
      std::istringstream iss;
 
      boost::iostreams::filtering_istream is;
-     is.push( VowelRemover{} );
+     is.push( CharRemover{ test_env::vowels } );
      is.push( iss );
 
      boost::test_tools::output_test_stream os;
@@ -301,7 +306,7 @@ BOOST_AUTO_TEST_CASE( TextData )
      std::istringstream iss{ test_env::text::source };
 
      boost::iostreams::filtering_istream is;
-     is.push( VowelRemover{} );
+     is.push( CharRemover{ test_env::vowels } );
      is.push( iss );
 
      boost::test_tools::output_test_stream os;
@@ -309,7 +314,7 @@ BOOST_AUTO_TEST_CASE( TextData )
 
      BOOST_TEST( os.is_equal( test_env::text::modified ) );
 }
-BOOST_AUTO_TEST_SUITE_END() /// VowelRemover
+BOOST_AUTO_TEST_SUITE_END() /// CharRemover
 BOOST_AUTO_TEST_SUITE_END() /// Multichar
 BOOST_AUTO_TEST_SUITE_END() /// Modifying
 BOOST_AUTO_TEST_SUITE_END() /// IoFilters

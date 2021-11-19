@@ -214,9 +214,11 @@ int main( int argc, char** argv )
 
           std::istringstream is{ text };
 
+          const auto vowels = { 'a','e','i','o','u','A','E','I','O','U' };
+
           boost::iostreams::filtering_istream fis;
-          fis.push( using_boost::iostreams::filters::single_char::VowelRemover{} );
-          fis.push( using_boost::iostreams::filters::multichar::VowelRemover{} );
+          fis.push( using_boost::iostreams::filters::single_char::CharRemover{ vowels } );
+          fis.push( using_boost::iostreams::filters::multichar::CharRemover{ vowels } );
           fis.push( is );
 
           std::ostringstream oss;
