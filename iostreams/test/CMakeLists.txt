@@ -3,6 +3,7 @@ add_executable(${TEST_NAME}
      ../base64.cpp
      main_test.cpp
      base64_test.cpp
+     filters_test.cpp
      )
 target_link_libraries(${TEST_NAME}
      ${Boost_IOSTREAMS_LIBRARY}
