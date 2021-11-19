@@ -5,6 +5,7 @@
 #pragma once
 
 #include <cstring>
+#include <set>
 
 #include <boost/assert.hpp>
 #include <boost/iostreams/concepts.hpp>
@@ -14,23 +15,6 @@
 namespace using_boost {
 namespace iostreams {
 namespace filters {
-
-
-namespace {
-namespace impl {
-
-
-inline bool isVowel( const int c ) noexcept
-{
-     static constexpr auto vowels = "aeiouAEIOU";
-     return std::strchr( vowels, c ) != nullptr;
-}
-
-
-} // namespace impl
-} // namespace {unnamed}
-
-
 namespace single_char {
 
 
@@ -50,21 +34,29 @@ struct Transparent : boost::iostreams::dual_use_filter
 };
 
 
-struct VowelRemover : boost::iostreams::input_filter
+struct CharRemover : boost::iostreams::input_filter
 {
+     template< typename ...Args >
+     explicit CharRemover( Args&& ...args )
+          : chars_{ std::forward< Args >( args )... }
+     {}
+
      template< typename Source >
      int get( Source& src )
      {
           while( true )
           {
                const auto c = boost::iostreams::get( src );
-               if( !impl::isVowel( c ) )
+               if( !chars_.count( c ) )
                {
                     return c;
                }
           }
           BOOST_ASSERT( !"unreachable code" );
      }
+
+private:
+     std::set< char > chars_;
 };
 
 
@@ -118,8 +110,13 @@ private:
 };
 
 
-struct VowelRemover : boost::iostreams::multichar_input_filter
+struct CharRemover : boost::iostreams::multichar_input_filter
 {
+     template< typename ...Args >
+     explicit CharRemover( Args&& ...args )
+          : chars_{ std::forward< Args >( args )... }
+     {}
+
      template< typename Source >
      std::streamsize read( Source& src, char* s, std::streamsize n )
      {
@@ -136,7 +133,7 @@ struct VowelRemover : boost::iostreams::multichar_input_filter
                     {
                          return i;
                     }
-                    else if( impl::isVowel( c ) )
+                    else if( chars_.count( c ) )
                     {
                          continue;
                     }
@@ -146,6 +143,8 @@ struct VowelRemover : boost::iostreams::multichar_input_filter
           }
           return n;
      }
+private:
+     std::set< char > chars_;
 };
 
 
