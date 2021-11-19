@@ -45,6 +45,134 @@ prdnt, snt n clp q ffc dsrnt mllt nm d st lbrm.
 
 
 BOOST_AUTO_TEST_SUITE( IoFilters )
+BOOST_AUTO_TEST_SUITE( NonModifying )
+BOOST_AUTO_TEST_SUITE( SingleChar )
+BOOST_AUTO_TEST_SUITE( Transparent )
+
+using using_boost::iostreams::filters::single_char::Transparent;
+
+BOOST_AUTO_TEST_SUITE( Input )
+BOOST_AUTO_TEST_CASE( EmptyData )
+{
+     std::istringstream iss;
+
+     boost::iostreams::filtering_istream is;
+     is.push( Transparent{} );
+     is.push( iss );
+
+     boost::test_tools::output_test_stream os;
+     boost::iostreams::copy( is, os );
+
+     BOOST_TEST( os.is_empty() );
+}
+BOOST_AUTO_TEST_CASE( TextData )
+{
+     std::istringstream iss{ test_env::text::source };
+
+     boost::iostreams::filtering_istream is;
+     is.push( Transparent{} );
+     is.push( iss );
+
+     boost::test_tools::output_test_stream os;
+     boost::iostreams::copy( is, os );
+
+     BOOST_TEST( os.is_equal( test_env::text::source ) );
+}
+BOOST_AUTO_TEST_SUITE_END() /// Input
+BOOST_AUTO_TEST_SUITE( Output )
+BOOST_AUTO_TEST_CASE( EmptyData )
+{
+     std::istringstream is;
+     boost::test_tools::output_test_stream os;
+
+     boost::iostreams::filtering_ostream fos;
+     fos.push( Transparent{} );
+     fos.push( os );
+
+     boost::iostreams::copy( is, fos );
+
+     BOOST_TEST( os.is_empty() );
+}
+BOOST_AUTO_TEST_CASE( TextData )
+{
+     std::istringstream is{ test_env::text::source };
+     boost::test_tools::output_test_stream os;
+
+     boost::iostreams::filtering_ostream fos;
+     fos.push( Transparent{} );
+     fos.push( os );
+
+     boost::iostreams::copy( is, fos );
+
+     BOOST_TEST( os.is_equal( test_env::text::source ) );
+}
+BOOST_AUTO_TEST_SUITE_END() /// Output
+BOOST_AUTO_TEST_SUITE_END() /// Transparent
+BOOST_AUTO_TEST_SUITE_END() /// SingleChar
+BOOST_AUTO_TEST_SUITE( Multichar )
+BOOST_AUTO_TEST_SUITE( Transparent )
+
+using using_boost::iostreams::filters::multichar::Transparent;
+
+BOOST_AUTO_TEST_SUITE( Input )
+BOOST_AUTO_TEST_CASE( EmptyData )
+{
+     std::istringstream iss;
+
+     boost::iostreams::filtering_istream is;
+     is.push( Transparent{} );
+     is.push( iss );
+
+     boost::test_tools::output_test_stream os;
+     boost::iostreams::copy( is, os );
+
+     BOOST_TEST( os.is_empty() );
+}
+BOOST_AUTO_TEST_CASE( TextData )
+{
+     std::istringstream iss{ test_env::text::source };
+
+     boost::iostreams::filtering_istream is;
+     is.push( Transparent{} );
+     is.push( iss );
+
+     boost::test_tools::output_test_stream os;
+     boost::iostreams::copy( is, os );
+
+     BOOST_TEST( os.is_equal( test_env::text::source ) );
+}
+BOOST_AUTO_TEST_SUITE_END() /// Input
+BOOST_AUTO_TEST_SUITE( Output )
+BOOST_AUTO_TEST_CASE( EmptyData )
+{
+     std::istringstream iss;
+     boost::test_tools::output_test_stream os;
+
+     boost::iostreams::filtering_ostream fos;
+     fos.push( Transparent{} );
+     fos.push( os );
+
+     boost::iostreams::copy( iss, fos );
+
+     BOOST_TEST( os.is_empty() );
+}
+BOOST_AUTO_TEST_CASE( TextData )
+{
+     std::istringstream iss{ test_env::text::source };
+     boost::test_tools::output_test_stream os;
+
+     boost::iostreams::filtering_ostream fos;
+     fos.push( Transparent{} );
+     fos.push( os );
+
+     boost::iostreams::copy( iss, fos );
+
+     BOOST_TEST( os.is_equal( test_env::text::source ) );
+}
+BOOST_AUTO_TEST_SUITE_END() /// Output
+BOOST_AUTO_TEST_SUITE_END() /// Transparent
+BOOST_AUTO_TEST_SUITE_END() /// Multichar
+BOOST_AUTO_TEST_SUITE_END() /// NonModifying
 BOOST_AUTO_TEST_SUITE( Modifying )
 BOOST_AUTO_TEST_SUITE( SingleChar )
 BOOST_AUTO_TEST_SUITE( VowelRemover )
