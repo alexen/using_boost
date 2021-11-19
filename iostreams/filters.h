@@ -88,6 +88,36 @@ struct Transparent : boost::iostreams::multichar_dual_use_filter
 };
 
 
+struct Counter : boost::iostreams::multichar_dual_use_filter
+{
+     explicit Counter( std::size_t n = 0 ) : chars_{ n } {}
+
+     template< typename Source >
+     std::streamsize read( Source& src, char* s, std::streamsize n )
+     {
+          const auto result = boost::iostreams::read( src, s, n );
+          chars_ += result > 0 ? result : 0u;
+          return result;
+     }
+
+     template< typename Sink >
+     std::streamsize write( Sink& snk, const char* s, std::streamsize n )
+     {
+          const auto result = boost::iostreams::write( snk, s, n );
+          chars_ += result > 0 ? result : 0u;
+          return result;
+     }
+
+     std::size_t chars() const noexcept
+     {
+          return chars_;
+     }
+
+private:
+     std::size_t chars_ = 0;
+};
+
+
 struct VowelRemover : boost::iostreams::multichar_input_filter
 {
      template< typename Source >
