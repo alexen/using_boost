@@ -22,12 +22,20 @@
 CELERO_MAIN
 
 
-#define KB( n ) (n * 1024)
-#define MB( n ) (KB( n ) * 1024)
+std::int64_t operator ""_KB( unsigned long long kb )
+{
+     return kb * 1024;
+}
 
 
-static constexpr auto N_SAMPLES = 4u;
-static constexpr auto N_ITERATIONS = 500u;
+std::int64_t operator ""_MB( unsigned long long mb )
+{
+     return mb * 1_KB * 1_KB;
+}
+
+
+static constexpr auto N_SAMPLES = 3u;
+static constexpr auto N_ITERATIONS = 300u;
 static constexpr auto N_THREADS = 8u;
 
 
@@ -38,14 +46,12 @@ public:
      using ExperimentalValues = std::vector< ExperimentValue >;
      using Buffer = std::vector< char >;
 
-     TestFixture() : null_{ {} } {}
-
      ExperimentalValues getExperimentValues() const override
      {
           return {
-               KB( 300 ),
-               KB( 500 ),
-               MB(   1 ),
+               100_KB,
+               300_KB,
+               600_KB
           };
      }
 
