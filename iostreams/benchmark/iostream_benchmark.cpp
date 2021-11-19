@@ -70,11 +70,6 @@ public:
           return buffer_;
      }
 
-     std::ostream& null()
-     {
-          return null_;
-     }
-
 private:
      static void clear( Buffer& out )
      {
@@ -103,168 +98,207 @@ private:
      }
 
      Buffer buffer_;
-     boost::iostreams::stream< boost::iostreams::null_sink > null_;
 };
 
 
-BASELINE_F( CopyStream, BoostCopy, TestFixture, N_SAMPLES, N_ITERATIONS )
+BASELINE_F( CopyStream, BoostIosCopy, TestFixture, N_SAMPLES, N_ITERATIONS )
 {
      boost::iostreams::filtering_istream is{ boost::make_iterator_range( buffer() ) };
-     std::ostream& os = null();
-
-     boost::iostreams::copy( is, os );
+     boost::iostreams::stream< boost::iostreams::null_sink > os{
+          boost::iostreams::null_sink{}
+     };
+     celero::DoNotOptimizeAway( boost::iostreams::copy( is, os ) );
 }
 
 
-BENCHMARK_F( CopyStream, StdStreamIt, TestFixture, N_SAMPLES, N_ITERATIONS )
+BENCHMARK_F( CopyStream, StreamIter, TestFixture, N_SAMPLES, N_ITERATIONS )
 {
      boost::iostreams::filtering_istream is{ boost::make_iterator_range( buffer() ) };
-     std::ostream& os = null();
-
-     std::copy(
-          std::istream_iterator< char >{ is }
-          , std::istream_iterator< char >{}
-          , std::ostream_iterator< char >{ os }
+     boost::iostreams::stream< boost::iostreams::null_sink > os{
+          boost::iostreams::null_sink{}
+     };
+     celero::DoNotOptimizeAway(
+          std::copy(
+               std::istream_iterator< char >{ is }
+               , std::istream_iterator< char >{}
+               , std::ostream_iterator< char >{ os }
+               )
           );
 }
 
 
-BENCHMARK_F( CopyStream, StdStreambufIt, TestFixture, N_SAMPLES, N_ITERATIONS )
+BENCHMARK_F( CopyStream, StreambufIter, TestFixture, N_SAMPLES, N_ITERATIONS )
 {
      boost::iostreams::filtering_istream is{ boost::make_iterator_range( buffer() ) };
-     std::ostream& os = null();
-
-     std::copy(
-          std::istreambuf_iterator< char >{ is }
-          , std::istreambuf_iterator< char >{}
-          , std::ostreambuf_iterator< char >{ os }
+     boost::iostreams::stream< boost::iostreams::null_sink > os{
+          boost::iostreams::null_sink{}
+     };
+     celero::DoNotOptimizeAway(
+          std::copy(
+               std::istreambuf_iterator< char >{ is }
+               , std::istreambuf_iterator< char >{}
+               , std::ostreambuf_iterator< char >{ os }
+               )
           );
 }
+
+
+namespace {
+namespace fastest {
+
+
+void copy( std::istream& is, std::ostream& os )
+{
+     celero::DoNotOptimizeAway(
+          std::copy(
+               std::istreambuf_iterator< char >{ is }
+               , std::istreambuf_iterator< char >{}
+               , std::ostreambuf_iterator< char >{ os }
+               )
+          );
+}
+
+
+void copyToNull( std::istream& is )
+{
+     static boost::iostreams::stream< boost::iostreams::null_sink > os{
+          boost::iostreams::null_sink{}
+     };
+     copy( is, os );
+}
+
+
+} // namespace fastest
+} // namespace {unnamed}
+
 
 
 BASELINE_F( IoFilter, NoFilters, TestFixture, N_SAMPLES, N_ITERATIONS )
 {
      boost::iostreams::filtering_istream is{ boost::make_iterator_range( buffer() ) };
-     std::ostream& os = null();
-     boost::iostreams::copy( is, os );
+     fastest::copyToNull( is );
 }
 
 
-BENCHMARK_F( IoFilter, BoostICounter, TestFixture, N_SAMPLES, N_ITERATIONS )
+BENCHMARK_F( IoFilter, BoostInCounter, TestFixture, N_SAMPLES, N_ITERATIONS )
 {
      boost::iostreams::filtering_istream is{ boost::make_iterator_range( buffer() ) };
-     std::ostream& os = null();
 
      boost::iostreams::counter c;
      boost::iostreams::filtering_istream fis;
      fis.push( boost::ref( c ) );
      fis.push( is );
 
-     boost::iostreams::copy( fis, os );
+     fastest::copyToNull( is );
 
      BOOST_ASSERT( boost::numeric_cast< std::size_t >( c.characters() ) == buffer().size() );
 }
 
 
-BENCHMARK_F( IoFilter, BoostOCounter, TestFixture, N_SAMPLES, N_ITERATIONS )
+BENCHMARK_F( IoFilter, BoostOutCounter, TestFixture, N_SAMPLES, N_ITERATIONS )
 {
      boost::iostreams::filtering_istream is{ boost::make_iterator_range( buffer() ) };
-     std::ostream& os = null();
+     boost::iostreams::stream< boost::iostreams::null_sink > os{
+          boost::iostreams::null_sink{}
+     };
 
      boost::iostreams::counter c;
      boost::iostreams::filtering_ostream fos;
      fos.push( boost::ref( c ) );
      fos.push( os );
 
-     boost::iostreams::copy( is, fos );
+     fastest::copy( is, fos );
 
      BOOST_ASSERT( boost::numeric_cast< std::size_t >( c.characters() ) == buffer().size() );
 }
 
 
-BENCHMARK_F( IoFilter, CustomICounter, TestFixture, N_SAMPLES, N_ITERATIONS )
+BENCHMARK_F( IoFilter, CustomInCounter, TestFixture, N_SAMPLES, N_ITERATIONS )
 {
      boost::iostreams::filtering_istream is{ boost::make_iterator_range( buffer() ) };
-     std::ostream& os = null();
 
      using_boost::iostreams::filters::multichar::Counter c;
      boost::iostreams::filtering_istream fis;
      fis.push( boost::ref( c ) );
      fis.push( is );
 
-     boost::iostreams::copy( fis, os );
+     fastest::copyToNull( is );
 
      BOOST_ASSERT( c.chars() == buffer().size() );
 }
 
 
-BENCHMARK_F( IoFilter, CustomOCounter, TestFixture, N_SAMPLES, N_ITERATIONS )
+BENCHMARK_F( IoFilter, CustomOutCounter, TestFixture, N_SAMPLES, N_ITERATIONS )
 {
      boost::iostreams::filtering_istream is{ boost::make_iterator_range( buffer() ) };
-     std::ostream& os = null();
+     boost::iostreams::stream< boost::iostreams::null_sink > os{
+          boost::iostreams::null_sink{}
+     };
 
      using_boost::iostreams::filters::multichar::Counter c;
      boost::iostreams::filtering_ostream fos;
      fos.push( boost::ref( c ) );
      fos.push( os );
 
-     boost::iostreams::copy( is, fos );
+     fastest::copy( is, fos );
 
      BOOST_ASSERT( c.chars() == buffer().size() );
 }
 
 
-BENCHMARK_F( IoFilter, SingleCharIFilter, TestFixture, N_SAMPLES, N_ITERATIONS )
+BENCHMARK_F( IoFilter, CharInFilt, TestFixture, N_SAMPLES, N_ITERATIONS )
 {
      boost::iostreams::filtering_istream is{ boost::make_iterator_range( buffer() ) };
-     std::ostream& os = null();
 
-     using_boost::iostreams::filters::single_char::Transparent f;
+     using_boost::iostreams::filters::single_char::Transparent t;
      boost::iostreams::filtering_istream fis;
-     fis.push( boost::ref( f ) );
+     fis.push( boost::ref( t ) );
      fis.push( is );
 
-     boost::iostreams::copy( fis, os );
+     fastest::copyToNull( is );
 }
 
 
-BENCHMARK_F( IoFilter, SingleCharOFilter, TestFixture, N_SAMPLES, N_ITERATIONS )
+BENCHMARK_F( IoFilter, CharOutFilt, TestFixture, N_SAMPLES, N_ITERATIONS )
 {
      boost::iostreams::filtering_istream is{ boost::make_iterator_range( buffer() ) };
-     std::ostream& os = null();
+     boost::iostreams::stream< boost::iostreams::null_sink > os{
+          boost::iostreams::null_sink{}
+     };
 
-     using_boost::iostreams::filters::single_char::Transparent f;
+     using_boost::iostreams::filters::single_char::Transparent t;
      boost::iostreams::filtering_ostream fos;
-     fos.push( boost::ref( f ) );
+     fos.push( boost::ref( t ) );
      fos.push( os );
 
-     boost::iostreams::copy( is, fos );
+     fastest::copy( is, fos );
 }
 
 
-BENCHMARK_F( IoFilter, MulticharIFilter, TestFixture, N_SAMPLES, N_ITERATIONS )
+BENCHMARK_F( IoFilter, BlockInFilt, TestFixture, N_SAMPLES, N_ITERATIONS )
 {
      boost::iostreams::filtering_istream is{ boost::make_iterator_range( buffer() ) };
-     std::ostream& os = null();
 
-     using_boost::iostreams::filters::multichar::Transparent f;
+     using_boost::iostreams::filters::multichar::Transparent t;
      boost::iostreams::filtering_istream fis;
-     fis.push( boost::ref( f ) );
+     fis.push( boost::ref( t ) );
      fis.push( is );
 
-     boost::iostreams::copy( fis, os );
+     fastest::copyToNull( is );
 }
 
 
-BENCHMARK_F( IoFilter, MulticharOFilter, TestFixture, N_SAMPLES, N_ITERATIONS )
+BENCHMARK_F( IoFilter, BlockOutFilt, TestFixture, N_SAMPLES, N_ITERATIONS )
 {
      boost::iostreams::filtering_istream is{ boost::make_iterator_range( buffer() ) };
-     std::ostream& os = null();
+     boost::iostreams::stream< boost::iostreams::null_sink > os{
+          boost::iostreams::null_sink{}
+     };
 
-     using_boost::iostreams::filters::multichar::Transparent f;
+     using_boost::iostreams::filters::multichar::Transparent t;
      boost::iostreams::filtering_ostream fos;
-     fos.push( boost::ref( f ) );
+     fos.push( boost::ref( t ) );
      fos.push( os );
 
-     boost::iostreams::copy( is, fos );
+     fastest::copy( is, fos );
 }
