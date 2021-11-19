@@ -21,19 +21,7 @@
 #include <iostreams/base64.h>
 
 
-CELERO_MAIN
-
-
-std::int64_t operator ""_KB( unsigned long long kb )
-{
-     return kb * 1024;
-}
-
-
-std::int64_t operator ""_MB( unsigned long long mb )
-{
-     return mb * 1_KB * 1_KB;
-}
+namespace {
 
 
 using CeleroExperimentValue = celero::TestFixture::ExperimentValue;
@@ -41,19 +29,37 @@ using CeleroExperimentValues = std::vector< CeleroExperimentValue >;
 using Buffer = std::vector< char >;
 
 
+namespace bm_env {
+
+
+[[maybe_unused]] std::int64_t operator ""_KB( unsigned long long kb )
+{
+     return kb * 1024;
+}
+
+
+[[maybe_unused]] std::int64_t operator ""_MB( unsigned long long mb )
+{
+     return mb * 1_KB * 1_KB;
+}
+
+namespace consts {
+
+
 static constexpr auto N_SAMPLES = 3u;
 static constexpr auto N_ITERATIONS = 400u;
 static const CeleroExperimentValues BUFFER_SIZES{ 100_KB, 300_KB, 800_KB };
 
 
+} // namespace consts
+
+
 class EncodingTestFixture : public celero::TestFixture
 {
 public:
-     EncodingTestFixture() : null_{ {} } {}
-
      CeleroExperimentValues getExperimentValues() const override
      {
-          return BUFFER_SIZES;
+          return consts::BUFFER_SIZES;
      }
 
      void setUp( const CeleroExperimentValue& value ) override
@@ -69,11 +75,6 @@ public:
      const Buffer& data() const noexcept
      {
           return buffer_;
-     }
-
-     std::ostream& null()
-     {
-          return null_;
      }
 
 private:
@@ -104,18 +105,15 @@ private:
      }
 
      Buffer buffer_;
-     boost::iostreams::stream< boost::iostreams::null_sink > null_;
 };
 
 
 class DecodingTestFixture : public celero::TestFixture
 {
 public:
-     DecodingTestFixture() : null_{ {} } {}
-
      CeleroExperimentValues getExperimentValues() const override
      {
-          return BUFFER_SIZES;
+          return consts::BUFFER_SIZES;
      }
 
      void setUp( const CeleroExperimentValue& value ) override
@@ -131,11 +129,6 @@ public:
      const Buffer& data() const noexcept
      {
           return buffer_;
-     }
-
-     std::ostream& null()
-     {
-          return null_;
      }
 
 private:
@@ -174,11 +167,14 @@ private:
      }
 
      Buffer buffer_;
-     boost::iostreams::stream< boost::iostreams::null_sink > null_;
 };
 
 
-BASELINE_F( Base64Encoding, BoostOnIterators, EncodingTestFixture, N_SAMPLES, N_ITERATIONS )
+} // namespace bm_env
+} // namespace {unnamed}
+
+
+BASELINE_F( Base64Encoding, BoostOnIterators, bm_env::EncodingTestFixture, bm_env::consts::N_SAMPLES, bm_env::consts::N_ITERATIONS )
 {
      using Base64EncodingIterator =
           boost::archive::iterators::base64_from_binary<
@@ -189,7 +185,9 @@ BASELINE_F( Base64Encoding, BoostOnIterators, EncodingTestFixture, N_SAMPLES, N_
                >
           >;
      boost::iostreams::filtering_istream is{ boost::make_iterator_range( data() ) };
-     std::ostream& os = null();
+     boost::iostreams::stream< boost::iostreams::null_sink > os{
+          boost::iostreams::null_sink{}
+     };
 
      std::copy(
           Base64EncodingIterator{ std::istreambuf_iterator< char >{ is } }
@@ -199,7 +197,7 @@ BASELINE_F( Base64Encoding, BoostOnIterators, EncodingTestFixture, N_SAMPLES, N_
 }
 
 
-BENCHMARK_F( Base64Encoding, BoostOnPtrs, EncodingTestFixture, N_SAMPLES, N_ITERATIONS )
+BENCHMARK_F( Base64Encoding, BoostOnPtrs, bm_env::EncodingTestFixture, bm_env::consts::N_SAMPLES, bm_env::consts::N_ITERATIONS )
 {
      using Base64EncodingIterator =
           boost::archive::iterators::base64_from_binary<
@@ -209,7 +207,9 @@ BENCHMARK_F( Base64Encoding, BoostOnPtrs, EncodingTestFixture, N_SAMPLES, N_ITER
                     , 8
                >
           >;
-     std::ostream& os = null();
+     boost::iostreams::stream< boost::iostreams::null_sink > os{
+          boost::iostreams::null_sink{}
+     };
 
      std::copy(
           Base64EncodingIterator{ data().data() }
@@ -219,16 +219,18 @@ BENCHMARK_F( Base64Encoding, BoostOnPtrs, EncodingTestFixture, N_SAMPLES, N_ITER
 }
 
 
-BENCHMARK_F( Base64Encoding, Custom, EncodingTestFixture, N_SAMPLES, N_ITERATIONS )
+BENCHMARK_F( Base64Encoding, Custom, bm_env::EncodingTestFixture, bm_env::consts::N_SAMPLES, bm_env::consts::N_ITERATIONS )
 {
      boost::iostreams::filtering_istream is{ boost::make_iterator_range( data() ) };
-     std::ostream& os = null();
+     boost::iostreams::stream< boost::iostreams::null_sink > os{
+          boost::iostreams::null_sink{}
+     };
 
      base64::encode( is, os );
 }
 
 
-BASELINE_F( Base64Decoding, BoostOnIterators, DecodingTestFixture, N_SAMPLES, N_ITERATIONS )
+BASELINE_F( Base64Decoding, BoostOnIterators, bm_env::DecodingTestFixture, bm_env::consts::N_SAMPLES, bm_env::consts::N_ITERATIONS )
 {
      using Base64DecodingIterator =
           boost::archive::iterators::transform_width<
@@ -240,7 +242,9 @@ BASELINE_F( Base64Decoding, BoostOnIterators, DecodingTestFixture, N_SAMPLES, N_
                >;
 
      boost::iostreams::filtering_istream is{ boost::make_iterator_range( data() ) };
-     std::ostream& os = null();
+     boost::iostreams::stream< boost::iostreams::null_sink > os{
+          boost::iostreams::null_sink{}
+     };
 
      std::copy(
           Base64DecodingIterator{ std::istreambuf_iterator< char >{ is } }
@@ -250,7 +254,7 @@ BASELINE_F( Base64Decoding, BoostOnIterators, DecodingTestFixture, N_SAMPLES, N_
 }
 
 
-BENCHMARK_F( Base64Decoding, BoostOnPtrs, DecodingTestFixture, N_SAMPLES, N_ITERATIONS )
+BENCHMARK_F( Base64Decoding, BoostOnPtrs, bm_env::DecodingTestFixture, bm_env::consts::N_SAMPLES, bm_env::consts::N_ITERATIONS )
 {
      using Base64DecodingIterator =
      boost::archive::iterators::transform_width<
@@ -262,7 +266,9 @@ BENCHMARK_F( Base64Decoding, BoostOnPtrs, DecodingTestFixture, N_SAMPLES, N_ITER
           >;
 
      boost::iostreams::filtering_istream is{ boost::make_iterator_range( data() ) };
-     std::ostream& os = null();
+     boost::iostreams::stream< boost::iostreams::null_sink > os{
+          boost::iostreams::null_sink{}
+     };
 
      std::copy(
           Base64DecodingIterator{ data().data() }
@@ -272,10 +278,12 @@ BENCHMARK_F( Base64Decoding, BoostOnPtrs, DecodingTestFixture, N_SAMPLES, N_ITER
 }
 
 
-BENCHMARK_F( Base64Decoding, Custom, DecodingTestFixture, N_SAMPLES, N_ITERATIONS )
+BENCHMARK_F( Base64Decoding, Custom, bm_env::DecodingTestFixture, bm_env::consts::N_SAMPLES, bm_env::consts::N_ITERATIONS )
 {
      boost::iostreams::filtering_istream is{ boost::make_iterator_range( data() ) };
-     std::ostream& os = null();
+     boost::iostreams::stream< boost::iostreams::null_sink > os{
+          boost::iostreams::null_sink{}
+     };
 
      base64::decode( is, os );
 }

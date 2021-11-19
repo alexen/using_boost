@@ -14,9 +14,6 @@
 #include <iostreams/filters.h>
 
 
-CELERO_MAIN
-
-
 using namespace std::literals;
 
 

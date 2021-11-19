@@ -19,24 +19,31 @@
 #include <iostreams/filters.h>
 
 
-CELERO_MAIN
+namespace {
 
 
-std::int64_t operator ""_KB( unsigned long long kb )
+[[maybe_unused]] std::int64_t operator ""_KB( unsigned long long kb )
 {
      return kb * 1024;
 }
 
 
-std::int64_t operator ""_MB( unsigned long long mb )
+[[maybe_unused]] std::int64_t operator ""_MB( unsigned long long mb )
 {
      return mb * 1_KB * 1_KB;
 }
 
 
+namespace bm_env {
+namespace consts {
+
+
 static constexpr auto N_SAMPLES = 3u;
 static constexpr auto N_ITERATIONS = 300u;
 static constexpr auto N_THREADS = 8u;
+
+
+} // namespace consts
 
 
 class TestFixture : public celero::TestFixture
@@ -101,7 +108,11 @@ private:
 };
 
 
-BASELINE_F( CopyStream, BoostIosCopy, TestFixture, N_SAMPLES, N_ITERATIONS )
+} // namespace bm_env
+} // namespace {unnamed}
+
+
+BASELINE_F( CopyStream, BoostIosCopy, bm_env::TestFixture, bm_env::consts::N_SAMPLES, bm_env::consts::N_ITERATIONS )
 {
      boost::iostreams::filtering_istream is{ boost::make_iterator_range( buffer() ) };
      boost::iostreams::stream< boost::iostreams::null_sink > os{
@@ -111,7 +122,7 @@ BASELINE_F( CopyStream, BoostIosCopy, TestFixture, N_SAMPLES, N_ITERATIONS )
 }
 
 
-BENCHMARK_F( CopyStream, StreamIter, TestFixture, N_SAMPLES, N_ITERATIONS )
+BENCHMARK_F( CopyStream, StreamIter, bm_env::TestFixture, bm_env::consts::N_SAMPLES, bm_env::consts::N_ITERATIONS )
 {
      boost::iostreams::filtering_istream is{ boost::make_iterator_range( buffer() ) };
      boost::iostreams::stream< boost::iostreams::null_sink > os{
@@ -127,7 +138,7 @@ BENCHMARK_F( CopyStream, StreamIter, TestFixture, N_SAMPLES, N_ITERATIONS )
 }
 
 
-BENCHMARK_F( CopyStream, StreambufIter, TestFixture, N_SAMPLES, N_ITERATIONS )
+BENCHMARK_F( CopyStream, StreambufIter, bm_env::TestFixture, bm_env::consts::N_SAMPLES, bm_env::consts::N_ITERATIONS )
 {
      boost::iostreams::filtering_istream is{ boost::make_iterator_range( buffer() ) };
      boost::iostreams::stream< boost::iostreams::null_sink > os{
@@ -144,6 +155,7 @@ BENCHMARK_F( CopyStream, StreambufIter, TestFixture, N_SAMPLES, N_ITERATIONS )
 
 
 namespace {
+namespace bm_env {
 namespace fastest {
 
 
@@ -169,18 +181,19 @@ void copyToNull( std::istream& is )
 
 
 } // namespace fastest
+} // namespace bm_env
 } // namespace {unnamed}
 
 
 
-BASELINE_F( IoFilter, NoFilters, TestFixture, N_SAMPLES, N_ITERATIONS )
+BASELINE_F( IoFilter, NoFilters, bm_env::TestFixture, bm_env::consts::N_SAMPLES, bm_env::consts::N_ITERATIONS )
 {
      boost::iostreams::filtering_istream is{ boost::make_iterator_range( buffer() ) };
-     fastest::copyToNull( is );
+     bm_env::fastest::copyToNull( is );
 }
 
 
-BENCHMARK_F( IoFilter, BoostInCounter, TestFixture, N_SAMPLES, N_ITERATIONS )
+BENCHMARK_F( IoFilter, BoostInCounter, bm_env::TestFixture, bm_env::consts::N_SAMPLES, bm_env::consts::N_ITERATIONS )
 {
      boost::iostreams::filtering_istream is{ boost::make_iterator_range( buffer() ) };
 
@@ -189,13 +202,13 @@ BENCHMARK_F( IoFilter, BoostInCounter, TestFixture, N_SAMPLES, N_ITERATIONS )
      fis.push( boost::ref( c ) );
      fis.push( is );
 
-     fastest::copyToNull( is );
+     bm_env::fastest::copyToNull( is );
 
      BOOST_ASSERT( boost::numeric_cast< std::size_t >( c.characters() ) == buffer().size() );
 }
 
 
-BENCHMARK_F( IoFilter, BoostOutCounter, TestFixture, N_SAMPLES, N_ITERATIONS )
+BENCHMARK_F( IoFilter, BoostOutCounter, bm_env::TestFixture, bm_env::consts::N_SAMPLES, bm_env::consts::N_ITERATIONS )
 {
      boost::iostreams::filtering_istream is{ boost::make_iterator_range( buffer() ) };
      boost::iostreams::stream< boost::iostreams::null_sink > os{
@@ -207,13 +220,13 @@ BENCHMARK_F( IoFilter, BoostOutCounter, TestFixture, N_SAMPLES, N_ITERATIONS )
      fos.push( boost::ref( c ) );
      fos.push( os );
 
-     fastest::copy( is, fos );
+     bm_env::fastest::copy( is, fos );
 
      BOOST_ASSERT( boost::numeric_cast< std::size_t >( c.characters() ) == buffer().size() );
 }
 
 
-BENCHMARK_F( IoFilter, CustomInCounter, TestFixture, N_SAMPLES, N_ITERATIONS )
+BENCHMARK_F( IoFilter, CustomInCounter, bm_env::TestFixture, bm_env::consts::N_SAMPLES, bm_env::consts::N_ITERATIONS )
 {
      boost::iostreams::filtering_istream is{ boost::make_iterator_range( buffer() ) };
 
@@ -222,13 +235,13 @@ BENCHMARK_F( IoFilter, CustomInCounter, TestFixture, N_SAMPLES, N_ITERATIONS )
      fis.push( boost::ref( c ) );
      fis.push( is );
 
-     fastest::copyToNull( is );
+     bm_env::fastest::copyToNull( is );
 
      BOOST_ASSERT( c.chars() == buffer().size() );
 }
 
 
-BENCHMARK_F( IoFilter, CustomOutCounter, TestFixture, N_SAMPLES, N_ITERATIONS )
+BENCHMARK_F( IoFilter, CustomOutCounter, bm_env::TestFixture, bm_env::consts::N_SAMPLES, bm_env::consts::N_ITERATIONS )
 {
      boost::iostreams::filtering_istream is{ boost::make_iterator_range( buffer() ) };
      boost::iostreams::stream< boost::iostreams::null_sink > os{
@@ -240,13 +253,13 @@ BENCHMARK_F( IoFilter, CustomOutCounter, TestFixture, N_SAMPLES, N_ITERATIONS )
      fos.push( boost::ref( c ) );
      fos.push( os );
 
-     fastest::copy( is, fos );
+     bm_env::fastest::copy( is, fos );
 
      BOOST_ASSERT( c.chars() == buffer().size() );
 }
 
 
-BENCHMARK_F( IoFilter, CharInFilt, TestFixture, N_SAMPLES, N_ITERATIONS )
+BENCHMARK_F( IoFilter, CharInFilt, bm_env::TestFixture, bm_env::consts::N_SAMPLES, bm_env::consts::N_ITERATIONS )
 {
      boost::iostreams::filtering_istream is{ boost::make_iterator_range( buffer() ) };
 
@@ -255,11 +268,11 @@ BENCHMARK_F( IoFilter, CharInFilt, TestFixture, N_SAMPLES, N_ITERATIONS )
      fis.push( boost::ref( t ) );
      fis.push( is );
 
-     fastest::copyToNull( is );
+     bm_env::fastest::copyToNull( is );
 }
 
 
-BENCHMARK_F( IoFilter, CharOutFilt, TestFixture, N_SAMPLES, N_ITERATIONS )
+BENCHMARK_F( IoFilter, CharOutFilt, bm_env::TestFixture, bm_env::consts::N_SAMPLES, bm_env::consts::N_ITERATIONS )
 {
      boost::iostreams::filtering_istream is{ boost::make_iterator_range( buffer() ) };
      boost::iostreams::stream< boost::iostreams::null_sink > os{
@@ -271,11 +284,11 @@ BENCHMARK_F( IoFilter, CharOutFilt, TestFixture, N_SAMPLES, N_ITERATIONS )
      fos.push( boost::ref( t ) );
      fos.push( os );
 
-     fastest::copy( is, fos );
+     bm_env::fastest::copy( is, fos );
 }
 
 
-BENCHMARK_F( IoFilter, BlockInFilt, TestFixture, N_SAMPLES, N_ITERATIONS )
+BENCHMARK_F( IoFilter, BlockInFilt, bm_env::TestFixture, bm_env::consts::N_SAMPLES, bm_env::consts::N_ITERATIONS )
 {
      boost::iostreams::filtering_istream is{ boost::make_iterator_range( buffer() ) };
 
@@ -284,11 +297,11 @@ BENCHMARK_F( IoFilter, BlockInFilt, TestFixture, N_SAMPLES, N_ITERATIONS )
      fis.push( boost::ref( t ) );
      fis.push( is );
 
-     fastest::copyToNull( is );
+     bm_env::fastest::copyToNull( is );
 }
 
 
-BENCHMARK_F( IoFilter, BlockOutFilt, TestFixture, N_SAMPLES, N_ITERATIONS )
+BENCHMARK_F( IoFilter, BlockOutFilt, bm_env::TestFixture, bm_env::consts::N_SAMPLES, bm_env::consts::N_ITERATIONS )
 {
      boost::iostreams::filtering_istream is{ boost::make_iterator_range( buffer() ) };
      boost::iostreams::stream< boost::iostreams::null_sink > os{
@@ -300,5 +313,5 @@ BENCHMARK_F( IoFilter, BlockOutFilt, TestFixture, N_SAMPLES, N_ITERATIONS )
      fos.push( boost::ref( t ) );
      fos.push( os );
 
-     fastest::copy( is, fos );
+     bm_env::fastest::copy( is, fos );
 }
