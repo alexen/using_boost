@@ -39,19 +39,18 @@ prdnt, snt n clp q ffc dsrnt mllt nm d st lbrm.
 )txt";
 
 
-} // namespace text
-} // namespace test_env
-} // namespace {unnamed}
-
+} /// namespace text
+} /// namespace test_env
+} /// namespace {unnamed}
 
 
 BOOST_AUTO_TEST_SUITE( IoFilters )
-BOOST_AUTO_TEST_SUITE( ModifyingFilters )
-BOOST_AUTO_TEST_SUITE( SingleCharFilters )
+BOOST_AUTO_TEST_SUITE( Modifying )
+BOOST_AUTO_TEST_SUITE( SingleChar )
+BOOST_AUTO_TEST_SUITE( VowelRemover )
 
 using using_boost::iostreams::filters::single_char::VowelRemover;
 
-BOOST_AUTO_TEST_SUITE( VovelRemover )
 BOOST_AUTO_TEST_CASE( EmptyData )
 {
      std::istringstream iss;
@@ -78,13 +77,13 @@ BOOST_AUTO_TEST_CASE( TextData )
 
      BOOST_TEST( os.is_equal( test_env::text::modified ) );
 }
-BOOST_AUTO_TEST_SUITE_END()
-BOOST_AUTO_TEST_SUITE_END()
-BOOST_AUTO_TEST_SUITE( MulticharFilters )
+BOOST_AUTO_TEST_SUITE_END() /// VowelRemover
+BOOST_AUTO_TEST_SUITE_END() /// SingleChar
+BOOST_AUTO_TEST_SUITE( Multichar )
+BOOST_AUTO_TEST_SUITE( VowelRemover )
 
 using using_boost::iostreams::filters::multichar::VowelRemover;
 
-BOOST_AUTO_TEST_SUITE( VovelRemover )
 BOOST_AUTO_TEST_CASE( EmptyData )
 {
      std::istringstream iss;
@@ -111,7 +110,7 @@ BOOST_AUTO_TEST_CASE( TextData )
 
      BOOST_TEST( os.is_equal( test_env::text::modified ) );
 }
-BOOST_AUTO_TEST_SUITE_END()
-BOOST_AUTO_TEST_SUITE_END()
-BOOST_AUTO_TEST_SUITE_END()
-BOOST_AUTO_TEST_SUITE_END()
+BOOST_AUTO_TEST_SUITE_END() /// VowelRemover
+BOOST_AUTO_TEST_SUITE_END() /// Multichar
+BOOST_AUTO_TEST_SUITE_END() /// Modifying
+BOOST_AUTO_TEST_SUITE_END() /// IoFilters
