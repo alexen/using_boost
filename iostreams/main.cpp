@@ -26,7 +26,8 @@
 #include <boost/exception/diagnostic_information.hpp>
 #include <boost/utility/string_view.hpp>
 
-#include "iterator_source.h"
+#include <iostreams/filters.h>
+#include <iostreams/iterator_source.h>
 
 
 namespace {
@@ -190,85 +191,6 @@ void test_readers()
 }
 
 
-namespace custom_filters {
-
-
-namespace {
-namespace impl {
-
-
-bool isVowel( const int c ) noexcept
-{
-     static constexpr auto vowels = "aeiouAEIOU";
-     return std::strchr( vowels, c ) != nullptr;
-}
-
-
-} // namespace impl
-} // namespace {unnamed}
-
-
-namespace single_char {
-
-
-struct VowelRemover : boost::iostreams::input_filter
-{
-     template< typename Source >
-     int get( Source& src )
-     {
-          while( true )
-          {
-               const auto c = boost::iostreams::get( src );
-               if( !impl::isVowel( c ) )
-               {
-                    return c;
-               }
-          }
-          BOOST_ASSERT_MSG( false, "this code must be UNREACHABLE" );
-     }
-};
-
-
-} // namespace single_char
-namespace multichar {
-
-
-struct VowelRemover : boost::iostreams::multichar_input_filter
-{
-     template< typename Source >
-     std::streamsize read( Source& src, char* s, std::streamsize n )
-     {
-          for( std::streamsize i = 0; i < n; ++i )
-          {
-               while( true )
-               {
-                    const auto c = boost::iostreams::get( src );
-                    if( c == EOF )
-                    {
-                         return i ? i : EOF;
-                    }
-                    else if( c == boost::iostreams::WOULD_BLOCK )
-                    {
-                         return i;
-                    }
-                    else if( impl::isVowel( c ) )
-                    {
-                         continue;
-                    }
-                    s[ i ] = c;
-                    break;
-               }
-          }
-          return n;
-     }
-};
-
-
-} // namespace multichar
-} // namespace custom_filters
-
-
-
 int main( int argc, char** argv )
 {
      boost::ignore_unused( argc, argv );
@@ -291,9 +213,10 @@ int main( int argc, char** argv )
           std::cout << "Source: " << text << '\n';
 
           std::istringstream is{ text };
+
           boost::iostreams::filtering_istream fis;
-          fis.push( custom_filters::single_char::VowelRemover{} );
-          fis.push( custom_filters::multichar::VowelRemover{} );
+          fis.push( using_boost::iostreams::filters::single_char::VowelRemover{} );
+          fis.push( using_boost::iostreams::filters::multichar::VowelRemover{} );
           fis.push( is );
 
           std::ostringstream oss;
