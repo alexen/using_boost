@@ -171,6 +171,77 @@ BOOST_AUTO_TEST_CASE( TextData )
 }
 BOOST_AUTO_TEST_SUITE_END() /// Output
 BOOST_AUTO_TEST_SUITE_END() /// Transparent
+BOOST_AUTO_TEST_SUITE( Counter )
+
+using using_boost::iostreams::filters::multichar::Counter;
+
+BOOST_AUTO_TEST_SUITE( Input )
+BOOST_AUTO_TEST_CASE( EmptyStream )
+{
+     Counter c;
+
+     std::istringstream iss;
+     boost::iostreams::filtering_istream fis;
+     fis.push( boost::ref( c ) );
+     fis.push( iss );
+
+     boost::test_tools::output_test_stream os;
+     boost::iostreams::copy( fis, os );
+
+     BOOST_TEST( os.is_empty() );
+     BOOST_TEST( c.chars() == 0u );
+}
+BOOST_AUTO_TEST_CASE( TextStream )
+{
+     Counter c;
+
+     std::istringstream iss{ test_env::text::source };
+     boost::iostreams::filtering_istream fis;
+     fis.push( boost::ref( c ) );
+     fis.push( iss );
+
+     boost::test_tools::output_test_stream os;
+     boost::iostreams::copy( fis, os );
+
+     BOOST_TEST( !os.is_empty() );
+     BOOST_TEST( c.chars() == std::strlen( test_env::text::source ) );
+}
+BOOST_AUTO_TEST_SUITE_END() /// Input
+BOOST_AUTO_TEST_SUITE( Output )
+BOOST_AUTO_TEST_CASE( EmptyStream )
+{
+     Counter c;
+
+     std::istringstream iss;
+     boost::test_tools::output_test_stream os;
+
+     boost::iostreams::filtering_ostream fos;
+     fos.push( boost::ref( c ) );
+     fos.push( os );
+
+     boost::iostreams::copy( iss, fos );
+
+     BOOST_TEST( os.is_empty() );
+     BOOST_TEST( c.chars() == 0u );
+}
+BOOST_AUTO_TEST_CASE( TextStream )
+{
+     Counter c;
+
+     std::istringstream iss{ test_env::text::source };
+     boost::test_tools::output_test_stream os;
+
+     boost::iostreams::filtering_ostream fos;
+     fos.push( boost::ref( c ) );
+     fos.push( os );
+
+     boost::iostreams::copy( iss, fos );
+
+     BOOST_TEST( !os.is_empty() );
+     BOOST_TEST( c.chars() == std::strlen( test_env::text::source ) );
+}
+BOOST_AUTO_TEST_SUITE_END() /// Output
+BOOST_AUTO_TEST_SUITE_END() /// Counter
 BOOST_AUTO_TEST_SUITE_END() /// Multichar
 BOOST_AUTO_TEST_SUITE_END() /// NonModifying
 BOOST_AUTO_TEST_SUITE( Modifying )
