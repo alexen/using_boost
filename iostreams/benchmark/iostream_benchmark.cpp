@@ -16,6 +16,8 @@
 #include <celero/Celero.h>
 #include <celero/Console.h>
 
+#include <iostreams/filters.h>
+
 
 CELERO_MAIN
 
@@ -36,6 +38,8 @@ public:
      using ExperimentalValues = std::vector< ExperimentValue >;
      using Buffer = std::vector< char >;
 
+     TestFixture() : null_{ {} } {}
+
      ExperimentalValues getExperimentValues() const override
      {
           return {
@@ -50,6 +54,11 @@ public:
           prepareData( boost::numeric_cast< std::uint64_t >( value.Value ) );
      }
 
+     void tearDown() override
+     {
+          clearData();
+     }
+
      const Buffer& buffer() const noexcept
      {
           return buffer_;
@@ -61,139 +70,35 @@ public:
      }
 
 private:
+     static void clear( Buffer& out )
+     {
+          out.clear();
+          BOOST_ASSERT( out.empty() );
+     }
+     static void generateData( Buffer& out, const std::uint64_t bytes )
+     {
+          BOOST_ASSERT( out.empty() );
+
+          out.reserve( bytes );
+
+          std::ifstream ifile{ "/dev/urandom", std::ios::binary };
+          std::copy_n( std::istreambuf_iterator{ ifile }, bytes, std::back_inserter( out ) );
+
+          BOOST_ASSERT( out.size() == bytes );
+     }
      void prepareData( const std::uint64_t bytes )
      {
-          buffer_.clear();
-          buffer_.resize( bytes );
-
-          BOOST_ASSERT( buffer_.empty() );
-
-          std::ifstream{ "/dev/urandom", std::ios::binary }
-               .read( buffer_.data(), buffer_.size() );
-
-          BOOST_ASSERT( buffer_.size() == bytes );
+          clear( buffer_ );
+          generateData( buffer_, bytes );
+     }
+     void clearData()
+     {
+          clear( buffer_ );
      }
 
      Buffer buffer_;
      boost::iostreams::stream< boost::iostreams::null_sink > null_;
 };
-
-
-namespace {
-namespace custom {
-namespace filters {
-namespace single_char {
-
-
-struct Transparent : boost::iostreams::dual_use_filter
-{
-     template< typename Source >
-     int get( Source& src )
-     {
-          return boost::iostreams::get( src );
-     }
-
-     template< typename Sink >
-     bool put( Sink& snk, int c )
-     {
-          return boost::iostreams::put( snk, c );
-     }
-};
-
-
-} // namespace single_char
-namespace multichar {
-namespace by_char {
-
-
-struct Transparent : boost::iostreams::multichar_dual_use_filter
-{
-     template< typename Source >
-     std::streamsize read( Source& src, char* s, const std::streamsize n )
-     {
-          for( std::streamsize i = 0; i < n; ++i )
-          {
-               const auto c = boost::iostreams::get( src );
-               if( c < 0 )
-               {
-                    return c;
-               }
-               s[ i ] = c;
-          }
-          return n;
-     }
-
-     template< typename Sink >
-     std::streamsize write( Sink& snk, const char* s, const std::streamsize n )
-     {
-          for( std::streamsize i = 0; i < n; ++i )
-          {
-               const int c = s[ i ];
-               if( not boost::iostreams::put( snk, c ) )
-               {
-                    return i;
-               }
-          }
-          return n;
-     }
-};
-
-
-} // namespace by_char
-namespace by_block {
-
-
-struct Counter : boost::iostreams::multichar_dual_use_filter
-{
-     explicit Counter( unsigned n = 0 ) : chars_{ n } {}
-
-     template< typename Source >
-     std::streamsize read( Source& src, char* s, std::streamsize n )
-     {
-          const auto result = boost::iostreams::read( src, s, n );
-          chars_ += result > 0 ? result : 0;
-          return result;
-     }
-
-     template< typename Sink >
-     std::streamsize write( Sink& snk, const char* s, std::streamsize n )
-     {
-          const auto result = boost::iostreams::write( snk, s, n );
-          chars_ += result > 0 ? result : 0;
-          return result;
-     }
-
-     unsigned chars() const noexcept
-     {
-          return chars_;
-     }
-
-private:
-     unsigned chars_ = 0;
-};
-
-
-struct Transparent : boost::iostreams::multichar_dual_use_filter
-{
-     template< typename Source >
-     std::streamsize read( Source& src, char* s, const std::streamsize n )
-     {
-          return boost::iostreams::read( src, s, n );
-     }
-
-     template< typename Sink >
-     std::streamsize write( Sink& snk, const char* s, const std::streamsize n )
-     {
-          return boost::iostreams::write( snk, s, n );
-     }
-};
-
-
-} // namespace by_block
-} // namespace multichar
-} // namespace filters
-} // namespace custom
-} // namespace {unnamed}
 
 
 BASELINE_F( CopyStream, BoostCopy, TestFixture, N_SAMPLES, N_ITERATIONS )
@@ -276,7 +181,7 @@ BENCHMARK_F( IoFilter, CustomICounter, TestFixture, N_SAMPLES, N_ITERATIONS )
      boost::iostreams::filtering_istream is{ boost::make_iterator_range( buffer() ) };
      std::ostream& os = null();
 
-     custom::filters::multichar::by_block::Counter c;
+     using_boost::iostreams::filters::multichar::Counter c;
      boost::iostreams::filtering_istream fis;
      fis.push( boost::ref( c ) );
      fis.push( is );
@@ -292,7 +197,7 @@ BENCHMARK_F( IoFilter, CustomOCounter, TestFixture, N_SAMPLES, N_ITERATIONS )
      boost::iostreams::filtering_istream is{ boost::make_iterator_range( buffer() ) };
      std::ostream& os = null();
 
-     custom::filters::multichar::by_block::Counter c;
+     using_boost::iostreams::filters::multichar::Counter c;
      boost::iostreams::filtering_ostream fos;
      fos.push( boost::ref( c ) );
      fos.push( os );
@@ -308,7 +213,7 @@ BENCHMARK_F( IoFilter, SingleCharIFilter, TestFixture, N_SAMPLES, N_ITERATIONS )
      boost::iostreams::filtering_istream is{ boost::make_iterator_range( buffer() ) };
      std::ostream& os = null();
 
-     custom::filters::single_char::Transparent f;
+     using_boost::iostreams::filters::single_char::Transparent f;
      boost::iostreams::filtering_istream fis;
      fis.push( boost::ref( f ) );
      fis.push( is );
@@ -322,7 +227,7 @@ BENCHMARK_F( IoFilter, SingleCharOFilter, TestFixture, N_SAMPLES, N_ITERATIONS )
      boost::iostreams::filtering_istream is{ boost::make_iterator_range( buffer() ) };
      std::ostream& os = null();
 
-     custom::filters::single_char::Transparent f;
+     using_boost::iostreams::filters::single_char::Transparent f;
      boost::iostreams::filtering_ostream fos;
      fos.push( boost::ref( f ) );
      fos.push( os );
@@ -331,12 +236,12 @@ BENCHMARK_F( IoFilter, SingleCharOFilter, TestFixture, N_SAMPLES, N_ITERATIONS )
 }
 
 
-BENCHMARK_F( IoFilter, MulticharCharIFilter, TestFixture, N_SAMPLES, N_ITERATIONS )
+BENCHMARK_F( IoFilter, MulticharIFilter, TestFixture, N_SAMPLES, N_ITERATIONS )
 {
      boost::iostreams::filtering_istream is{ boost::make_iterator_range( buffer() ) };
      std::ostream& os = null();
 
-     custom::filters::multichar::by_char::Transparent f;
+     using_boost::iostreams::filters::multichar::Transparent f;
      boost::iostreams::filtering_istream fis;
      fis.push( boost::ref( f ) );
      fis.push( is );
@@ -345,40 +250,12 @@ BENCHMARK_F( IoFilter, MulticharCharIFilter, TestFixture, N_SAMPLES, N_ITERATION
 }
 
 
-BENCHMARK_F( IoFilter, MulticharCharOFilter, TestFixture, N_SAMPLES, N_ITERATIONS )
+BENCHMARK_F( IoFilter, MulticharOFilter, TestFixture, N_SAMPLES, N_ITERATIONS )
 {
      boost::iostreams::filtering_istream is{ boost::make_iterator_range( buffer() ) };
      std::ostream& os = null();
 
-     custom::filters::multichar::by_char::Transparent f;
-     boost::iostreams::filtering_ostream fos;
-     fos.push( boost::ref( f ) );
-     fos.push( os );
-
-     boost::iostreams::copy( is, fos );
-}
-
-
-BENCHMARK_F( IoFilter, MulticharBlockIFilter, TestFixture, N_SAMPLES, N_ITERATIONS )
-{
-     boost::iostreams::filtering_istream is{ boost::make_iterator_range( buffer() ) };
-     std::ostream& os = null();
-
-     custom::filters::multichar::by_block::Transparent f;
-     boost::iostreams::filtering_istream fis;
-     fis.push( boost::ref( f ) );
-     fis.push( is );
-
-     boost::iostreams::copy( fis, os );
-}
-
-
-BENCHMARK_F( IoFilter, MulticharBlockOFilter, TestFixture, N_SAMPLES, N_ITERATIONS )
-{
-     boost::iostreams::filtering_istream is{ boost::make_iterator_range( buffer() ) };
-     std::ostream& os = null();
-
-     custom::filters::multichar::by_block::Transparent f;
+     using_boost::iostreams::filters::multichar::Transparent f;
      boost::iostreams::filtering_ostream fos;
      fos.push( boost::ref( f ) );
      fos.push( os );
