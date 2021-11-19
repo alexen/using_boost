@@ -34,6 +34,22 @@ inline bool isVowel( const int c ) noexcept
 namespace single_char {
 
 
+struct Transparent : boost::iostreams::dual_use_filter
+{
+     template< typename Source >
+     int get( Source& src )
+     {
+          return boost::iostreams::get( src );
+     }
+
+     template< typename Sink >
+     bool put( Sink& snk, int c )
+     {
+          return boost::iostreams::put( snk, c );
+     }
+};
+
+
 struct VowelRemover : boost::iostreams::input_filter
 {
      template< typename Source >
@@ -54,6 +70,22 @@ struct VowelRemover : boost::iostreams::input_filter
 
 } // namespace single_char
 namespace multichar {
+
+
+struct Transparent : boost::iostreams::multichar_dual_use_filter
+{
+     template< typename Source >
+     std::streamsize read( Source& src, char* s, const std::streamsize n )
+     {
+          return boost::iostreams::read( src, s, n );
+     }
+
+     template< typename Sink >
+     std::streamsize write( Sink& snk, const char* s, const std::streamsize n )
+     {
+          return boost::iostreams::write( snk, s, n );
+     }
+};
 
 
 struct VowelRemover : boost::iostreams::multichar_input_filter
