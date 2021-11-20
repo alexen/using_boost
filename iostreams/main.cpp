@@ -200,27 +200,46 @@ struct CustomSymmetricFilterImpl
 {
      using char_type = char;
 
-     bool filter( const char*& ibeg, const char* iend, char*& obeg, char* oend, bool flush )
+     /*
+      * Attempts to filter the sequence [i1, i2), storing the result in the sequence [o1, o2).
+      * If flush is true, writes as much output to [o1, o2) as possible.
+      * If flush is false, returns false to indicate that a “natural” end of stream
+      * has been detected. Otherwise, returns true to indicate that additional characters,
+      * not yet stored in [o1, o2), are available for output.
+      */
+     bool filter( const char*& ibeg, const char* iend, char*& obeg, char* oend, const bool flush )
      {
-          boost::ignore_unused( ibeg, iend, obeg, oend, flush );
+          if( debug_ )
+          {
+               const auto ilen = std::distance( ibeg, iend );
+               std::clog << __FUNCTION__
+                    << ": [" << (flush ? 'f' : ' ' ) << ']'
+                    << " " << ilen << " -> " << std::distance( obeg, oend )
+                    << " (" << boost::string_view( ibeg, ilen ) << ')'
+                    << '\n';
+          }
 
-          std::clog << __FUNCTION__
-               << ": in: " << std::distance( ibeg, iend )
-               << " (" << std::string{ ibeg, iend } << ")"
-               << ", out: " << std::distance( obeg, oend )
-               << ", flush: " << std::boolalpha << flush
-               << '\n';
+          while( ibeg != iend && obeg != oend )
+          {
+               *obeg++ = *ibeg++;
+          }
 
-          std::copy( ibeg, iend, obeg );
-
-          return false;
+          return flush ? ibeg != iend : flush;
      }
      void close()
      {
-          std::clog << __FUNCTION__ << '\n';
+          if( debug_ )
+          {
+               std::clog << __FUNCTION__ << '\n';
+          }
      }
 
+     void setDebugEnabled( bool f = true )
+     {
+          debug_ = f;
+     }
 private:
+     bool debug_ = false;
 };
 
 
@@ -229,8 +248,11 @@ struct CustomSymmetricFilterT : boost::iostreams::symmetric_filter< Impl, Alloc 
 {
      using Base = boost::iostreams::symmetric_filter< Impl, Alloc >;
 
-     CustomSymmetricFilterT( std::streamsize bufferSize = boost::iostreams::default_device_buffer_size )
-          : Base{ bufferSize } {}
+     CustomSymmetricFilterT( bool debug = false, std::streamsize bufferSize = boost::iostreams::default_device_buffer_size )
+          : Base{ bufferSize }
+     {
+          this->filter().setDebugEnabled( debug );
+     }
 };
 
 
@@ -242,14 +264,28 @@ int main( int argc, char** argv )
      boost::ignore_unused( argc, argv );
      try
      {
+          static constexpr auto text =
+               "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod "
+               "tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, "
+               "quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo "
+               "consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse "
+               "cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non "
+               "proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
+
           boost::iostreams::zstd_compressor zc;
           CustomSymmetricFilter csf;
 
-          std::istringstream is{ "My Bonnie is over the ocean" };
-          boost::iostreams::filtering_ostream os;
-          os.push( boost::ref( csf ) );
-          os.push( std::cout );
-          boost::iostreams::copy( is, os );
+          std::istringstream is{ text };
+          std::ostringstream os;
+          boost::iostreams::filtering_ostream fos;
+          fos.push( boost::ref( csf ) );
+          fos.push( os );
+          boost::iostreams::copy( is, fos );
+
+          if( os.str() != text )
+          {
+               BOOST_THROW_EXCEPTION( std::runtime_error{ "result does not match" } );
+          }
      }
      catch( const std::exception& e )
      {
