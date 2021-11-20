@@ -255,6 +255,7 @@ BOOST_AUTO_TEST_SUITE( CharRemover )
 
 using using_boost::iostreams::filters::single_char::CharRemover;
 
+BOOST_AUTO_TEST_SUITE( Input )
 BOOST_AUTO_TEST_CASE( EmptyData )
 {
      std::istringstream iss;
@@ -281,6 +282,35 @@ BOOST_AUTO_TEST_CASE( TextData )
 
      BOOST_TEST( os.is_equal( test_env::text::modified ) );
 }
+BOOST_AUTO_TEST_SUITE_END() /// Input
+BOOST_AUTO_TEST_SUITE( Output )
+BOOST_AUTO_TEST_CASE( EmptyData )
+{
+     std::istringstream iss;
+     boost::test_tools::output_test_stream os;
+
+     boost::iostreams::filtering_ostream fos;
+     fos.push( CharRemover{ test_env::vowels } );
+     fos.push( os );
+
+     boost::iostreams::copy( iss, fos );
+
+     BOOST_TEST( os.is_empty() );
+}
+BOOST_AUTO_TEST_CASE( TextData )
+{
+     std::istringstream iss{ test_env::text::source };
+     boost::test_tools::output_test_stream os;
+
+     boost::iostreams::filtering_ostream fos;
+     fos.push( CharRemover{ test_env::vowels } );
+     fos.push( os );
+
+     boost::iostreams::copy( iss, fos );
+
+     BOOST_TEST( os.is_equal( test_env::text::modified ) );
+}
+BOOST_AUTO_TEST_SUITE_END() /// Output
 BOOST_AUTO_TEST_SUITE_END() /// CharRemover
 BOOST_AUTO_TEST_SUITE_END() /// SingleChar
 BOOST_AUTO_TEST_SUITE( Multichar )
@@ -288,6 +318,7 @@ BOOST_AUTO_TEST_SUITE( CharRemover )
 
 using using_boost::iostreams::filters::multichar::CharRemover;
 
+BOOST_AUTO_TEST_SUITE( Input )
 BOOST_AUTO_TEST_CASE( EmptyData )
 {
      std::istringstream iss;
@@ -314,6 +345,35 @@ BOOST_AUTO_TEST_CASE( TextData )
 
      BOOST_TEST( os.is_equal( test_env::text::modified ) );
 }
+BOOST_AUTO_TEST_SUITE_END() /// Input
+BOOST_AUTO_TEST_SUITE( Output )
+BOOST_AUTO_TEST_CASE( EmptyData )
+{
+     std::istringstream iss;
+     boost::test_tools::output_test_stream os;
+
+     boost::iostreams::filtering_ostream fos;
+     fos.push( CharRemover{ test_env::vowels } );
+     fos.push( os );
+
+     boost::iostreams::copy( iss, fos );
+
+     BOOST_TEST( os.is_empty() );
+}
+BOOST_AUTO_TEST_CASE( TextData )
+{
+     std::istringstream iss{ test_env::text::source };
+     boost::test_tools::output_test_stream os;
+
+     boost::iostreams::filtering_ostream fos;
+     fos.push( CharRemover{ test_env::vowels } );
+     fos.push( os );
+
+     boost::iostreams::copy( iss, fos );
+
+     BOOST_TEST( os.is_equal( test_env::text::modified ) );
+}
+BOOST_AUTO_TEST_SUITE_END() /// Output
 BOOST_AUTO_TEST_SUITE_END() /// CharRemover
 BOOST_AUTO_TEST_SUITE_END() /// Multichar
 BOOST_AUTO_TEST_SUITE_END() /// Modifying

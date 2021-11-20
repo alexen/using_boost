@@ -34,7 +34,7 @@ struct Transparent : boost::iostreams::dual_use_filter
 };
 
 
-struct CharRemover : boost::iostreams::input_filter
+struct CharRemover : boost::iostreams::dual_use_filter
 {
      template< typename ...Args >
      explicit CharRemover( Args&& ...args )
@@ -55,6 +55,11 @@ struct CharRemover : boost::iostreams::input_filter
           BOOST_ASSERT( !"unreachable code" );
      }
 
+     template< typename Sink >
+     bool put( Sink& snk, int c )
+     {
+          return boost::iostreams::put( snk, c );
+     }
 private:
      std::set< char > chars_;
 };
@@ -110,7 +115,7 @@ private:
 };
 
 
-struct CharRemover : boost::iostreams::multichar_input_filter
+struct CharRemover : boost::iostreams::multichar_dual_use_filter
 {
      template< typename ...Args >
      explicit CharRemover( Args&& ...args )
@@ -142,6 +147,12 @@ struct CharRemover : boost::iostreams::multichar_input_filter
                }
           }
           return n;
+     }
+
+     template< typename Sink >
+     std::streamsize write( Sink& snk, const char* s, const std::streamsize n )
+     {
+          return boost::iostreams::write( snk, s, n );
      }
 private:
      std::set< char > chars_;
