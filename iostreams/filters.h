@@ -56,8 +56,12 @@ struct CharRemover : boost::iostreams::dual_use_filter
      }
 
      template< typename Sink >
-     bool put( Sink& snk, int c )
+     bool put( Sink& snk, const int c )
      {
+          if( chars_.count( c ) )
+          {
+               return true;
+          }
           return boost::iostreams::put( snk, c );
      }
 private:
@@ -152,7 +156,20 @@ struct CharRemover : boost::iostreams::multichar_dual_use_filter
      template< typename Sink >
      std::streamsize write( Sink& snk, const char* s, const std::streamsize n )
      {
-          return boost::iostreams::write( snk, s, n );
+          std::streamsize i = 0;
+          for( ; i < n; ++i )
+          {
+               const auto c = s[ i ];
+               if( chars_.count( c ) )
+               {
+                    continue;
+               }
+               if( !boost::iostreams::put( snk, c ) )
+               {
+                    break;
+               }
+          }
+          return i;
      }
 private:
      std::set< char > chars_;
