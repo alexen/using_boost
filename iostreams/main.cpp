@@ -8,6 +8,7 @@
 #include <stdexcept>
 #include <iostream>
 #include <algorithm>
+#include <iterator>
 
 #include <boost/core/ignore_unused.hpp>
 #include <boost/range/irange.hpp>
@@ -21,6 +22,9 @@
 #include <boost/iostreams/filter/gzip.hpp>
 #include <boost/iostreams/filter/stdio.hpp>
 #include <boost/iostreams/filter/counter.hpp>
+#include <boost/iostreams/filter/zstd.hpp>
+#include <boost/iostreams/filter/zlib.hpp>
+#include <boost/iostreams/filter/symmetric.hpp>
 #include <boost/iostreams/filtering_stream.hpp>
 #include <boost/iostreams/device/array.hpp>
 #include <boost/iostreams/device/back_inserter.hpp>
@@ -192,11 +196,60 @@ void test_readers()
 }
 
 
+struct CustomSymmetricFilterImpl
+{
+     using char_type = char;
+
+     bool filter( const char*& ibeg, const char* iend, char*& obeg, char* oend, bool flush )
+     {
+          boost::ignore_unused( ibeg, iend, obeg, oend, flush );
+
+          std::clog << __FUNCTION__
+               << ": in: " << std::distance( ibeg, iend )
+               << " (" << std::string{ ibeg, iend } << ")"
+               << ", out: " << std::distance( obeg, oend )
+               << ", flush: " << std::boolalpha << flush
+               << '\n';
+
+          std::copy( ibeg, iend, obeg );
+
+          return false;
+     }
+     void close()
+     {
+          std::clog << __FUNCTION__ << '\n';
+     }
+
+private:
+};
+
+
+template< typename Impl = CustomSymmetricFilterImpl, typename Alloc = std::allocator< char > >
+struct CustomSymmetricFilterT : boost::iostreams::symmetric_filter< Impl, Alloc >
+{
+     using Base = boost::iostreams::symmetric_filter< Impl, Alloc >;
+
+     CustomSymmetricFilterT( std::streamsize bufferSize = boost::iostreams::default_device_buffer_size )
+          : Base{ bufferSize } {}
+};
+
+
+using CustomSymmetricFilter = CustomSymmetricFilterT<>;
+
+
 int main( int argc, char** argv )
 {
      boost::ignore_unused( argc, argv );
      try
      {
+          boost::iostreams::zstd_compressor zc;
+          CustomSymmetricFilter csf;
+
+          std::istringstream is{ "My Bonnie is over the ocean" };
+          boost::iostreams::filtering_ostream os;
+          os.push( boost::ref( csf ) );
+          os.push( std::cout );
+          boost::iostreams::copy( is, os );
      }
      catch( const std::exception& e )
      {
