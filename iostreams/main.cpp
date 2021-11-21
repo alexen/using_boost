@@ -191,11 +191,68 @@ void test_readers()
 }
 
 
+struct CharMultiplier : boost::iostreams::multichar_dual_use_filter
+{
+     explicit CharMultiplier( unsigned n )
+          : n_{ n }
+          {}
+
+     template< typename Source >
+     std::streamsize read( Source& src, char* s, std::streamsize n )
+     {
+          const auto cycles = n / n_;
+
+     }
+
+     template< typename Sink >
+     std::streamsize write( Sink& snk, const char* s, std::streamsize n )
+     {
+          return boost::iostreams::write( snk, s, n );
+     }
+
+private:
+     const unsigned n_;
+     unsigned left_ = 0;
+};
+
+
 int main( int argc, char** argv )
 {
      boost::ignore_unused( argc, argv );
      try
      {
+          static constexpr auto source = "0123456789";
+          static constexpr auto expected = "000111222333444555666777888999";
+          {
+               std::istringstream is{ source };
+               std::ostringstream os;
+
+               boost::iostreams::filtering_istream fis;
+               fis.push( CharMultiplier{ 3 } );
+               fis.push( is );
+
+               boost::iostreams::copy( fis, os );
+
+               if( os.str() != expected )
+               {
+                    BOOST_THROW_EXCEPTION( std::runtime_error{ "bad result" } );
+               }
+          }
+          {
+               std::istringstream is{ source };
+               std::ostringstream os;
+
+               boost::iostreams::filtering_ostream fos;
+               fos.push( CharMultiplier{ 3 } );
+               fos.push( os );
+
+               boost::iostreams::copy( is, fos );
+
+               if( os.str() != expected )
+               {
+                    BOOST_THROW_EXCEPTION( std::runtime_error{ "bad result" } );
+               }
+          }
      }
      catch( const std::exception& e )
      {
