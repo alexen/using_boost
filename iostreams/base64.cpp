@@ -12,6 +12,7 @@
 #include <boost/iostreams/filtering_stream.hpp>
 #include <boost/iostreams/char_traits.hpp>
 
+#include <iostreams/filters.h>
 
 
 namespace using_boost {
@@ -62,7 +63,7 @@ static void decode( std::istream& is, std::ostream& os )
 namespace input_filters {
 
 
-struct Base64StreamEndDetector : boost::iostreams::input_filter, boost::noncopyable
+struct Base64StreamEndDetector : boost::iostreams::input_filter
 {
      static constexpr auto END_OF_BASE64 = '=';
 
@@ -72,37 +73,6 @@ struct Base64StreamEndDetector : boost::iostreams::input_filter, boost::noncopya
           const auto c = boost::iostreams::get( src );
           return c == END_OF_BASE64 ? EOF : c;
      }
-};
-
-
-struct IgnoredCharsRemover : boost::iostreams::input_filter, boost::noncopyable
-{
-     template< typename ...Args >
-     explicit IgnoredCharsRemover( Args&& ...args )
-          : ignored_{ std::forward< Args >( args )... }
-     {
-          BOOST_ASSERT_MSG(
-               !ignored_.count( EOF )
-               && !ignored_.count( boost::iostreams::WOULD_BLOCK )
-               , "service characters cannot be specified as ignored"
-               );
-     }
-
-     template< typename Source >
-     int get( Source& src )
-     {
-          while( true )
-          {
-               const auto c = boost::iostreams::get( src );
-               if( !ignored_.count( c ) )
-               {
-                    return c;
-               }
-          }
-     }
-
-private:
-     std::set< char > ignored_;
 };
 
 
@@ -148,15 +118,17 @@ void encode( std::istream& is, std::ostream& os )
 }
 
 
-void decode( std::istream& is, std::ostream& os, std::initializer_list< char > ignored )
+void decode( std::istream& is, std::ostream& os, boost::string_view ignored )
 {
      static impl::input_filters::Base64StreamEndDetector streamEndDetector;
-     impl::input_filters::IgnoredCharsRemover ignoredCharsRemover{ ignored };
 
      boost::iostreams::filtering_istream fis;
 
      fis.push( boost::ref( streamEndDetector ) );
-     fis.push( boost::ref( ignoredCharsRemover ) );
+     if( !ignored.empty() )
+     {
+          fis.push( std::move( filters::multichar::CharRemover{ ignored } ) );
+     }
      fis.push( is );
 
      impl::decode( fis, os );
