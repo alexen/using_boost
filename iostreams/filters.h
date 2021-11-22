@@ -4,12 +4,10 @@
 
 #pragma once
 
-#include <cstring>
-#include <set>
-
 #include <boost/assert.hpp>
 #include <boost/iostreams/concepts.hpp>
 #include <boost/iostreams/get.hpp>
+#include <boost/utility/string_view.hpp>
 
 
 namespace using_boost {
@@ -47,7 +45,7 @@ struct CharRemover : boost::iostreams::dual_use_filter
           while( true )
           {
                const auto c = boost::iostreams::get( src );
-               if( !chars_.count( c ) )
+               if( not ignored( c ) )
                {
                     return c;
                }
@@ -58,14 +56,18 @@ struct CharRemover : boost::iostreams::dual_use_filter
      template< typename Sink >
      bool put( Sink& snk, const int c )
      {
-          if( chars_.count( c ) )
+          if( ignored( c ) )
           {
                return true;
           }
           return boost::iostreams::put( snk, c );
      }
 private:
-     std::set< char > chars_;
+     bool ignored( int c ) const noexcept
+     {
+          return chars_.find( c ) != boost::string_view::npos;
+     }
+     boost::string_view chars_;
 };
 
 
@@ -142,7 +144,7 @@ struct CharRemover : boost::iostreams::multichar_dual_use_filter
                     {
                          return i;
                     }
-                    else if( chars_.count( c ) )
+                    else if( ignored( c ) )
                     {
                          continue;
                     }
@@ -160,7 +162,7 @@ struct CharRemover : boost::iostreams::multichar_dual_use_filter
           for( ; i < n; ++i )
           {
                const auto c = s[ i ];
-               if( chars_.count( c ) )
+               if( ignored( c ) )
                {
                     continue;
                }
@@ -172,7 +174,11 @@ struct CharRemover : boost::iostreams::multichar_dual_use_filter
           return i;
      }
 private:
-     std::set< char > chars_;
+     bool ignored( int c ) const noexcept
+     {
+          return chars_.find( c ) != boost::string_view::npos;
+     }
+     boost::string_view chars_;
 };
 
 

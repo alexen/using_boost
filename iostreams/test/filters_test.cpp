@@ -42,7 +42,7 @@ prdnt, snt n clp q ffc dsrnt mllt nm d st lbrm.
 } /// namespace text
 
 
-constexpr auto vowels = { 'a','e','i','o','u','A','E','I','O','U' };
+static constexpr auto vowels = "aeiouAEIOU";
 
 
 } /// namespace test_env

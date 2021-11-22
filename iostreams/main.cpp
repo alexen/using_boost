@@ -196,38 +196,6 @@ int main( int argc, char** argv )
      boost::ignore_unused( argc, argv );
      try
      {
-          const std::string text =
-               "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod "
-               "tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, "
-               "quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo "
-               "consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse "
-               "cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non "
-               "proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
-
-          const auto expected =
-               "Lrm psm dlr st mt, cnscttr dpscng lt, sd d smd tmpr ncddnt t lbr t dlr mgn lq. "
-               "t nm d mnm vnm, qs nstrd xrcttn llmc lbrs ns t lqp x  cmmd cnsqt. Ds t rr dlr "
-               "n rprhndrt n vlptt vlt ss cllm dlr  fgt nll prtr. xcptr snt ccct cpdtt nn prdnt, "
-               "snt n clp q ffc dsrnt mllt nm d st lbrm.";
-
-          std::cout << "Source: " << text << '\n';
-
-          std::istringstream is{ text };
-
-          const auto vowels = { 'a','e','i','o','u','A','E','I','O','U' };
-
-          boost::iostreams::filtering_istream fis;
-          fis.push( using_boost::iostreams::filters::single_char::CharRemover{ vowels } );
-          fis.push( using_boost::iostreams::filters::multichar::CharRemover{ vowels } );
-          fis.push( is );
-
-          std::ostringstream oss;
-          boost::iostreams::copy( fis, oss );
-          std::cout << "Result: " << oss.str() << '\n';
-          if( oss.str() != expected )
-          {
-               BOOST_THROW_EXCEPTION( std::runtime_error{ "bad result" } );
-          }
      }
      catch( const std::exception& e )
      {
