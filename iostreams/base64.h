@@ -8,6 +8,8 @@
 #include <initializer_list>
 
 
+namespace using_boost {
+namespace iostreams {
 namespace base64 {
 
 
@@ -16,3 +18,5 @@ void decode( std::istream&, std::ostream&, std::initializer_list< char > ignored
 
 
 } // namespace base64
+} // namespace iostreams
+} // namespace using_boost

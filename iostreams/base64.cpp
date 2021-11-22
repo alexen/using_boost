@@ -13,6 +13,9 @@
 #include <boost/iostreams/char_traits.hpp>
 
 
+
+namespace using_boost {
+namespace iostreams {
 namespace base64 {
 
 
@@ -161,3 +164,5 @@ void decode( std::istream& is, std::ostream& os, std::initializer_list< char > i
 
 
 } // namespace base64
+} // namespace iostreams
+} // namespace using_boost
