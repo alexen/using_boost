@@ -2,6 +2,7 @@
 /// @brief
 /// @copyright Copyright (c) InfoTeCS. All Rights Reserved.
 
+#include <set>
 #include <sstream>
 #include <iterator>
 
@@ -24,8 +25,9 @@ namespace bm_env {
 namespace consts {
 
 
-static constexpr auto N_SAMPLES = 3u;
-static constexpr auto N_ITERATIONS = 10000u;
+static constexpr auto N_SAMPLES = 2u;
+static constexpr auto N_ITERATIONS = 3000u;
+
 
 static const auto SOURCE = R"txt(
 Far far away, behind the word mountains, far from the countries Vokalia and
@@ -145,7 +147,9 @@ nt t d s, bcs thr wr thsnds f bd Cmms, wld Qstn Mrks nd
 dvs Smkl, bt th Lttl Blnd Txt ddn’t lstn.
 )txt"s;
 
-constexpr auto VOWELS = { 'a','e','i','o','u','A','E','I','O','U' };
+
+static constexpr auto VOWELS = "aeiouAEIOU";
+
 
 } // namespace consts
 
@@ -170,7 +174,12 @@ BASELINE( CharRemover, UseCopyIf, bm_env::consts::N_SAMPLES, bm_env::consts::N_I
      std::istringstream is{ bm_env::consts::SOURCE };
      std::ostringstream os;
 
-     std::set< char > ignored{ bm_env::consts::VOWELS };
+     const std::set< char > ignored{
+          bm_env::consts::VOWELS
+          , bm_env::consts::VOWELS + std::strlen( bm_env::consts::VOWELS )
+     };
+
+     BOOST_ASSERT( ignored.size() == std::strlen( bm_env::consts::VOWELS ) );
 
      std::copy_if(
           std::istreambuf_iterator< char >{ is }
@@ -188,9 +197,9 @@ BASELINE( CharRemover, UseCopyIf, bm_env::consts::N_SAMPLES, bm_env::consts::N_I
 BENCHMARK( CharRemover, UseBoostErase, bm_env::consts::N_SAMPLES, bm_env::consts::N_ITERATIONS )
 {
      std::string mutableSrc = bm_env::consts::SOURCE;
-     for( const auto c: bm_env::consts::VOWELS )
+     for( auto&& c: boost::string_view{ bm_env::consts::VOWELS } )
      {
-          boost::algorithm::erase_all( mutableSrc, boost::string_view{ &c, 1 } );
+          boost::algorithm::erase_all( mutableSrc, boost::string_view{ &c, 1u } );
      }
 
      BOOST_ASSERT( mutableSrc == bm_env::consts::RESULT );
@@ -202,10 +211,10 @@ BENCHMARK( CharRemover, CharStdIos, bm_env::consts::N_SAMPLES, bm_env::consts::N
      std::istringstream is{ bm_env::consts::SOURCE };
      std::ostringstream os;
 
-     using_boost::iostreams::filters::single_char::CharRemover vr{ bm_env::consts::VOWELS };;
+     using_boost::iostreams::filters::single_char::CharRemover cr{ bm_env::consts::VOWELS };
 
      boost::iostreams::filtering_istream fis;
-     fis.push( boost::ref( vr ) );
+     fis.push( boost::ref( cr ) );
      fis.push( is );
 
      bm_env::copy( fis, os );
@@ -219,10 +228,10 @@ BENCHMARK( CharRemover, BlockStdIos, bm_env::consts::N_SAMPLES, bm_env::consts::
      std::istringstream is{ bm_env::consts::SOURCE };
      std::ostringstream os;
 
-     using_boost::iostreams::filters::multichar::CharRemover vr{ bm_env::consts::VOWELS };;
+     using_boost::iostreams::filters::multichar::CharRemover cr{ bm_env::consts::VOWELS };
 
      boost::iostreams::filtering_istream fis;
-     fis.push( boost::ref( vr ) );
+     fis.push( boost::ref( cr ) );
      fis.push( is );
 
      bm_env::copy( fis, os );
@@ -240,10 +249,10 @@ BENCHMARK( CharRemover, CharBoostIos, bm_env::consts::N_SAMPLES, bm_env::consts:
      };
      std::ostringstream os;
 
-     using_boost::iostreams::filters::single_char::CharRemover vr{ bm_env::consts::VOWELS };;
+     using_boost::iostreams::filters::single_char::CharRemover cr{ bm_env::consts::VOWELS };
 
      boost::iostreams::filtering_istream fis;
-     fis.push( boost::ref( vr ) );
+     fis.push( boost::ref( cr ) );
      fis.push( is );
 
      bm_env::copy( fis, os );
@@ -261,10 +270,10 @@ BENCHMARK( CharRemover, BlockBoostIos, bm_env::consts::N_SAMPLES, bm_env::consts
      };
      std::ostringstream os;
 
-     using_boost::iostreams::filters::multichar::CharRemover vr{ bm_env::consts::VOWELS };;
+     using_boost::iostreams::filters::multichar::CharRemover cr{ bm_env::consts::VOWELS };
 
      boost::iostreams::filtering_istream fis;
-     fis.push( boost::ref( vr ) );
+     fis.push( boost::ref( cr ) );
      fis.push( is );
 
      bm_env::copy( fis, os );
