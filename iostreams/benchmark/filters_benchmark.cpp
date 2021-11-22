@@ -212,7 +212,7 @@ BENCHMARK( CharRemover, CharFilterBoost, bm_env::consts::N_SAMPLES, bm_env::cons
 {
      boost::iostreams::stream< boost::iostreams::array_source > is{
           boost::iostreams::array_source{
-               bm_env::consts::RESULT.data(), bm_env::consts::RESULT.size()
+               bm_env::consts::SOURCE.data(), bm_env::consts::SOURCE.size()
           }
      };
      std::ostringstream os;
@@ -233,7 +233,7 @@ BENCHMARK( CharRemover, BlockFilterBoost, bm_env::consts::N_SAMPLES, bm_env::con
 {
      boost::iostreams::stream< boost::iostreams::array_source > is{
           boost::iostreams::array_source{
-               bm_env::consts::RESULT.data(), bm_env::consts::RESULT.size()
+               bm_env::consts::SOURCE.data(), bm_env::consts::SOURCE.size()
           }
      };
      std::ostringstream os;
