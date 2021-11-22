@@ -288,3 +288,15 @@ BENCHMARK_F( Base64Decoding, Custom, bm_env::DecodingTestFixture, bm_env::consts
      using_boost::iostreams::base64::decode( is, os );
 }
 
+
+
+
+BENCHMARK_F( Base64Decoding, CustomRm, bm_env::DecodingTestFixture, bm_env::consts::N_SAMPLES, bm_env::consts::N_ITERATIONS )
+{
+     boost::iostreams::filtering_istream is{ boost::make_iterator_range( data() ) };
+     boost::iostreams::stream< boost::iostreams::null_sink > os{
+          boost::iostreams::null_sink{}
+     };
+
+     using_boost::iostreams::base64::decode( is, os, "\r\n\t " );
+}
