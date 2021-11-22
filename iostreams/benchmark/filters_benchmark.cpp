@@ -8,6 +8,8 @@
 #include <boost/iostreams/stream.hpp>
 #include <boost/iostreams/device/null.hpp>
 #include <boost/iostreams/filtering_stream.hpp>
+#include <boost/algorithm/string/erase.hpp>
+#include <boost/utility/string_view.hpp>
 
 #include <celero/Celero.h>
 
@@ -163,18 +165,39 @@ void copy( std::istream& is, std::ostream& os )
 
 
 
-BASELINE( CharRemover, CopyStream, bm_env::consts::N_SAMPLES, bm_env::consts::N_ITERATIONS )
+BASELINE( CharRemover, UseCopyIf, bm_env::consts::N_SAMPLES, bm_env::consts::N_ITERATIONS )
 {
      std::istringstream is{ bm_env::consts::SOURCE };
      std::ostringstream os;
 
-     bm_env::copy( is, os );
+     std::set< char > ignored{ bm_env::consts::VOWELS };
 
-     BOOST_ASSERT( os.str() == bm_env::consts::SOURCE );
+     std::copy_if(
+          std::istreambuf_iterator< char >{ is }
+          , std::istreambuf_iterator< char >{}
+          , std::ostreambuf_iterator< char >{ os }
+          , [ &ignored ]( const auto c ){
+               return !ignored.count( c );
+          }
+          );
+
+     BOOST_ASSERT( os.str() == bm_env::consts::RESULT );
 }
 
 
-BENCHMARK( CharRemover, CharFilter, bm_env::consts::N_SAMPLES, bm_env::consts::N_ITERATIONS )
+BENCHMARK( CharRemover, UseBoostErase, bm_env::consts::N_SAMPLES, bm_env::consts::N_ITERATIONS )
+{
+     std::string mutableSrc = bm_env::consts::SOURCE;
+     for( const auto c: bm_env::consts::VOWELS )
+     {
+          boost::algorithm::erase_all( mutableSrc, boost::string_view{ &c, 1 } );
+     }
+
+     BOOST_ASSERT( mutableSrc == bm_env::consts::RESULT );
+}
+
+
+BENCHMARK( CharRemover, CharStdIos, bm_env::consts::N_SAMPLES, bm_env::consts::N_ITERATIONS )
 {
      std::istringstream is{ bm_env::consts::SOURCE };
      std::ostringstream os;
@@ -191,7 +214,7 @@ BENCHMARK( CharRemover, CharFilter, bm_env::consts::N_SAMPLES, bm_env::consts::N
 }
 
 
-BENCHMARK( CharRemover, BlockFilter, bm_env::consts::N_SAMPLES, bm_env::consts::N_ITERATIONS )
+BENCHMARK( CharRemover, BlockStdIos, bm_env::consts::N_SAMPLES, bm_env::consts::N_ITERATIONS )
 {
      std::istringstream is{ bm_env::consts::SOURCE };
      std::ostringstream os;
@@ -208,7 +231,7 @@ BENCHMARK( CharRemover, BlockFilter, bm_env::consts::N_SAMPLES, bm_env::consts::
 }
 
 
-BENCHMARK( CharRemover, CharFilterBoost, bm_env::consts::N_SAMPLES, bm_env::consts::N_ITERATIONS )
+BENCHMARK( CharRemover, CharBoostIos, bm_env::consts::N_SAMPLES, bm_env::consts::N_ITERATIONS )
 {
      boost::iostreams::stream< boost::iostreams::array_source > is{
           boost::iostreams::array_source{
@@ -229,7 +252,7 @@ BENCHMARK( CharRemover, CharFilterBoost, bm_env::consts::N_SAMPLES, bm_env::cons
 }
 
 
-BENCHMARK( CharRemover, BlockFilterBoost, bm_env::consts::N_SAMPLES, bm_env::consts::N_ITERATIONS )
+BENCHMARK( CharRemover, BlockBoostIos, bm_env::consts::N_SAMPLES, bm_env::consts::N_ITERATIONS )
 {
      boost::iostreams::stream< boost::iostreams::array_source > is{
           boost::iostreams::array_source{
