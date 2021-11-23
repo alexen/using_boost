@@ -24,6 +24,7 @@ find_package(Boost 1.69 REQUIRED
      regex
      filesystem
      stacktrace_basic
+     log
      )
 include_directories(SYSTEM ${Boost_INCLUDE_DIRS})
 link_directories(${Boost_LIBRARY_DIRS})
@@ -57,3 +58,4 @@ add_subdirectory(multiindex)
 add_subdirectory(filesystem)
 add_subdirectory(tribool)
 add_subdirectory(stacktrace)
+add_subdirectory(log)
