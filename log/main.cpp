@@ -10,12 +10,22 @@
 #include <boost/log/trivial.hpp>
 #include <boost/log/core.hpp>
 #include <boost/log/expressions.hpp>
+#include <boost/log/sinks/text_file_backend.hpp>
+#include <boost/log/utility/setup/file.hpp>
+#include <boost/log/utility/setup/common_attributes.hpp>
+#include <boost/log/sources/severity_logger.hpp>
+#include <boost/log/sources/record_ostream.hpp>
 
 
-void initLogging()
+namespace show_higher_than_info {
+
+void init()
 {
      boost::log::core::get()->set_filter( boost::log::trivial::severity >= boost::log::trivial::info );
 }
+
+} // namespace show_higher_than_info
+
 
 
 int main( int argc, char** argv )
@@ -23,7 +33,7 @@ int main( int argc, char** argv )
      boost::ignore_unused( argc, argv );
      try
      {
-          initLogging();
+          show_higher_than_info::init();
 
           BOOST_LOG_TRIVIAL( debug ) << "This is debug";
           BOOST_LOG_TRIVIAL( info ) << "This is info";
