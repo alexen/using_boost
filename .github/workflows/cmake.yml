@@ -16,7 +16,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
+    - name: Checkout repo with submodules
+      uses: actions/checkout@v2
+      with:
+        submodules: recursive
     
     - name: Install required packages
       run: xargs sudo apt-get install --yes <./requirements.txt
