@@ -129,30 +129,19 @@ struct CharRemover : boost::iostreams::multichar_dual_use_filter
      {}
 
      template< typename Source >
-     std::streamsize read( Source& src, char* s, std::streamsize n )
+     std::streamsize read( Source& src, char* out, const std::streamsize n )
      {
-          for( std::streamsize i = 0; i < n; ++i )
+          const auto result = boost::iostreams::read( src, out, n );
+          if( result > 0 )
           {
-               while( true )
-               {
-                    const auto c = boost::iostreams::get( src );
-                    if( c == EOF )
-                    {
-                         return i ? i : EOF;
-                    }
-                    else if( c == boost::iostreams::WOULD_BLOCK )
-                    {
-                         return i;
-                    }
-                    else if( ignored( c ) )
-                    {
-                         continue;
-                    }
-                    s[ i ] = c;
-                    break;
-               }
+               const auto end = std::remove_if(
+                    out,
+                    out + result,
+                    [ this ]( const char c ){ return ignored( c ); }
+                    );
+               return std::distance( out, end );
           }
-          return n;
+          return result;
      }
 
      template< typename Sink >
@@ -174,7 +163,7 @@ struct CharRemover : boost::iostreams::multichar_dual_use_filter
           return i;
      }
 private:
-     bool ignored( int c ) const noexcept
+     bool ignored( const int c ) const noexcept
      {
           return chars_.find( c ) != boost::string_view::npos;
      }
