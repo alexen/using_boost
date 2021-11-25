@@ -12,7 +12,8 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        build-type: [Debug, Release, MinSizeRel]
+        build-type: [Debug, Release]
+        build-shared-libs: [ON, OFF]
 
     steps:
     - name: Checkout repo with submodules
@@ -24,7 +25,7 @@ jobs:
       run: xargs sudo apt-get install --yes <./requirements.txt
 
     - name: Configure CMake
-      run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{matrix.build-type}}
+      run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{matrix.build-type}} -DBUILD_SHARED_LIBS=${{matrix.build-shared-libs}}
 
     - name: Build
       run: cmake --build ${{github.workspace}}/build --config ${{matrix.build-type}} --parallel $(nproc)
