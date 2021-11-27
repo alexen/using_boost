@@ -6,10 +6,13 @@
 
 #include <boost/test/unit_test.hpp>
 #include <boost/test/tools/output_test_stream.hpp>
-#include <boost/mpl/list.hpp>
 #include <boost/utility/string_view.hpp>
 #include <boost/iostreams/copy.hpp>
+#include <boost/iostreams/stream.hpp>
+#include <boost/iostreams/device/array.hpp>
 #include <boost/iostreams/filtering_stream.hpp>
+#include <boost/algorithm/hex.hpp>
+#include <boost/range/algorithm/equal.hpp>
 
 #include <iostreams/filters.h>
 
@@ -45,6 +48,26 @@ prdnt, snt n clp q ffc dsrnt mllt nm d st lbrm.
 static constexpr auto vowels = "aeiouAEIOU";
 
 
+namespace aux {
+
+
+template< typename Iter >
+struct AsHex
+{
+     explicit AsHex( Iter beg, Iter end ) : beg{ beg }, end{ end } {}
+     Iter beg, end;
+};
+
+
+template< typename Iter >
+std::ostream& operator<<( std::ostream& os, const AsHex< Iter >& ah )
+{
+     boost::algorithm::hex( ah.beg, ah.end, std::ostreambuf_iterator< char >{ os } );
+     return os;
+}
+
+
+} // namespace aux
 } /// namespace test_env
 } /// namespace {unnamed}
 
@@ -375,6 +398,191 @@ BOOST_AUTO_TEST_CASE( TextData )
 }
 BOOST_AUTO_TEST_SUITE_END() /// Output
 BOOST_AUTO_TEST_SUITE_END() /// CharRemover
+BOOST_AUTO_TEST_SUITE( StreamInterrupter )
+
+using using_boost::iostreams::filters::multichar::StreamInterrupter;
+
+BOOST_AUTO_TEST_SUITE( Input )
+BOOST_AUTO_TEST_CASE( EmptyStream )
+{
+     std::istringstream is;
+     boost::test_tools::output_test_stream os;
+
+     boost::iostreams::filtering_istream fis;
+     fis.push( StreamInterrupter{ "xYz" } );
+     fis.push( is );
+
+     boost::iostreams::copy( fis, os );
+
+     BOOST_TEST( os.is_empty() );
+}
+BOOST_AUTO_TEST_CASE( TextStream )
+{
+     static constexpr auto source =
+          "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod "
+          "tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, "
+          "quis nostrud exercitation ullamco ^ laboris nisi ut aliquip ex ea commodo "
+          "consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse "
+          "cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non "
+          "proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
+
+     static constexpr auto interrupters = "^";
+
+     static constexpr auto expected =
+          "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod "
+          "tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, "
+          "quis nostrud exercitation ullamco ";
+
+     std::istringstream is{ source };
+     boost::test_tools::output_test_stream os;
+
+     boost::iostreams::filtering_istream fis;
+     fis.push( StreamInterrupter{ interrupters } );
+     fis.push( is );
+
+     boost::iostreams::copy( fis, os );
+
+     BOOST_TEST( os.is_equal( expected ) );
+}
+
+//BOOST_TEST_DONT_PRINT_LOG_VALUE( std::string )
+
+BOOST_AUTO_TEST_CASE( BinaryStream )
+{
+     static constexpr std::uint8_t source[] = {
+          0x63, 0x41, 0x67, 0xdb, 0x7f, 0x57, 0x23, 0x2a, 0xb9, 0xf1, 0xec, 0xba,
+          0xea, 0x31, 0x00, 0xd3, 0xec, 0xd3, 0xb6, 0x85, 0x1d, 0xc4, 0x31, 0xdd,
+          0xa3, 0x32, 0x27, 0x36, 0x09, 0xba, 0xc7, 0x1e, 0xf3, 0xea, 0x8a, 0x34,
+          0x6b, 0x79, 0x88, 0xb0, 0x79, 0x92, 0xb8, 0x23, 0x1c, 0xac, 0xc0, 0xb6,
+          0x41, 0xba, 0xab, 0x3b, 0x68, 0xe3, 0x78, 0x68, 0x75, 0x01, 0x98, 0x74,
+          0xaf, 0x2b, 0xc4, 0xd3, 0x98, 0xd2, 0xca, 0x1b, 0x1a, 0xc8, 0x97, 0x92,
+          0x1b, 0xe8, 0x98, 0x1b, 0x3d, 0x22, 0xa9, 0xfc, 0xda, 0x39, 0xe3, 0xf3,
+          0xde, 0xe6, 0xf8, 0x6f, 0xc8, 0xa7, 0xf0, 0x93, 0xcb, 0x83, 0x5a, 0xde,
+          0x44, 0x64, 0x40, 0x32, 0x86, 0x33, 0x9c, 0xd8, 0xbf, 0xc2, 0x90, 0x7f,
+          0xc3, 0xf4, 0x10, 0x8f, 0x71, 0x31, 0x8f, 0x63, 0x0f, 0x8c, 0xe2, 0x72,
+          0x04, 0x37, 0x39, 0x5e, 0x17, 0x02, 0x80, 0xf4
+     };
+     static constexpr std::uint8_t interrupters[] = { 0x68, 0xd2, 0x6f };
+     static constexpr std::uint8_t expected[] = {
+          0x63, 0x41, 0x67, 0xdb, 0x7f, 0x57, 0x23, 0x2a, 0xb9, 0xf1, 0xec, 0xba,
+          0xea, 0x31, 0x00, 0xd3, 0xec, 0xd3, 0xb6, 0x85, 0x1d, 0xc4, 0x31, 0xdd,
+          0xa3, 0x32, 0x27, 0x36, 0x09, 0xba, 0xc7, 0x1e, 0xf3, 0xea, 0x8a, 0x34,
+          0x6b, 0x79, 0x88, 0xb0, 0x79, 0x92, 0xb8, 0x23, 0x1c, 0xac, 0xc0, 0xb6,
+          0x41, 0xba, 0xab, 0x3b
+     };
+
+     boost::iostreams::stream< boost::iostreams::array_source > is{
+          boost::iostreams::array_source{
+               reinterpret_cast< const char* >( source )
+               , sizeof( source )
+          }
+     };
+     std::ostringstream oss{ std::ios::binary };
+
+     boost::iostreams::filtering_istream fis;
+     fis.push( StreamInterrupter{ interrupters, interrupters + sizeof( interrupters ) } );
+     fis.push( is );
+
+     boost::iostreams::copy( fis, oss );
+
+     const auto& actual = oss.str();
+
+     BOOST_TEST( actual == std::string( expected, expected + sizeof( expected ) ),
+          "binary sequences is not equal"
+          << "\n- expected: " << test_env::aux::AsHex( actual.cbegin(), actual.cend() )
+          << "\n-   actual: " << test_env::aux::AsHex( expected, expected + sizeof( expected ) )
+          );
+}
+BOOST_AUTO_TEST_SUITE_END() /// Input
+BOOST_AUTO_TEST_SUITE( Output )
+BOOST_AUTO_TEST_CASE( EmptyStream )
+{
+     std::istringstream is;
+     boost::test_tools::output_test_stream os;
+
+     boost::iostreams::filtering_ostream fos;
+     fos.push( StreamInterrupter{ "xYz" } );
+     fos.push( os );
+
+     boost::iostreams::copy( is, fos );
+
+     BOOST_TEST( os.is_empty() );
+}
+BOOST_AUTO_TEST_CASE( TextStream )
+{
+     static constexpr auto source =
+          "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod "
+          "tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, "
+          "quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo "
+          "consequat. Duis aute irure # dolor in reprehenderit in voluptate velit esse "
+          "cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non "
+          "proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
+
+     static constexpr auto interrupters = "%$#";
+
+     static constexpr auto expected =
+          "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod "
+          "tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, "
+          "quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo "
+          "consequat. Duis aute irure ";
+
+     std::istringstream is{ source };
+     boost::test_tools::output_test_stream os;
+
+     boost::iostreams::filtering_ostream fos;
+     fos.push( StreamInterrupter{ interrupters } );
+     fos.push( os );
+
+     boost::iostreams::copy( is, fos );
+
+     BOOST_TEST( os.is_equal( expected ) );
+}
+BOOST_AUTO_TEST_CASE( BinaryStream )
+{
+     static constexpr std::uint8_t source[] = {
+          0x8b, 0x8f, 0xd7, 0x3a, 0xb0, 0x29, 0x41, 0x64, 0x44, 0x92, 0xdf, 0x0c,
+          0x39, 0x6a, 0x09, 0x6b, 0x67, 0xb5, 0x71, 0x25, 0x15, 0x68, 0x92, 0xa2,
+          0x09, 0x9a, 0x44, 0x3e, 0x3c, 0x99, 0xb6, 0x44, 0x41, 0xa4, 0x26, 0x40,
+          0x0b, 0x2b, 0xf3, 0xc8, 0x8c, 0xba, 0xd9, 0x61, 0x03, 0x6c, 0xb7, 0x25,
+          0x1f, 0x2e, 0xda, 0xcd, 0x59, 0x97, 0xe6, 0x25, 0x92, 0x53, 0x1a, 0xf4,
+          0xdc, 0xfb, 0x40, 0x98, 0xcd, 0xc6, 0x96, 0x21, 0x2c, 0xdc, 0x3c, 0x8d,
+          0xd1, 0x9e, 0x25, 0x2f, 0x34, 0x0e, 0xc8, 0x8c, 0x22, 0xb9, 0x17, 0x49,
+          0x0b, 0x18, 0x91, 0x9c, 0x19, 0x17, 0x7c, 0x90, 0x46, 0x06, 0x34, 0x53,
+          0x97, 0x97, 0xce, 0x55, 0xc6, 0xef, 0x0e, 0x20, 0xb6, 0x8b, 0x12, 0x1b,
+          0x05, 0x72, 0x1c, 0x91, 0xb3, 0x32, 0x79, 0xa1, 0x19, 0x05, 0xb3, 0x2c,
+          0x7e, 0xfa, 0xd3, 0x75, 0x83, 0x37, 0x85, 0xf6
+     };
+     static constexpr std::uint8_t interrupters[] = { 0xb6 };
+     static constexpr std::uint8_t expected[] = {
+          0x8b, 0x8f, 0xd7, 0x3a, 0xb0, 0x29, 0x41, 0x64, 0x44, 0x92, 0xdf, 0x0c,
+          0x39, 0x6a, 0x09, 0x6b, 0x67, 0xb5, 0x71, 0x25, 0x15, 0x68, 0x92, 0xa2,
+          0x09, 0x9a, 0x44, 0x3e, 0x3c, 0x99
+     };
+
+     boost::iostreams::stream< boost::iostreams::array_source > is{
+          boost::iostreams::array_source{
+               reinterpret_cast< const char* >( source )
+               , sizeof( source )
+          }
+     };
+     std::ostringstream oss{ std::ios::binary };
+
+     boost::iostreams::filtering_ostream fos;
+     fos.push( StreamInterrupter{ interrupters, interrupters + sizeof( interrupters ) } );
+     fos.push( oss );
+
+     boost::iostreams::copy( is, fos );
+
+     const auto& actual = oss.str();
+
+     BOOST_TEST( actual == std::string( expected, expected + sizeof( expected ) ),
+          "binary sequences is not equal"
+          << "\n- expected: " << test_env::aux::AsHex( actual.cbegin(), actual.cend() )
+          << "\n-   actual: " << test_env::aux::AsHex( expected, expected + sizeof( expected ) )
+          );
+}
+BOOST_AUTO_TEST_SUITE_END() /// Output
+BOOST_AUTO_TEST_SUITE_END() /// StreamInterrupter
 BOOST_AUTO_TEST_SUITE_END() /// Multichar
 BOOST_AUTO_TEST_SUITE_END() /// Modifying
 BOOST_AUTO_TEST_SUITE_END() /// IoFilters
