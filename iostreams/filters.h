@@ -4,6 +4,8 @@
 
 #pragma once
 
+#include <set>
+
 #include <boost/assert.hpp>
 #include <boost/iostreams/concepts.hpp>
 #include <boost/iostreams/get.hpp>
@@ -168,6 +170,63 @@ private:
           return chars_.find( c ) != boost::string_view::npos;
      }
      boost::string_view chars_;
+};
+
+
+struct StreamInterrupter : boost::iostreams::multichar_dual_use_filter
+{
+     template< typename Iter >
+     explicit StreamInterrupter( Iter begin, Iter end )
+          : chars_{ begin, end }
+     {}
+
+     explicit StreamInterrupter( boost::string_view cc )
+          : StreamInterrupter{ cc.cbegin(), cc.cend() }
+     {}
+
+     template< typename Source >
+     std::streamsize read( Source& src, char* out, std::streamsize n )
+     {
+          if( !eos_ && (n = boost::iostreams::read( src, out, n )) > 0 )
+          {
+               const auto end = out + n;
+               const auto endstrm = std::find_if( out, end,
+                    [ this ]( const char c ){ return eos( c ); } );
+               eos_ = endstrm != end;
+               return std::distance( out, endstrm );
+          }
+          return eos_ ? EOF : n;
+     }
+
+     template< typename Sink >
+     std::streamsize write( Sink& snk, const char* in, const std::streamsize n )
+     {
+          if( !eos_ )
+          {
+               const auto end = in + n;
+               const auto endstrm = std::find_if(
+                    in
+                    , end
+                    , [ this ]( const char c ){ return eos( c ); }
+                    );
+               eos_ = endstrm != end;
+               boost::iostreams::write( snk, in, std::distance( in, endstrm ) );
+          }
+          return n;
+     }
+
+     template< typename Device >
+     void close( Device&, std::ios::openmode )
+     {
+          eos_ = false;
+     }
+private:
+     bool eos( const int c ) const noexcept
+     {
+          return chars_.count( c ) > 0;
+     }
+     std::set< char > chars_;
+     bool eos_ = false;
 };
 
 
