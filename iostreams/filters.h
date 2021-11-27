@@ -207,7 +207,10 @@ struct StreamInterrupter : boost::iostreams::multichar_dual_use_filter
                     , [ this ]( const char c ){ return eos( c ); }
                     );
                eos_ = endstrm != end;
-               boost::iostreams::write( snk, in, std::distance( in, endstrm ) );
+               if( boost::iostreams::write( snk, in, std::distance( in, endstrm ) ) == EOF )
+               {
+                    return EOF;
+               }
           }
           return n;
      }
