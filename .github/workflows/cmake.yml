@@ -28,9 +28,3 @@ jobs:
     - name: Run tests
       working-directory: ${{github.workspace}}/build
       run: ctest -C ${{matrix.build-type}}
-
-    - name: Run benchmarks (for release only)
-      if: matrix.build-type == 'Release'
-      working-directory: ${{github.workspace}}/build
-      run: find -type f -name \*-benchmark -exec {} \;
-      
