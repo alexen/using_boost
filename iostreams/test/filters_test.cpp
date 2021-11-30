@@ -444,9 +444,6 @@ BOOST_AUTO_TEST_CASE( TextStream )
 
      BOOST_TEST( os.is_equal( expected ) );
 }
-
-//BOOST_TEST_DONT_PRINT_LOG_VALUE( std::string )
-
 BOOST_AUTO_TEST_CASE( BinaryStream )
 {
      static constexpr std::uint8_t source[] = {
