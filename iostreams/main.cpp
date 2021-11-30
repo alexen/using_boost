@@ -10,6 +10,7 @@
 #include <algorithm>
 
 #include <boost/core/ignore_unused.hpp>
+#include <boost/range/irange.hpp>
 #include <boost/iostreams/copy.hpp>
 #include <boost/iostreams/invert.hpp>
 #include <boost/iostreams/operations.hpp>
