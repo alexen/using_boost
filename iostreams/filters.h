@@ -36,9 +36,13 @@ struct Transparent : boost::iostreams::dual_use_filter
 
 struct CharRemover : boost::iostreams::dual_use_filter
 {
-     template< typename ...Args >
-     explicit CharRemover( Args&& ...args )
-          : chars_{ std::forward< Args >( args )... }
+     template< typename Iter >
+     explicit CharRemover( Iter begin, Iter end )
+          : chars_{ begin, end }
+     {}
+
+     explicit CharRemover( boost::string_view cc )
+          : CharRemover{ cc.cbegin(), cc.cend() }
      {}
 
      template< typename Source >
@@ -65,11 +69,11 @@ struct CharRemover : boost::iostreams::dual_use_filter
           return boost::iostreams::put( snk, c );
      }
 private:
-     bool ignored( int c ) const noexcept
+     bool ignored( const int c ) const noexcept
      {
-          return chars_.find( c ) != boost::string_view::npos;
+          return chars_.count( c );
      }
-     boost::string_view chars_;
+     std::set< char > chars_;
 };
 
 
@@ -125,9 +129,13 @@ private:
 
 struct CharRemover : boost::iostreams::multichar_dual_use_filter
 {
-     template< typename ...Args >
-     explicit CharRemover( Args&& ...args )
-          : chars_{ std::forward< Args >( args )... }
+     template< typename Iter >
+     explicit CharRemover( Iter begin, Iter end )
+          : chars_{ begin, end }
+     {}
+
+     explicit CharRemover( boost::string_view cc )
+          : CharRemover{ cc.cbegin(), cc.cend() }
      {}
 
      template< typename Source >
@@ -164,9 +172,9 @@ struct CharRemover : boost::iostreams::multichar_dual_use_filter
 private:
      bool ignored( const int c ) const noexcept
      {
-          return chars_.find( c ) != boost::string_view::npos;
+          return chars_.count( c );
      }
-     boost::string_view chars_;
+     std::set< char > chars_;
 };
 
 
