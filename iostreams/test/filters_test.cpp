@@ -583,6 +583,271 @@ BOOST_AUTO_TEST_CASE( BinaryStream )
 }
 BOOST_AUTO_TEST_SUITE_END() /// Output
 BOOST_AUTO_TEST_SUITE_END() /// StreamInterrupter
+BOOST_AUTO_TEST_SUITE( CharMultiplier )
+
+using using_boost::iostreams::filters::multichar::CharMultiplier;
+
+BOOST_AUTO_TEST_SUITE( Input )
+BOOST_AUTO_TEST_CASE( EmptyStream )
+{
+     std::istringstream is;
+     boost::test_tools::output_test_stream os;
+
+     boost::iostreams::filtering_istream fis;
+     fis.push( CharMultiplier{ 50 } );
+     fis.push( is );
+
+     boost::iostreams::copy( fis, os );
+
+     BOOST_TEST( os.is_empty() );
+}
+BOOST_AUTO_TEST_CASE( ShortTextStream )
+{
+     static constexpr auto source = "0123456789abcdefg";
+     static constexpr auto expected = "000111222333444555666777888999aaabbbcccdddeeefffggg";
+
+     std::istringstream is{ source };
+     boost::test_tools::output_test_stream os;
+
+     boost::iostreams::filtering_istream fis;
+     fis.push( CharMultiplier{ 3 } );
+     fis.push( is );
+
+     boost::iostreams::copy( fis, os );
+
+     BOOST_TEST( os.is_equal( expected ) );
+}
+BOOST_AUTO_TEST_CASE( LongTextStream )
+{
+     static constexpr auto source =
+          "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod "
+          "tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, "
+          "quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo "
+          "consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse "
+          "cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non "
+          "proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
+
+     static constexpr auto expected =
+          "LLLLLooooorrrrreeeeemmmmm     iiiiipppppsssssuuuuummmmm     dddddooooolllllo"
+          "oooorrrrr     sssssiiiiittttt     aaaaammmmmeeeeettttt,,,,,     cccccooooonn"
+          "nnnssssseeeeecccccttttteeeeetttttuuuuurrrrr     aaaaadddddiiiiipppppiiiiisss"
+          "ssiiiiiccccciiiiinnnnnggggg     eeeeellllliiiiittttt,,,,,     ssssseeeeedddd"
+          "d     dddddooooo     eeeeeiiiiiuuuuusssssmmmmmoooooddddd     ttttteeeeemmmmm"
+          "pppppooooorrrrr     iiiiinnnnnccccciiiiidddddiiiiiddddduuuuunnnnnttttt     u"
+          "uuuuttttt     lllllaaaaabbbbbooooorrrrreeeee     eeeeettttt     dddddoooooll"
+          "lllooooorrrrreeeee     mmmmmaaaaagggggnnnnnaaaaa     aaaaallllliiiiiqqqqquuu"
+          "uuaaaaa.....     UUUUUttttt     eeeeennnnniiiiimmmmm     aaaaaddddd     mmmm"
+          "miiiiinnnnniiiiimmmmm     vvvvveeeeennnnniiiiiaaaaammmmm,,,,,     qqqqquuuuu"
+          "iiiiisssss     nnnnnooooossssstttttrrrrruuuuuddddd     eeeeexxxxxeeeeerrrrrc"
+          "cccciiiiitttttaaaaatttttiiiiiooooonnnnn     uuuuullllllllllaaaaammmmmcccccoo"
+          "ooo     lllllaaaaabbbbbooooorrrrriiiiisssss     nnnnniiiiisssssiiiii     uuu"
+          "uuttttt     aaaaallllliiiiiqqqqquuuuuiiiiippppp     eeeeexxxxx     eeeeeaaaa"
+          "a     cccccooooommmmmmmmmmooooodddddooooo     cccccooooonnnnnssssseeeeeqqqqq"
+          "uuuuuaaaaattttt.....     DDDDDuuuuuiiiiisssss     aaaaauuuuuttttteeeee     i"
+          "iiiirrrrruuuuurrrrreeeee     dddddooooolllllooooorrrrr     iiiiinnnnn     rr"
+          "rrreeeeeppppprrrrreeeeehhhhheeeeennnnndddddeeeeerrrrriiiiittttt     iiiiinnn"
+          "nn     vvvvvooooollllluuuuuppppptttttaaaaattttteeeee     vvvvveeeeellllliiii"
+          "ittttt     eeeeesssssssssseeeee     ccccciiiiilllllllllluuuuummmmm     ddddd"
+          "ooooolllllooooorrrrreeeee     eeeeeuuuuu     fffffuuuuugggggiiiiiaaaaattttt "
+          "    nnnnnuuuuullllllllllaaaaa     pppppaaaaarrrrriiiiiaaaaatttttuuuuurrrrr.."
+          "...     EEEEExxxxxccccceeeeepppppttttteeeeeuuuuurrrrr     sssssiiiiinnnnnttt"
+          "tt     oooooccccccccccaaaaaeeeeecccccaaaaattttt     cccccuuuuupppppiiiiidddd"
+          "daaaaatttttaaaaattttt     nnnnnooooonnnnn     ppppprrrrroooooiiiiidddddeeeee"
+          "nnnnnttttt,,,,,     sssssuuuuunnnnnttttt     iiiiinnnnn     cccccuuuuulllllp"
+          "ppppaaaaa     qqqqquuuuuiiiii     oooooffffffffffiiiiiccccciiiiiaaaaa     dd"
+          "dddeeeeessssseeeeerrrrruuuuunnnnnttttt     mmmmmooooolllllllllliiiiittttt   "
+          "  aaaaannnnniiiiimmmmm     iiiiiddddd     eeeeesssssttttt     lllllaaaaabbbb"
+          "booooorrrrruuuuummmmm.....";
+
+     std::istringstream is{ source };
+     boost::test_tools::output_test_stream os;
+
+     boost::iostreams::filtering_istream fis;
+     fis.push( CharMultiplier{ 5 } );
+     fis.push( is );
+
+     boost::iostreams::copy( fis, os );
+
+     BOOST_TEST( os.is_equal( expected ) );
+}
+BOOST_AUTO_TEST_CASE( BinaryStream )
+{
+     static constexpr std::uint8_t source[] = {
+          0xdb, 0x54, 0x74, 0x7b, 0xf2, 0x03, 0xbd, 0x69, 0x7e, 0xff, 0xd4, 0x75,
+          0x9c, 0x16, 0x5a, 0xf1, 0xaa, 0x95, 0x5e, 0x0b, 0x59, 0xa9, 0x71, 0x18,
+          0x0a, 0x22, 0x57, 0x75, 0xc6, 0xbf, 0xdc, 0xa2, 0x1f, 0xba, 0xf5, 0x46,
+          0x50, 0xa3, 0x79, 0x8c, 0x0a, 0x41, 0x9c, 0x47, 0x95, 0x10, 0xbd, 0x15,
+          0xa8, 0x49, 0x26, 0xf2, 0xcc, 0x98, 0x83, 0xb6, 0xfc, 0xf0, 0xd2, 0x0d,
+          0xc4, 0x99, 0xad, 0xa9
+     };
+     static constexpr std::uint8_t expected[] = {
+          0xdb, 0xdb, 0xdb, 0xdb, 0x54, 0x54, 0x54, 0x54, 0x74, 0x74, 0x74, 0x74,
+          0x7b, 0x7b, 0x7b, 0x7b, 0xf2, 0xf2, 0xf2, 0xf2, 0x03, 0x03, 0x03, 0x03,
+          0xbd, 0xbd, 0xbd, 0xbd, 0x69, 0x69, 0x69, 0x69, 0x7e, 0x7e, 0x7e, 0x7e,
+          0xff, 0xff, 0xff, 0xff, 0xd4, 0xd4, 0xd4, 0xd4, 0x75, 0x75, 0x75, 0x75,
+          0x9c, 0x9c, 0x9c, 0x9c, 0x16, 0x16, 0x16, 0x16, 0x5a, 0x5a, 0x5a, 0x5a,
+          0xf1, 0xf1, 0xf1, 0xf1, 0xaa, 0xaa, 0xaa, 0xaa, 0x95, 0x95, 0x95, 0x95,
+          0x5e, 0x5e, 0x5e, 0x5e, 0x0b, 0x0b, 0x0b, 0x0b, 0x59, 0x59, 0x59, 0x59,
+          0xa9, 0xa9, 0xa9, 0xa9, 0x71, 0x71, 0x71, 0x71, 0x18, 0x18, 0x18, 0x18,
+          0x0a, 0x0a, 0x0a, 0x0a, 0x22, 0x22, 0x22, 0x22, 0x57, 0x57, 0x57, 0x57,
+          0x75, 0x75, 0x75, 0x75, 0xc6, 0xc6, 0xc6, 0xc6, 0xbf, 0xbf, 0xbf, 0xbf,
+          0xdc, 0xdc, 0xdc, 0xdc, 0xa2, 0xa2, 0xa2, 0xa2, 0x1f, 0x1f, 0x1f, 0x1f,
+          0xba, 0xba, 0xba, 0xba, 0xf5, 0xf5, 0xf5, 0xf5, 0x46, 0x46, 0x46, 0x46,
+          0x50, 0x50, 0x50, 0x50, 0xa3, 0xa3, 0xa3, 0xa3, 0x79, 0x79, 0x79, 0x79,
+          0x8c, 0x8c, 0x8c, 0x8c, 0x0a, 0x0a, 0x0a, 0x0a, 0x41, 0x41, 0x41, 0x41,
+          0x9c, 0x9c, 0x9c, 0x9c, 0x47, 0x47, 0x47, 0x47, 0x95, 0x95, 0x95, 0x95,
+          0x10, 0x10, 0x10, 0x10, 0xbd, 0xbd, 0xbd, 0xbd, 0x15, 0x15, 0x15, 0x15,
+          0xa8, 0xa8, 0xa8, 0xa8, 0x49, 0x49, 0x49, 0x49, 0x26, 0x26, 0x26, 0x26,
+          0xf2, 0xf2, 0xf2, 0xf2, 0xcc, 0xcc, 0xcc, 0xcc, 0x98, 0x98, 0x98, 0x98,
+          0x83, 0x83, 0x83, 0x83, 0xb6, 0xb6, 0xb6, 0xb6, 0xfc, 0xfc, 0xfc, 0xfc,
+          0xf0, 0xf0, 0xf0, 0xf0, 0xd2, 0xd2, 0xd2, 0xd2, 0x0d, 0x0d, 0x0d, 0x0d,
+          0xc4, 0xc4, 0xc4, 0xc4, 0x99, 0x99, 0x99, 0x99, 0xad, 0xad, 0xad, 0xad,
+          0xa9, 0xa9, 0xa9, 0xa9
+     };
+
+     boost::iostreams::stream< boost::iostreams::array_source > is{
+          boost::iostreams::array_source{
+               reinterpret_cast< const char* >( source )
+               , sizeof( source )
+          }
+     };
+     std::ostringstream oss{ std::ios::binary };
+
+     boost::iostreams::filtering_istream fis;
+     fis.push( CharMultiplier{ 4 } );
+     fis.push( is );
+
+     boost::iostreams::copy( fis, oss );
+
+     const auto& actual = oss.str();
+
+     BOOST_TEST( actual == std::string( expected, expected + sizeof( expected ) ),
+          "binary sequences is not equal"
+          << "\n- expected: " << test_env::aux::AsHex( actual.cbegin(), actual.cend() )
+          << "\n-   actual: " << test_env::aux::AsHex( expected, expected + sizeof( expected ) )
+          );
+}
+BOOST_AUTO_TEST_SUITE_END() /// Input
+BOOST_AUTO_TEST_SUITE( Output )
+BOOST_AUTO_TEST_CASE( EmptyStream )
+{
+     std::istringstream is;
+     boost::test_tools::output_test_stream os;
+
+     boost::iostreams::filtering_ostream fos;
+     fos.push( CharMultiplier{ 37 } );
+     fos.push( os );
+
+     boost::iostreams::copy( is, fos );
+
+     BOOST_TEST( os.is_empty() );
+}
+BOOST_AUTO_TEST_CASE( TextStream )
+{
+     static constexpr auto source =
+          "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod "
+          "tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, "
+          "quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo "
+          "consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse "
+          "cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non "
+          "proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
+
+     static constexpr auto expected =
+          "LLLLLooooorrrrreeeeemmmmm     iiiiipppppsssssuuuuummmmm     dddddooooolllllo"
+          "oooorrrrr     sssssiiiiittttt     aaaaammmmmeeeeettttt,,,,,     cccccooooonn"
+          "nnnssssseeeeecccccttttteeeeetttttuuuuurrrrr     aaaaadddddiiiiipppppiiiiisss"
+          "ssiiiiiccccciiiiinnnnnggggg     eeeeellllliiiiittttt,,,,,     ssssseeeeedddd"
+          "d     dddddooooo     eeeeeiiiiiuuuuusssssmmmmmoooooddddd     ttttteeeeemmmmm"
+          "pppppooooorrrrr     iiiiinnnnnccccciiiiidddddiiiiiddddduuuuunnnnnttttt     u"
+          "uuuuttttt     lllllaaaaabbbbbooooorrrrreeeee     eeeeettttt     dddddoooooll"
+          "lllooooorrrrreeeee     mmmmmaaaaagggggnnnnnaaaaa     aaaaallllliiiiiqqqqquuu"
+          "uuaaaaa.....     UUUUUttttt     eeeeennnnniiiiimmmmm     aaaaaddddd     mmmm"
+          "miiiiinnnnniiiiimmmmm     vvvvveeeeennnnniiiiiaaaaammmmm,,,,,     qqqqquuuuu"
+          "iiiiisssss     nnnnnooooossssstttttrrrrruuuuuddddd     eeeeexxxxxeeeeerrrrrc"
+          "cccciiiiitttttaaaaatttttiiiiiooooonnnnn     uuuuullllllllllaaaaammmmmcccccoo"
+          "ooo     lllllaaaaabbbbbooooorrrrriiiiisssss     nnnnniiiiisssssiiiii     uuu"
+          "uuttttt     aaaaallllliiiiiqqqqquuuuuiiiiippppp     eeeeexxxxx     eeeeeaaaa"
+          "a     cccccooooommmmmmmmmmooooodddddooooo     cccccooooonnnnnssssseeeeeqqqqq"
+          "uuuuuaaaaattttt.....     DDDDDuuuuuiiiiisssss     aaaaauuuuuttttteeeee     i"
+          "iiiirrrrruuuuurrrrreeeee     dddddooooolllllooooorrrrr     iiiiinnnnn     rr"
+          "rrreeeeeppppprrrrreeeeehhhhheeeeennnnndddddeeeeerrrrriiiiittttt     iiiiinnn"
+          "nn     vvvvvooooollllluuuuuppppptttttaaaaattttteeeee     vvvvveeeeellllliiii"
+          "ittttt     eeeeesssssssssseeeee     ccccciiiiilllllllllluuuuummmmm     ddddd"
+          "ooooolllllooooorrrrreeeee     eeeeeuuuuu     fffffuuuuugggggiiiiiaaaaattttt "
+          "    nnnnnuuuuullllllllllaaaaa     pppppaaaaarrrrriiiiiaaaaatttttuuuuurrrrr.."
+          "...     EEEEExxxxxccccceeeeepppppttttteeeeeuuuuurrrrr     sssssiiiiinnnnnttt"
+          "tt     oooooccccccccccaaaaaeeeeecccccaaaaattttt     cccccuuuuupppppiiiiidddd"
+          "daaaaatttttaaaaattttt     nnnnnooooonnnnn     ppppprrrrroooooiiiiidddddeeeee"
+          "nnnnnttttt,,,,,     sssssuuuuunnnnnttttt     iiiiinnnnn     cccccuuuuulllllp"
+          "ppppaaaaa     qqqqquuuuuiiiii     oooooffffffffffiiiiiccccciiiiiaaaaa     dd"
+          "dddeeeeessssseeeeerrrrruuuuunnnnnttttt     mmmmmooooolllllllllliiiiittttt   "
+          "  aaaaannnnniiiiimmmmm     iiiiiddddd     eeeeesssssttttt     lllllaaaaabbbb"
+          "booooorrrrruuuuummmmm.....";
+
+     std::istringstream is{ source };
+     boost::test_tools::output_test_stream os;
+
+     boost::iostreams::filtering_ostream fos;
+     fos.push( CharMultiplier{ 5 } );
+     fos.push( os );
+
+     boost::iostreams::copy( is, fos );
+
+     BOOST_TEST( os.is_equal( expected ) );
+}
+BOOST_AUTO_TEST_CASE( BinaryStream )
+{
+     static constexpr std::uint8_t source[] = {
+          0x93, 0xbf, 0xef, 0xfb, 0xe9, 0xbb, 0x32, 0x73, 0x93, 0x63, 0x41, 0xb7,
+          0xb9, 0x7f, 0x9c, 0x60, 0xd8, 0xd6, 0x5e, 0x85, 0xc0, 0x1c, 0x2b, 0xab,
+          0xfc, 0x43, 0xe5, 0x30, 0x76, 0xbf, 0xa2, 0x7d, 0xcd, 0x43, 0x98, 0x2f,
+          0x52, 0xee, 0x14, 0xa4, 0xff, 0xac, 0x09, 0xf0, 0x40, 0x79, 0x91, 0x27,
+          0x13, 0xa6, 0x92, 0x7e, 0x54, 0x99, 0x32, 0x90, 0xaf, 0xb5, 0x3a, 0x79,
+          0x5c, 0x50, 0x78, 0x86
+     };
+     static constexpr std::uint8_t expected[] = {
+          0x93, 0x93, 0x93, 0xbf, 0xbf, 0xbf, 0xef, 0xef, 0xef, 0xfb, 0xfb, 0xfb,
+          0xe9, 0xe9, 0xe9, 0xbb, 0xbb, 0xbb, 0x32, 0x32, 0x32, 0x73, 0x73, 0x73,
+          0x93, 0x93, 0x93, 0x63, 0x63, 0x63, 0x41, 0x41, 0x41, 0xb7, 0xb7, 0xb7,
+          0xb9, 0xb9, 0xb9, 0x7f, 0x7f, 0x7f, 0x9c, 0x9c, 0x9c, 0x60, 0x60, 0x60,
+          0xd8, 0xd8, 0xd8, 0xd6, 0xd6, 0xd6, 0x5e, 0x5e, 0x5e, 0x85, 0x85, 0x85,
+          0xc0, 0xc0, 0xc0, 0x1c, 0x1c, 0x1c, 0x2b, 0x2b, 0x2b, 0xab, 0xab, 0xab,
+          0xfc, 0xfc, 0xfc, 0x43, 0x43, 0x43, 0xe5, 0xe5, 0xe5, 0x30, 0x30, 0x30,
+          0x76, 0x76, 0x76, 0xbf, 0xbf, 0xbf, 0xa2, 0xa2, 0xa2, 0x7d, 0x7d, 0x7d,
+          0xcd, 0xcd, 0xcd, 0x43, 0x43, 0x43, 0x98, 0x98, 0x98, 0x2f, 0x2f, 0x2f,
+          0x52, 0x52, 0x52, 0xee, 0xee, 0xee, 0x14, 0x14, 0x14, 0xa4, 0xa4, 0xa4,
+          0xff, 0xff, 0xff, 0xac, 0xac, 0xac, 0x09, 0x09, 0x09, 0xf0, 0xf0, 0xf0,
+          0x40, 0x40, 0x40, 0x79, 0x79, 0x79, 0x91, 0x91, 0x91, 0x27, 0x27, 0x27,
+          0x13, 0x13, 0x13, 0xa6, 0xa6, 0xa6, 0x92, 0x92, 0x92, 0x7e, 0x7e, 0x7e,
+          0x54, 0x54, 0x54, 0x99, 0x99, 0x99, 0x32, 0x32, 0x32, 0x90, 0x90, 0x90,
+          0xaf, 0xaf, 0xaf, 0xb5, 0xb5, 0xb5, 0x3a, 0x3a, 0x3a, 0x79, 0x79, 0x79,
+          0x5c, 0x5c, 0x5c, 0x50, 0x50, 0x50, 0x78, 0x78, 0x78, 0x86, 0x86, 0x86
+     };
+
+     boost::iostreams::stream< boost::iostreams::array_source > is{
+          boost::iostreams::array_source{
+               reinterpret_cast< const char* >( source )
+               , sizeof( source )
+          }
+     };
+     std::ostringstream oss{ std::ios::binary };
+
+     boost::iostreams::filtering_ostream fos;
+     fos.push( CharMultiplier{ 3 } );
+     fos.push( oss );
+
+     boost::iostreams::copy( is, fos );
+
+     const auto& actual = oss.str();
+
+     BOOST_TEST( actual == std::string( expected, expected + sizeof( expected ) ),
+          "binary sequences is not equal"
+          << "\n- expected: " << test_env::aux::AsHex( actual.cbegin(), actual.cend() )
+          << "\n-   actual: " << test_env::aux::AsHex( expected, expected + sizeof( expected ) )
+          );
+}
+BOOST_AUTO_TEST_SUITE_END() /// Output
+BOOST_AUTO_TEST_SUITE_END() /// CharMultiplier
 BOOST_AUTO_TEST_SUITE_END() /// Multichar
 BOOST_AUTO_TEST_SUITE_END() /// Modifying
 BOOST_AUTO_TEST_SUITE_END() /// IoFilters
