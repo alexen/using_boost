@@ -3,6 +3,7 @@
 Ссылки на используемую документацию:  
 - [Boost.Iostream](https://www.boost.org/doc/libs/1_69_0/libs/iostreams/)
 - [Boost.Log](https://www.boost.org/doc/libs/1_69_0/libs/log/)
+- [Boost.Test](https://www.boost.org/doc/libs/1_69_0/libs/test/doc/html/index.html)
 
 *(список будет пополняться по мере обращения к другим разделам документации)*
 
