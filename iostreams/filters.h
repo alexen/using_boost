@@ -238,6 +238,62 @@ private:
 };
 
 
+struct CharMultiplier : boost::iostreams::multichar_dual_use_filter
+{
+     explicit CharMultiplier( int n ) : n_{ n } {}
+
+     template< typename Source >
+     std::streamsize read( Source& src, char* dst, const std::streamsize n )
+     {
+          for( std::streamsize i = 0; i < n; )
+          {
+               while( left_-- > 0 )
+               {
+                    dst[ i++ ] = c_;
+                    if( i >= n )
+                    {
+                         return n;
+                    }
+               }
+               const auto c = boost::iostreams::get( src );
+               if( c == EOF )
+               {
+                    return i > 0 ? i : EOF;
+               }
+               else if( c == boost::iostreams::WOULD_BLOCK )
+               {
+                    return i;
+               }
+               c_ = c;
+               left_ = n_;
+          }
+          return n;
+     }
+
+     template< typename Sink >
+     std::streamsize write( Sink& dst, const char* src, const std::streamsize n )
+     {
+          for( std::streamsize i = 0; i < n; ++i )
+          {
+               auto steps = n_;
+               while( steps-- )
+               {
+                    if( !boost::iostreams::put( dst, src[ i ] ) )
+                    {
+                         return i;
+                    }
+               }
+          }
+          return n;
+     }
+
+private:
+     const int n_;
+     char c_ = 0;
+     int left_ = 0;
+};
+
+
 } // namespace multichar
 } // namespace filters
 } // namespace iostreams

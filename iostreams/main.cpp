@@ -10,6 +10,7 @@
 #include <algorithm>
 
 #include <boost/core/ignore_unused.hpp>
+#include <boost/range/irange.hpp>
 #include <boost/iostreams/copy.hpp>
 #include <boost/iostreams/invert.hpp>
 #include <boost/iostreams/operations.hpp>
@@ -191,77 +192,11 @@ void test_readers()
 }
 
 
-struct CharMultiplier : boost::iostreams::multichar_dual_use_filter
-{
-     explicit CharMultiplier( unsigned n ) : n_{ n } {}
-
-     template< typename Source >
-     std::streamsize read( Source& src, char* s, const std::streamsize n )
-     {
-          return boost::iostreams::read( src, s, n );
-     }
-
-     template< typename Sink >
-     std::streamsize write( Sink& snk, const char* s, const std::streamsize n )
-     {
-          for( std::streamsize i = 0; i < n; ++i )
-          {
-               for( auto j = 0u; j < n_; ++j )
-               {
-                    if( !boost::iostreams::put( snk, s[ i ] ) )
-                    {
-                         return i;
-                    }
-               }
-          }
-          return n;
-     }
-
-private:
-     const unsigned n_;
-     unsigned left_ = 0;
-};
-
-
 int main( int argc, char** argv )
 {
      boost::ignore_unused( argc, argv );
      try
      {
-          static constexpr auto source = "0123456789";
-          static constexpr auto expected = "000111222333444555666777888999";
-#if 0
-          {
-               std::istringstream is{ source };
-               std::ostringstream os;
-
-               boost::iostreams::filtering_istream fis;
-               fis.push( CharMultiplier{ 3 } );
-               fis.push( is );
-
-               boost::iostreams::copy( fis, os );
-
-               if( os.str() != expected )
-               {
-                    BOOST_THROW_EXCEPTION( std::runtime_error{ "input bad result" } );
-               }
-          }
-#endif
-          {
-               std::istringstream is{ source };
-               std::ostringstream os;
-
-               boost::iostreams::filtering_ostream fos;
-               fos.push( CharMultiplier{ 3 } );
-               fos.push( os );
-
-               boost::iostreams::copy( is, fos );
-
-               if( os.str() != expected )
-               {
-                    BOOST_THROW_EXCEPTION( std::runtime_error{ "output bad result" } );
-               }
-          }
      }
      catch( const std::exception& e )
      {
