@@ -46,8 +46,8 @@ namespace bm_env {
 namespace consts {
 
 
-static constexpr auto N_SAMPLES = 3u;
-static constexpr auto N_ITERATIONS = 400u;
+static constexpr auto N_SAMPLES = 2u;
+static constexpr auto N_ITERATIONS = 100u;
 static const CeleroExperimentValues BUFFER_SIZES{ 100_KB, 300_KB, 800_KB };
 
 
@@ -152,7 +152,7 @@ private:
      {
           boost::iostreams::filtering_istream is{ boost::make_iterator_range( in ) };
           boost::iostreams::filtering_ostream os{ boost::iostreams::back_inserter( out ) };
-          base64::encode( is, os );
+          using_boost::iostreams::base64::encode( is, os );
           BOOST_ASSERT( out.size() > in.size() );
      }
      void prepareData( const std::uint64_t bytes )
@@ -226,7 +226,7 @@ BENCHMARK_F( Base64Encoding, Custom, bm_env::EncodingTestFixture, bm_env::consts
           boost::iostreams::null_sink{}
      };
 
-     base64::encode( is, os );
+     using_boost::iostreams::base64::encode( is, os );
 }
 
 
@@ -285,6 +285,18 @@ BENCHMARK_F( Base64Decoding, Custom, bm_env::DecodingTestFixture, bm_env::consts
           boost::iostreams::null_sink{}
      };
 
-     base64::decode( is, os );
+     using_boost::iostreams::base64::decode( is, os );
 }
 
+
+
+
+BENCHMARK_F( Base64Decoding, CustomRm, bm_env::DecodingTestFixture, bm_env::consts::N_SAMPLES, bm_env::consts::N_ITERATIONS )
+{
+     boost::iostreams::filtering_istream is{ boost::make_iterator_range( data() ) };
+     boost::iostreams::stream< boost::iostreams::null_sink > os{
+          boost::iostreams::null_sink{}
+     };
+
+     using_boost::iostreams::base64::decode( is, os, "\r\n\t " );
+}

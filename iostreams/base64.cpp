@@ -12,7 +12,11 @@
 #include <boost/iostreams/filtering_stream.hpp>
 #include <boost/iostreams/char_traits.hpp>
 
+#include <iostreams/filters.h>
 
+
+namespace using_boost {
+namespace iostreams {
 namespace base64 {
 
 
@@ -56,76 +60,6 @@ static void decode( std::istream& is, std::ostream& os )
 }
 
 
-namespace input_filters {
-
-
-struct Base64StreamEndDetector : boost::iostreams::input_filter, boost::noncopyable
-{
-     static constexpr auto END_OF_BASE64 = '=';
-
-     template< typename Source >
-     int get( Source& src )
-     {
-          const auto c = boost::iostreams::get( src );
-          return c == END_OF_BASE64 ? EOF : c;
-     }
-};
-
-
-struct IgnoredCharsRemover : boost::iostreams::input_filter, boost::noncopyable
-{
-     template< typename ...Args >
-     explicit IgnoredCharsRemover( Args&& ...args )
-          : ignored_{ std::forward< Args >( args )... }
-     {
-          BOOST_ASSERT_MSG(
-               !ignored_.count( EOF )
-               && !ignored_.count( boost::iostreams::WOULD_BLOCK )
-               , "service characters cannot be specified as ignored"
-               );
-     }
-
-     template< typename Source >
-     int get( Source& src )
-     {
-          while( true )
-          {
-               const auto c = boost::iostreams::get( src );
-               if( !ignored_.count( c ) )
-               {
-                    return c;
-               }
-          }
-     }
-
-private:
-     std::set< char > ignored_;
-};
-
-
-struct CharCounter : boost::iostreams::multichar_input_filter
-{
-     explicit CharCounter( unsigned n = 0 ) : chars_{ n } {}
-
-     template< typename Source >
-     std::streamsize read( Source& src, char* s, std::streamsize n )
-     {
-          const auto result = boost::iostreams::read( src, s, n );
-          chars_ += result > 0 ? result : 0;
-          return result;
-     }
-
-     unsigned chars() const noexcept
-     {
-          return chars_;
-     }
-
-private:
-     unsigned chars_ = 0;
-};
-
-
-} // namespace input_filters
 } // namespace impl
 } // namespace {unnamed}
 
@@ -134,7 +68,7 @@ void encode( std::istream& is, std::ostream& os )
 {
      boost::iostreams::filtering_istream fis;
 
-     impl::input_filters::CharCounter counter;
+     filters::multichar::Counter counter;
      fis.push( boost::ref( counter ) );
      fis.push( is );
 
@@ -145,15 +79,17 @@ void encode( std::istream& is, std::ostream& os )
 }
 
 
-void decode( std::istream& is, std::ostream& os, std::initializer_list< char > ignored )
+void decode( std::istream& is, std::ostream& os, boost::string_view ignored )
 {
-     static impl::input_filters::Base64StreamEndDetector streamEndDetector;
-     impl::input_filters::IgnoredCharsRemover ignoredCharsRemover{ ignored };
+     static filters::multichar::StreamInterrupter streamInterrupter{ "=" };
 
      boost::iostreams::filtering_istream fis;
 
-     fis.push( boost::ref( streamEndDetector ) );
-     fis.push( boost::ref( ignoredCharsRemover ) );
+     fis.push( boost::ref( streamInterrupter ) );
+     if( !ignored.empty() )
+     {
+          fis.push( std::move( filters::multichar::CharRemover{ ignored } ) );
+     }
      fis.push( is );
 
      impl::decode( fis, os );
@@ -161,3 +97,5 @@ void decode( std::istream& is, std::ostream& os, std::initializer_list< char > i
 
 
 } // namespace base64
+} // namespace iostreams
+} // namespace using_boost

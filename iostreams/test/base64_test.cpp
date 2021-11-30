@@ -142,6 +142,9 @@ static constexpr auto encoded =
 
 
 BOOST_AUTO_TEST_SUITE( Base64ConversionTest )
+
+using namespace using_boost::iostreams;
+
 BOOST_AUTO_TEST_SUITE( Base64Encoding )
 BOOST_DATA_TEST_CASE(
      TextEncoding
@@ -153,7 +156,7 @@ BOOST_DATA_TEST_CASE(
 {
      std::istringstream is{ source };
      boost::test_tools::output_test_stream os;
-     BOOST_REQUIRE_NO_THROW( base64::encode( is, os ) );
+     base64::encode( is, os );
      BOOST_TEST( os.is_equal( expected ) );
 }
 BOOST_AUTO_TEST_SUITE_END()
@@ -165,7 +168,7 @@ BOOST_AUTO_TEST_CASE( BinaryEncoding )
           , sizeof( test_env::bin::decoded )
           );
      boost::test_tools::output_test_stream os;
-     BOOST_REQUIRE_NO_THROW( base64::encode( is, os ) );
+     base64::encode( is, os );
      BOOST_TEST( os.is_equal( test_env::bin::encoded ) );
 }
 BOOST_AUTO_TEST_SUITE( Base64Decoding )
@@ -179,32 +182,28 @@ BOOST_DATA_TEST_CASE(
 {
      std::istringstream is{ source };
      boost::test_tools::output_test_stream os;
-     BOOST_REQUIRE_NO_THROW( base64::decode( is, os ) );
+     base64::decode( is, os );
      BOOST_TEST( os.is_equal( expected ) );
 }
 BOOST_AUTO_TEST_CASE( BinaryDecoding )
 {
      std::istringstream is{ test_env::bin::encoded };
      boost::test_tools::output_test_stream os;
-     BOOST_REQUIRE_NO_THROW( base64::decode( is, os ) );
+     base64::decode( is, os );
      BOOST_TEST( os.is_equal( std::string{ reinterpret_cast< const char* >( test_env::bin::decoded ), sizeof( test_env::bin::decoded ) } ) );
 }
 BOOST_AUTO_TEST_CASE( DecodeMultiline )
 {
      std::istringstream is{ test_env::multiline::encoded };
      boost::test_tools::output_test_stream os;
-     BOOST_REQUIRE_NO_THROW( base64::decode( is, os ) );
+     base64::decode( is, os, "\r\n" );
      BOOST_TEST( os.is_equal( test_env::multiline::decoded ) );
 }
 BOOST_AUTO_TEST_CASE( DecodeFormatted )
 {
-     static constexpr auto ignored = {
-          '\n','\r',' ','\t'
-     };
-
      std::istringstream is{ test_env::formatted::encoded };
      boost::test_tools::output_test_stream os;
-     BOOST_REQUIRE_NO_THROW( base64::decode( is, os, ignored ) );
+     base64::decode( is, os, "\r\n\t " );
      BOOST_TEST( os.is_equal( test_env::formatted::decoded ) );
 }
 BOOST_AUTO_TEST_SUITE_END()
