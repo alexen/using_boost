@@ -11,3 +11,6 @@ jobs:
       uses: langroodi/doxygenize@v1.5
       with:
         htmloutput: ./doc
+
+    - name: Place index.html to project root directory
+      run: ln -sr index.html ./html/index.html
