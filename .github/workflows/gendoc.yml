@@ -1,0 +1,13 @@
+name: Generate Doxygen
+on: [push]
+jobs:
+  generate-doc:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repo (without submodules)
+      uses: actions/checkout@v2
+
+    - name: Generate documentation
+      uses: langroodi/doxygenize@v1.5
+      with:
+        htmloutput: ./doc
