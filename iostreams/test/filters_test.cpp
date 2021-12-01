@@ -271,6 +271,56 @@ BOOST_AUTO_TEST_CASE( TextStream )
 BOOST_AUTO_TEST_SUITE_END() /// Output
 BOOST_AUTO_TEST_SUITE_END() /// Counter
 BOOST_AUTO_TEST_SUITE_END() /// Multichar
+BOOST_AUTO_TEST_SUITE( Symmetric )
+BOOST_AUTO_TEST_SUITE( Monitor )
+
+using using_boost::iostreams::filters::symmetric::Monitor;
+
+BOOST_AUTO_TEST_CASE( EmptyStream )
+{
+     std::istringstream is;
+     boost::test_tools::output_test_stream os;
+
+     boost::iostreams::filtering_istream fis;
+     fis.push( Monitor{} );
+     fis.push( is );
+
+     boost::iostreams::copy( fis, os );
+
+     BOOST_TEST( os.is_empty() );
+}
+BOOST_AUTO_TEST_CASE( TextStream )
+{
+     std::istringstream is{ test_env::text::source };
+     boost::test_tools::output_test_stream os;
+
+     boost::iostreams::filtering_istream fis;
+     fis.push( Monitor{} );
+     fis.push( is );
+
+     boost::iostreams::copy( fis, os );
+
+     BOOST_TEST( os.is_equal( test_env::text::source ) );
+}
+BOOST_AUTO_TEST_CASE( TextStreamWithMonitoring )
+{
+     std::istringstream is{ test_env::text::source };
+     boost::test_tools::output_test_stream dest;
+     boost::test_tools::output_test_stream mon;
+
+     Monitor monit{ mon };
+
+     boost::iostreams::filtering_istream fis;
+     fis.push( boost::ref( monit ) );
+     fis.push( is );
+
+     boost::iostreams::copy( fis, dest );
+
+     BOOST_TEST( dest.is_equal( test_env::text::source ) );
+     BOOST_TEST( !mon.is_empty() );
+}
+BOOST_AUTO_TEST_SUITE_END() /// Monitor
+BOOST_AUTO_TEST_SUITE_END() /// Symmetric
 BOOST_AUTO_TEST_SUITE_END() /// NonModifying
 BOOST_AUTO_TEST_SUITE( Modifying )
 BOOST_AUTO_TEST_SUITE( SingleChar )

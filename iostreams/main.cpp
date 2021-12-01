@@ -11,24 +11,12 @@
 #include <iterator>
 
 #include <boost/core/ignore_unused.hpp>
-#include <boost/range/irange.hpp>
 #include <boost/iostreams/copy.hpp>
-#include <boost/iostreams/invert.hpp>
-#include <boost/iostreams/operations.hpp>
-#include <boost/iostreams/read.hpp>
-#include <boost/iostreams/flush.hpp>
-#include <boost/iostreams/tee.hpp>
-#include <boost/iostreams/close.hpp>
-#include <boost/iostreams/filter/gzip.hpp>
-#include <boost/iostreams/filter/stdio.hpp>
-#include <boost/iostreams/filter/counter.hpp>
-#include <boost/iostreams/filter/zstd.hpp>
-#include <boost/iostreams/filter/zlib.hpp>
-#include <boost/iostreams/filter/symmetric.hpp>
 #include <boost/iostreams/filtering_stream.hpp>
 #include <boost/iostreams/device/array.hpp>
 #include <boost/iostreams/device/back_inserter.hpp>
 #include <boost/exception/diagnostic_information.hpp>
+#include <boost/iostreams/filter/counter.hpp>
 #include <boost/utility/string_view.hpp>
 
 #include <iostreams/filters.h>
@@ -196,69 +184,6 @@ void test_readers()
 }
 
 
-struct CustomSymmetricFilterImpl
-{
-     using char_type = char;
-
-     /*
-      * Attempts to filter the sequence [i1, i2), storing the result in the sequence [o1, o2).
-      * If flush is true, writes as much output to [o1, o2) as possible.
-      * If flush is false, returns false to indicate that a “natural” end of stream
-      * has been detected. Otherwise, returns true to indicate that additional characters,
-      * not yet stored in [o1, o2), are available for output.
-      */
-     bool filter( const char*& ibeg, const char* iend, char*& obeg, char* oend, const bool flush )
-     {
-          if( debug_ )
-          {
-               const auto ilen = std::distance( ibeg, iend );
-               std::clog << __FUNCTION__
-                    << ": [" << (flush ? 'f' : ' ' ) << ']'
-                    << " " << ilen << " -> " << std::distance( obeg, oend )
-                    << " (" << boost::string_view( ibeg, ilen ) << ')'
-                    << '\n';
-          }
-
-          while( ibeg != iend && obeg != oend )
-          {
-               *obeg++ = *ibeg++;
-          }
-
-          return flush ? ibeg != iend : flush;
-     }
-     void close()
-     {
-          if( debug_ )
-          {
-               std::clog << __FUNCTION__ << '\n';
-          }
-     }
-
-     void setDebugEnabled( bool f = true )
-     {
-          debug_ = f;
-     }
-private:
-     bool debug_ = false;
-};
-
-
-template< typename Impl = CustomSymmetricFilterImpl, typename Alloc = std::allocator< char > >
-struct CustomSymmetricFilterT : boost::iostreams::symmetric_filter< Impl, Alloc >
-{
-     using Base = boost::iostreams::symmetric_filter< Impl, Alloc >;
-
-     CustomSymmetricFilterT( bool debug = false, std::streamsize bufferSize = boost::iostreams::default_device_buffer_size )
-          : Base{ bufferSize }
-     {
-          this->filter().setDebugEnabled( debug );
-     }
-};
-
-
-using CustomSymmetricFilter = CustomSymmetricFilterT<>;
-
-
 int main( int argc, char** argv )
 {
      boost::ignore_unused( argc, argv );
@@ -272,13 +197,12 @@ int main( int argc, char** argv )
                "cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non "
                "proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
 
-          boost::iostreams::zstd_compressor zc;
-          CustomSymmetricFilter csf;
+          using_boost::iostreams::filters::symmetric::Monitor monitor;
 
           std::istringstream is{ text };
           std::ostringstream os;
           boost::iostreams::filtering_ostream fos;
-          fos.push( boost::ref( csf ) );
+          fos.push( boost::ref( monitor ) );
           fos.push( os );
           boost::iostreams::copy( is, fos );
 

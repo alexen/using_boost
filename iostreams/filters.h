@@ -5,9 +5,11 @@
 #pragma once
 
 #include <set>
+#include <iomanip>
 
 #include <boost/assert.hpp>
 #include <boost/iostreams/concepts.hpp>
+#include <boost/iostreams/filter/symmetric.hpp>
 #include <boost/iostreams/get.hpp>
 #include <boost/utility/string_view.hpp>
 
@@ -295,6 +297,82 @@ private:
 
 
 } // namespace multichar
+namespace symmetric {
+namespace impl {
+
+
+struct Monitor
+{
+     using char_type = char;
+
+     /*
+      * Attempts to filter the sequence [i1, i2), storing the result in the sequence [o1, o2).
+      * If flush is true, writes as much output to [o1, o2) as possible.
+      * If flush is false, returns false to indicate that a “natural” end of stream
+      * has been detected. Otherwise, returns true to indicate that additional characters,
+      * not yet stored in [o1, o2), are available for output.
+      */
+     bool filter( const char*& ibeg, const char* iend, char*& obeg, char* oend, const bool flush )
+     {
+          if( os_ )
+          {
+               const auto ilen = std::distance( ibeg, iend );
+               *os_ << __FUNCTION__
+                    << ": (" << (flush ? 'f' : ' ' )
+                    << ") <" << std::setw( 4 ) << ilen
+                    << "> -> <" << std::setw( 4 ) << std::distance( obeg, oend )
+                    << "> [" << boost::string_view( ibeg, ilen ) << ']'
+                    << '\n';
+          }
+
+          while( ibeg != iend && obeg != oend )
+          {
+               *obeg++ = *ibeg++;
+          }
+
+          return flush ? ibeg != iend : flush;
+     }
+     void close()
+     {
+          if( os_ )
+          {
+               *os_ << __FUNCTION__ << '\n';
+          }
+     }
+
+     void setOstream( std::ostream& os )
+     {
+          os_ = &os;
+     }
+private:
+     std::ostream* os_ = nullptr;
+};
+
+
+} // namespace impl
+
+
+template< typename Impl = impl::Monitor, typename Alloc = std::allocator< char > >
+struct MonitorT : boost::iostreams::symmetric_filter< Impl, Alloc >
+{
+     using Base = boost::iostreams::symmetric_filter< Impl, Alloc >;
+
+     explicit MonitorT()
+          : Base{ boost::iostreams::default_device_buffer_size }
+     {}
+
+     explicit MonitorT( std::ostream& os )
+          : MonitorT{}
+     {
+          this->filter().setOstream( os );
+     }
+};
+
+
+using Monitor = MonitorT<>;
+
+
+} // namespace symmetric
 } // namespace filters
 } // namespace iostreams
 } // namespace using_boost
