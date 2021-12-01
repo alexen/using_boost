@@ -9,5 +9,7 @@ var searchData=
   ['consts_2eh_6',['consts.h',['../consts_8h.html',1,'']]],
   ['core_5ftest_2ecpp_7',['core_test.cpp',['../core__test_8cpp.html',1,'']]],
   ['counter_8',['Counter',['../structusing__boost_1_1iostreams_1_1filters_1_1multichar_1_1Counter.html',1,'using_boost::iostreams::filters::multichar']]],
-  ['custom_5foutput_5ftest_2ecpp_9',['custom_output_test.cpp',['../custom__output__test_8cpp.html',1,'']]]
+  ['custom_5foutput_5ftest_2ecpp_9',['custom_output_test.cpp',['../custom__output__test_8cpp.html',1,'']]],
+  ['customsymmetricfilterimpl_10',['CustomSymmetricFilterImpl',['../structCustomSymmetricFilterImpl.html',1,'']]],
+  ['customsymmetricfiltert_11',['CustomSymmetricFilterT',['../structCustomSymmetricFilterT.html',1,'']]]
 ];
