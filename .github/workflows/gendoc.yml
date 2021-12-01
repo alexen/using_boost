@@ -10,4 +10,4 @@ jobs:
     - name: Generate documentation
       uses: langroodi/doxygenize@v1.5
       with:
-        htmloutput: ./
+        htmloutput: ./doc/html
