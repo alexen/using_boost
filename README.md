@@ -7,9 +7,13 @@
 
 *(список будет пополняться по мере обращения к другим разделам документации)*
 
+[Doxygen][doxygen]-документация по проекту располагается [здесь][mydoc].
+
 ---
 
-###### Markdown *[basic][1]* and *[extended][2]* syntax guide 
+###### Markdown *[basic][md-basic]* and *[extended][md-ext]* syntax guide 
 
-[1]: <https://www.markdownguide.org/basic-syntax/>
-[2]: <https://www.markdownguide.org/extended-syntax/>
+[doxygen]: <https://www.doxygen.nl/index.html>
+[mydoc]: <https://alexen.github.io/using_boost>
+[md-basic]: <https://www.markdownguide.org/basic-syntax/>
+[md-ext]: <https://www.markdownguide.org/extended-syntax/>
