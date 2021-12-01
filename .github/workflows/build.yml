@@ -1,13 +1,13 @@
 name: Configure and build
 
 # Реагируем на любой push в любую ветку
-on:
-  push:
-    branches:
-      - master
-  pull_request:
-    branches: 
-      - master
+on: [push] # Временно для отладки конфига
+#  push:
+#    branches:
+#      - master
+#  pull_request:
+#    branches: 
+#      - master
 
 jobs:
   build:
