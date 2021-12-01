@@ -1,6 +1,0 @@
-[submodule "googletest"]
-	path = googletest
-	url = https://github.com/google/googletest
-[submodule "celero"]
-	path = celero
-	url = https://github.com/DigitalInBlue/Celero.git

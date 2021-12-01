@@ -1,0 +1,135 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.9.2"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Learning Boost: Файл core/test/core_test.cpp</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">Learning Boost
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Создано системой Doxygen 1.9.2 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+var searchBox = new SearchBox("searchBox", "search",'Поиск','.html');
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() {
+  initMenu('',true,false,'search.php','Поиск');
+  $(document).ready(function() { init_search(); });
+});
+/* @license-end */
+</script>
+<div id="main-nav"></div>
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<iframe src="javascript:void(0)" frameborder="0" 
+        name="MSearchResults" id="MSearchResults">
+</iframe>
+</div>
+
+<div id="nav-path" class="navpath">
+  <ul>
+<li class="navelem"><a class="el" href="dir_4270bfced15e0e73154b13468c7c9ad9.html">core</a></li><li class="navelem"><a class="el" href="dir_eda73d8bf8fbd45703b949ae88d46188.html">test</a></li>  </ul>
+</div>
+</div><!-- top -->
+<div class="header">
+  <div class="summary">
+<a href="#func-members">Функции</a>  </div>
+  <div class="headertitle"><div class="title">Файл core_test.cpp</div></div>
+</div><!--header-->
+<div class="contents">
+<div class="textblock"><code>#include &lt;boost/test/unit_test.hpp&gt;</code><br />
+<code>#include &lt;boost/shared_ptr.hpp&gt;</code><br />
+<code>#include &lt;boost/core/addressof.hpp&gt;</code><br />
+<code>#include &lt;boost/core/is_same.hpp&gt;</code><br />
+<code>#include &lt;boost/core/exchange.hpp&gt;</code><br />
+<code>#include &lt;boost/core/null_deleter.hpp&gt;</code><br />
+</div><div class="textblock"><div class="dynheader">
+Граф включаемых заголовочных файлов для core_test.cpp:</div>
+<div class="dyncontent">
+<div class="center"><img src="core__test_8cpp__incl.png" border="0" usemap="#acore_2test_2core__test_8cpp" alt=""/></div>
+<map name="acore_2test_2core__test_8cpp" id="acore_2test_2core__test_8cpp">
+<area shape="rect" title=" " alt="" coords="455,5,610,32"/>
+<area shape="rect" title=" " alt="" coords="5,80,164,107"/>
+<area shape="rect" title=" " alt="" coords="188,80,331,107"/>
+<area shape="rect" title=" " alt="" coords="355,80,523,107"/>
+<area shape="rect" title=" " alt="" coords="547,80,707,107"/>
+<area shape="rect" title=" " alt="" coords="732,80,899,107"/>
+<area shape="rect" title=" " alt="" coords="923,80,1100,107"/>
+</map>
+</div>
+</div><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
+Функции</h2></td></tr>
+<tr class="memitem:a93f0ac14dcf4fadd12f397fcb9d631e1"><td class="memItemLeft" align="right" valign="top"><a id="a93f0ac14dcf4fadd12f397fcb9d631e1" name="a93f0ac14dcf4fadd12f397fcb9d631e1"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>BOOST_AUTO_TEST_CASE</b> (TestAddressOf)</td></tr>
+<tr class="separator:a93f0ac14dcf4fadd12f397fcb9d631e1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaf8fc49129aeb5bc406e582092c54ae4"><td class="memItemLeft" align="right" valign="top"><a id="aaf8fc49129aeb5bc406e582092c54ae4" name="aaf8fc49129aeb5bc406e582092c54ae4"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>BOOST_AUTO_TEST_CASE</b> (TestExchange)</td></tr>
+<tr class="separator:aaf8fc49129aeb5bc406e582092c54ae4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4c74606c40506cc9dafdb69cd9f24253"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="core__test_8cpp.html#a4c74606c40506cc9dafdb69cd9f24253">BOOST_AUTO_TEST_CASE</a> (TestNullDeleter)</td></tr>
+<tr class="separator:a4c74606c40506cc9dafdb69cd9f24253"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">Подробное описание</h2>
+<div class="textblock"><dl class="section copyright"><dt>Авторство</dt><dd>Copyright (c) InfoTeCS. All Rights Reserved. </dd></dl>
+</div><h2 class="groupheader">Функции</h2>
+<a id="a4c74606c40506cc9dafdb69cd9f24253" name="a4c74606c40506cc9dafdb69cd9f24253"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4c74606c40506cc9dafdb69cd9f24253">&#9670;&nbsp;</a></span>BOOST_AUTO_TEST_CASE()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">BOOST_AUTO_TEST_CASE </td>
+          <td>(</td>
+          <td class="paramtype">TestNullDeleter&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p >"cleared" must be true after all</p>
+<p >"cleared" must be left unchangeable</p>
+
+</div>
+</div>
+</div><!-- contents -->
+<!-- start footer part -->
+<hr class="footer"/><address class="footer"><small>
+Создано системой&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.2
+</small></address>
+</body>
+</html>

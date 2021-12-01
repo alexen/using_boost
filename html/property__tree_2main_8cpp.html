@@ -1,0 +1,186 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.9.2"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Learning Boost: Файл property_tree/main.cpp</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">Learning Boost
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Создано системой Doxygen 1.9.2 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+var searchBox = new SearchBox("searchBox", "search",'Поиск','.html');
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() {
+  initMenu('',true,false,'search.php','Поиск');
+  $(document).ready(function() { init_search(); });
+});
+/* @license-end */
+</script>
+<div id="main-nav"></div>
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<iframe src="javascript:void(0)" frameborder="0" 
+        name="MSearchResults" id="MSearchResults">
+</iframe>
+</div>
+
+<div id="nav-path" class="navpath">
+  <ul>
+<li class="navelem"><a class="el" href="dir_2814c9356b8fecf3cd4bf8e598621699.html">property_tree</a></li>  </ul>
+</div>
+</div><!-- top -->
+<div class="header">
+  <div class="summary">
+<a href="#nested-classes">Классы</a> &#124;
+<a href="#func-members">Функции</a> &#124;
+<a href="#var-members">Переменные</a>  </div>
+  <div class="headertitle"><div class="title">Файл main.cpp</div></div>
+</div><!--header-->
+<div class="contents">
+<div class="textblock"><code>#include &lt;strings.h&gt;</code><br />
+<code>#include &lt;stdexcept&gt;</code><br />
+<code>#include &lt;iostream&gt;</code><br />
+<code>#include &lt;boost/property_tree/ptree.hpp&gt;</code><br />
+<code>#include &lt;boost/property_tree/ptree_fwd.hpp&gt;</code><br />
+<code>#include &lt;boost/property_tree/ini_parser.hpp&gt;</code><br />
+<code>#include &lt;boost/property_tree/xml_parser.hpp&gt;</code><br />
+<code>#include &lt;boost/core/ignore_unused.hpp&gt;</code><br />
+<code>#include &lt;boost/date_time/posix_time/posix_time_duration.hpp&gt;</code><br />
+<code>#include &lt;boost/date_time/posix_time/posix_time_io.hpp&gt;</code><br />
+<code>#include &lt;boost/exception/diagnostic_information.hpp&gt;</code><br />
+<code>#include &lt;boost/filesystem/path.hpp&gt;</code><br />
+<code>#include &lt;boost/iostreams/filtering_stream.hpp&gt;</code><br />
+<code>#include &lt;boost/range/iterator_range_core.hpp&gt;</code><br />
+</div><div class="textblock"><div class="dynheader">
+Граф включаемых заголовочных файлов для main.cpp:</div>
+<div class="dyncontent">
+<div class="center"><img src="property__tree_2main_8cpp__incl.png" border="0" usemap="#aproperty__tree_2main_8cpp" alt=""/></div>
+<map name="aproperty__tree_2main_8cpp" id="aproperty__tree_2main_8cpp">
+<area shape="rect" title=" " alt="" coords="855,5,1008,32"/>
+<area shape="rect" title=" " alt="" coords="5,87,76,114"/>
+<area shape="rect" title=" " alt="" coords="100,87,179,114"/>
+<area shape="rect" title=" " alt="" coords="203,87,275,114"/>
+<area shape="rect" title=" " alt="" coords="299,80,433,121"/>
+<area shape="rect" title=" " alt="" coords="457,80,590,121"/>
+<area shape="rect" title=" " alt="" coords="614,80,747,121"/>
+<area shape="rect" title=" " alt="" coords="771,80,905,121"/>
+<area shape="rect" title=" " alt="" coords="929,87,1123,114"/>
+<area shape="rect" title=" " alt="" coords="1147,80,1345,121"/>
+<area shape="rect" title=" " alt="" coords="1369,80,1531,121"/>
+<area shape="rect" title=" " alt="" coords="1555,80,1731,121"/>
+<area shape="rect" title=" " alt="" coords="1756,87,1925,114"/>
+<area shape="rect" title=" " alt="" coords="1950,80,2110,121"/>
+<area shape="rect" title=" " alt="" coords="2135,80,2269,121"/>
+</map>
+</div>
+</div><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="nested-classes" name="nested-classes"></a>
+Классы</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structValueTranslator.html">ValueTranslator&lt; T &gt;</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structIniConfigError.html">IniConfigError</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structParameterNotFound.html">ParameterNotFound</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structValueParsingError.html">ValueParsingError</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIniConfigParser.html">IniConfigParser</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structValueTranslator_3_01boost_1_1posix__time_1_1time__duration_01_4.html">ValueTranslator&lt; boost::posix_time::time_duration &gt;</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
+Функции</h2></td></tr>
+<tr class="memitem:a00e2b85b44e4fce294141cdd18663a09"><td class="memItemLeft" align="right" valign="top"><a id="a00e2b85b44e4fce294141cdd18663a09" name="a00e2b85b44e4fce294141cdd18663a09"></a>
+std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator&lt;&lt;</b> (std::ostream &amp;os, const <a class="el" href="classIniConfigParser.html">IniConfigParser</a> &amp;icp)</td></tr>
+<tr class="separator:a00e2b85b44e4fce294141cdd18663a09"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3c04138a5bfe5d72780bb7e82a18e627"><td class="memItemLeft" align="right" valign="top"><a id="a3c04138a5bfe5d72780bb7e82a18e627" name="a3c04138a5bfe5d72780bb7e82a18e627"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><b>main</b> (int argc, char **argv)</td></tr>
+<tr class="separator:a3c04138a5bfe5d72780bb7e82a18e627"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="var-members" name="var-members"></a>
+Переменные</h2></td></tr>
+<tr class="memitem:a22f3cdbca43147e0f41742b381441e0c"><td class="memItemLeft" align="right" valign="top">static const std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="property__tree_2main_8cpp.html#a22f3cdbca43147e0f41742b381441e0c">data</a></td></tr>
+<tr class="separator:a22f3cdbca43147e0f41742b381441e0c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">Подробное описание</h2>
+<div class="textblock"><dl class="section copyright"><dt>Авторство</dt><dd>Copyright (c) InfoTeCS. All Rights Reserved. </dd></dl>
+</div><h2 class="groupheader">Переменные</h2>
+<a id="a22f3cdbca43147e0f41742b381441e0c" name="a22f3cdbca43147e0f41742b381441e0c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a22f3cdbca43147e0f41742b381441e0c">&#9670;&nbsp;</a></span>data</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const std::string data</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<b>Инициализатор</b><div class="fragment"><div class="line">= R<span class="stringliteral">&quot;ini(</span></div>
+<div class="line"><span class="stringliteral">[general]</span></div>
+<div class="line"><span class="stringliteral">main_path = /path/to/somewhere</span></div>
+<div class="line"><span class="stringliteral">number_of_something = 96</span></div>
+<div class="line"><span class="stringliteral"></span> </div>
+<div class="line"><span class="stringliteral">[specific]</span></div>
+<div class="line"><span class="stringliteral">inner_interval = 15s</span></div>
+<div class="line"><span class="stringliteral">bad_suffix_interval = 21xoxoxo</span></div>
+<div class="line"><span class="stringliteral">optional_inner_interval = 25m</span></div>
+<div class="line"><span class="stringliteral">big_interval = 119h</span></div>
+<div class="line"><span class="stringliteral">gender = male</span></div>
+<div class="line"><span class="stringliteral"></span> </div>
+<div class="line"><span class="stringliteral">)ini&quot;</span></div>
+</div><!-- fragment -->
+</div>
+</div>
+</div><!-- contents -->
+<!-- start footer part -->
+<hr class="footer"/><address class="footer"><small>
+Создано системой&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.2
+</small></address>
+</body>
+</html>

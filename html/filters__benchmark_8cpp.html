@@ -1,0 +1,135 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.9.2"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Learning Boost: Файл iostreams/benchmark/filters_benchmark.cpp</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">Learning Boost
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Создано системой Doxygen 1.9.2 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+var searchBox = new SearchBox("searchBox", "search",'Поиск','.html');
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() {
+  initMenu('',true,false,'search.php','Поиск');
+  $(document).ready(function() { init_search(); });
+});
+/* @license-end */
+</script>
+<div id="main-nav"></div>
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<iframe src="javascript:void(0)" frameborder="0" 
+        name="MSearchResults" id="MSearchResults">
+</iframe>
+</div>
+
+<div id="nav-path" class="navpath">
+  <ul>
+<li class="navelem"><a class="el" href="dir_ee76a5ace4b9d002eda07f999b7ae5ca.html">iostreams</a></li><li class="navelem"><a class="el" href="dir_f0b7e27bf8ca6391fc3b24162afa74bf.html">benchmark</a></li>  </ul>
+</div>
+</div><!-- top -->
+<div class="header">
+  <div class="summary">
+<a href="#func-members">Функции</a>  </div>
+  <div class="headertitle"><div class="title">Файл filters_benchmark.cpp</div></div>
+</div><!--header-->
+<div class="contents">
+<div class="textblock"><code>#include &lt;set&gt;</code><br />
+<code>#include &lt;sstream&gt;</code><br />
+<code>#include &lt;iterator&gt;</code><br />
+<code>#include &lt;boost/iostreams/stream.hpp&gt;</code><br />
+<code>#include &lt;boost/iostreams/device/null.hpp&gt;</code><br />
+<code>#include &lt;boost/iostreams/filtering_stream.hpp&gt;</code><br />
+<code>#include &lt;boost/algorithm/string/erase.hpp&gt;</code><br />
+<code>#include &lt;boost/utility/string_view.hpp&gt;</code><br />
+<code>#include &lt;celero/Celero.h&gt;</code><br />
+<code>#include &lt;<a class="el" href="filters_8h_source.html">iostreams/filters.h</a>&gt;</code><br />
+</div><div class="textblock"><div class="dynheader">
+Граф включаемых заголовочных файлов для filters_benchmark.cpp:</div>
+<div class="dyncontent">
+<div class="center"><img src="filters__benchmark_8cpp__incl.png" border="0" usemap="#aiostreams_2benchmark_2filters__benchmark_8cpp" alt=""/></div>
+<map name="aiostreams_2benchmark_2filters__benchmark_8cpp" id="aiostreams_2benchmark_2filters__benchmark_8cpp">
+<area shape="rect" title=" " alt="" coords="441,5,593,47"/>
+<area shape="rect" title=" " alt="" coords="5,191,45,218"/>
+<area shape="rect" title=" " alt="" coords="319,102,388,129"/>
+<area shape="rect" title=" " alt="" coords="413,102,475,129"/>
+<area shape="rect" title=" " alt="" coords="499,102,682,129"/>
+<area shape="rect" title=" " alt="" coords="707,95,864,136"/>
+<area shape="rect" title=" " alt="" coords="888,95,1048,136"/>
+<area shape="rect" title=" " alt="" coords="1072,95,1219,136"/>
+<area shape="rect" title=" " alt="" coords="70,184,194,225"/>
+<area shape="rect" title=" " alt="" coords="1243,102,1351,129"/>
+<area shape="rect" href="filters_8h.html" title=" " alt="" coords="170,102,294,129"/>
+<area shape="rect" title=" " alt="" coords="218,191,337,218"/>
+<area shape="rect" title=" " alt="" coords="361,191,557,218"/>
+<area shape="rect" title=" " alt="" coords="581,191,742,218"/>
+</map>
+</div>
+</div><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
+Функции</h2></td></tr>
+<tr class="memitem:a1db064f2932202efe79e6d882ff0b411"><td class="memItemLeft" align="right" valign="top"><a id="a1db064f2932202efe79e6d882ff0b411" name="a1db064f2932202efe79e6d882ff0b411"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>BASELINE</b> (CharRemover, UseCopyIf, bm_env::consts::N_SAMPLES, bm_env::consts::N_ITERATIONS)</td></tr>
+<tr class="separator:a1db064f2932202efe79e6d882ff0b411"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a62bee8ab19707c148f93d00268ee3853"><td class="memItemLeft" align="right" valign="top"><a id="a62bee8ab19707c148f93d00268ee3853" name="a62bee8ab19707c148f93d00268ee3853"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>BENCHMARK</b> (CharRemover, UseBoostErase, bm_env::consts::N_SAMPLES, bm_env::consts::N_ITERATIONS)</td></tr>
+<tr class="separator:a62bee8ab19707c148f93d00268ee3853"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaa7d4a2b365c79c788565f13ed04c526"><td class="memItemLeft" align="right" valign="top"><a id="aaa7d4a2b365c79c788565f13ed04c526" name="aaa7d4a2b365c79c788565f13ed04c526"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>BENCHMARK</b> (CharRemover, CharStdIos, bm_env::consts::N_SAMPLES, bm_env::consts::N_ITERATIONS)</td></tr>
+<tr class="separator:aaa7d4a2b365c79c788565f13ed04c526"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afe106896ad8fe6880ac4c1f221f154f4"><td class="memItemLeft" align="right" valign="top"><a id="afe106896ad8fe6880ac4c1f221f154f4" name="afe106896ad8fe6880ac4c1f221f154f4"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>BENCHMARK</b> (CharRemover, BlockStdIos, bm_env::consts::N_SAMPLES, bm_env::consts::N_ITERATIONS)</td></tr>
+<tr class="separator:afe106896ad8fe6880ac4c1f221f154f4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aae8b1508cdf803637fc13cff79ea407f"><td class="memItemLeft" align="right" valign="top"><a id="aae8b1508cdf803637fc13cff79ea407f" name="aae8b1508cdf803637fc13cff79ea407f"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>BENCHMARK</b> (CharRemover, CharBoostIos, bm_env::consts::N_SAMPLES, bm_env::consts::N_ITERATIONS)</td></tr>
+<tr class="separator:aae8b1508cdf803637fc13cff79ea407f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab3ae37924d459b1558aacd778d974bba"><td class="memItemLeft" align="right" valign="top"><a id="ab3ae37924d459b1558aacd778d974bba" name="ab3ae37924d459b1558aacd778d974bba"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>BENCHMARK</b> (CharRemover, BlockBoostIos, bm_env::consts::N_SAMPLES, bm_env::consts::N_ITERATIONS)</td></tr>
+<tr class="separator:ab3ae37924d459b1558aacd778d974bba"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">Подробное описание</h2>
+<div class="textblock"><dl class="section copyright"><dt>Авторство</dt><dd>Copyright (c) InfoTeCS. All Rights Reserved. </dd></dl>
+</div></div><!-- contents -->
+<!-- start footer part -->
+<hr class="footer"/><address class="footer"><small>
+Создано системой&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.2
+</small></address>
+</body>
+</html>
