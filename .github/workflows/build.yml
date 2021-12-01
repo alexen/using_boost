@@ -1,20 +1,15 @@
-name: CMake
+name: Configure and build
 
 # Реагируем на любой push в любую ветку
-on: [push]
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches: 
+      - master
 
 jobs:
-  generate-doc:
-    runs-on: ubuntu-latest
-    steps:
-    - name: Checkout repo (without submodules)
-      uses: actions/checkout@v2
-
-    - name: Generate documentation
-      uses: langroodi/doxygenize@v1.5
-      with:
-        htmloutput: ./doc
-
   build:
     runs-on: ubuntu-latest
     strategy:
@@ -27,13 +22,13 @@ jobs:
       with:
         submodules: recursive
     
-    - name: Install required packages
+    - name: Install requirements
       run: xargs sudo apt-get install --yes < requirements.txt
 
-    - name: Configure project
+    - name: Configure
       run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{matrix.build-type}}
 
-    - name: Build project
+    - name: Build
       run: cmake --build ${{github.workspace}}/build --config ${{matrix.build-type}} --parallel $(nproc)
 
     - name: Run tests
