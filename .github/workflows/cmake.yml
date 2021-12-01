@@ -4,6 +4,17 @@ name: CMake
 on: [push]
 
 jobs:
+  generate-doc:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repo (without submodules)
+      uses: actions/checkout@v2
+
+    - name: Generate documentation
+      uses: langroodi/doxygenize@v1.5
+      with:
+        htmloutput: ./doc
+
   build:
     runs-on: ubuntu-latest
     strategy:
@@ -28,8 +39,3 @@ jobs:
     - name: Run tests
       working-directory: ${{github.workspace}}/build
       run: ctest -C ${{matrix.build-type}}
-
-    - name: Generate Doxygen documentation
-      # You may pin to the exact commit or the version.
-      # uses: langroodi/doxygenize@5bf82736f94dcda30be8bd84ddfd69d2e7a5a7c0
-      uses: langroodi/doxygenize@v1.5
