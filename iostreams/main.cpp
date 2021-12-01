@@ -184,6 +184,78 @@ void test_readers()
 }
 
 
+namespace filters {
+namespace symmetric {
+namespace impl {
+
+
+struct BlockFilter
+{
+     using char_type = char;
+
+     bool filter( const char*& ibeg, const char* iend, char*& obeg, char* oend, const bool flush )
+     {
+          const auto n = std::min(
+               std::distance( ibeg, iend ),
+               std::distance( obeg, oend )
+               );
+
+          if( n > 0 )
+          {
+               processBlock( ibeg, static_cast< std::size_t >( n ) );
+          }
+
+          obeg = std::copy_n( ibeg, n, obeg );
+          ibeg += n;
+
+          const auto eos = ibeg == iend;
+          if( flush && eos )
+          {
+               finalize();
+          }
+
+          return flush ? !eos: flush;
+     }
+
+     void close() {}
+
+private:
+     void processBlock( const char* s, std::size_t n )
+     {
+          std::cout << __FUNCTION__ << ": block [" << boost::string_view{ s, n } << "]\n";
+     }
+
+     void finalize()
+     {
+          if( !finalized_ )
+          {
+               std::cout << __FUNCTION__ << ": finalize";
+               finalized_ = true;
+          }
+     }
+
+     bool finalized_ = false;
+};
+
+
+} // namespace impl
+
+
+template< typename Impl = impl::BlockFilter, typename Alloc = std::allocator< char > >
+struct BlockT : boost::iostreams::symmetric_filter< Impl, Alloc >
+{
+     using Base = boost::iostreams::symmetric_filter< Impl, Alloc >;
+     BlockT() : Base{ boost::iostreams::default_device_buffer_size } {}
+};
+
+using Block = BlockT<>;
+
+
+} // namespace symmetric
+} // namespace filters
+
+
+
 int main( int argc, char** argv )
 {
      boost::ignore_unused( argc, argv );
@@ -197,18 +269,18 @@ int main( int argc, char** argv )
                "cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non "
                "proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
 
-          using_boost::iostreams::filters::symmetric::Monitor monitor;
+          filters::symmetric::Block block;
 
           std::istringstream is{ text };
           std::ostringstream os;
           boost::iostreams::filtering_ostream fos;
-          fos.push( boost::ref( monitor ) );
+          fos.push( boost::ref( block ) );
           fos.push( os );
           boost::iostreams::copy( is, fos );
 
-          if( os.str() != text )
+          if( auto&& result = os.str(); result != text )
           {
-               BOOST_THROW_EXCEPTION( std::runtime_error{ "result does not match" } );
+               BOOST_THROW_EXCEPTION( std::runtime_error{ "bad result: " + result } );
           }
      }
      catch( const std::exception& e )
