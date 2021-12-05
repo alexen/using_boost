@@ -68,6 +68,7 @@ $(function() {
 <div class="header">
   <div class="summary">
 <a href="#nested-classes">Классы</a> &#124;
+<a href="#define-members">Макросы</a> &#124;
 <a href="#typedef-members">Определения типов</a> &#124;
 <a href="#func-members">Функции</a>  </div>
   <div class="headertitle"><div class="title">Файл main.cpp</div></div>
@@ -88,8 +89,6 @@ $(function() {
 <code>#include &lt;boost/exception/diagnostic_information.hpp&gt;</code><br />
 <code>#include &lt;boost/iostreams/filter/counter.hpp&gt;</code><br />
 <code>#include &lt;boost/utility/string_view.hpp&gt;</code><br />
-<code>#include &lt;boost/archive/iterators/base64_from_binary.hpp&gt;</code><br />
-<code>#include &lt;boost/archive/iterators/transform_width.hpp&gt;</code><br />
 <code>#include &lt;<a class="el" href="filters_8h_source.html">iostreams/filters.h</a>&gt;</code><br />
 <code>#include &lt;<a class="el" href="iterator__source_8h_source.html">iostreams/iterator_source.h</a>&gt;</code><br />
 </div><div class="textblock"><div class="dynheader">
@@ -97,7 +96,7 @@ $(function() {
 <div class="dyncontent">
 <div class="center"><img src="iostreams_2main_8cpp__incl.png" border="0" usemap="#aiostreams_2main_8cpp" alt=""/></div>
 <map name="aiostreams_2main_8cpp" id="aiostreams_2main_8cpp">
-<area shape="rect" title=" " alt="" coords="1082,5,1217,32"/>
+<area shape="rect" title=" " alt="" coords="653,5,787,32"/>
 <area shape="rect" title=" " alt="" coords="5,87,64,114"/>
 <area shape="rect" title=" " alt="" coords="89,87,154,114"/>
 <area shape="rect" title=" " alt="" coords="179,87,245,114"/>
@@ -105,25 +104,25 @@ $(function() {
 <area shape="rect" title=" " alt="" coords="373,87,445,114"/>
 <area shape="rect" title=" " alt="" coords="469,87,544,114"/>
 <area shape="rect" title=" " alt="" coords="569,87,631,114"/>
-<area shape="rect" title=" " alt="" coords="656,87,851,114"/>
-<area shape="rect" title=" " alt="" coords="875,87,1045,114"/>
-<area shape="rect" title=" " alt="" coords="1069,80,1229,121"/>
-<area shape="rect" title=" " alt="" coords="1253,80,1411,121"/>
-<area shape="rect" title=" " alt="" coords="1435,80,1592,121"/>
-<area shape="rect" title=" " alt="" coords="1616,80,1792,121"/>
-<area shape="rect" title=" " alt="" coords="1817,80,1959,121"/>
-<area shape="rect" title=" " alt="" coords="1941,169,2065,211"/>
-<area shape="rect" title=" " alt="" coords="2035,80,2202,121"/>
-<area shape="rect" title=" " alt="" coords="2226,80,2377,121"/>
-<area shape="rect" href="filters_8h.html" title=" " alt="" coords="2401,87,2525,114"/>
-<area shape="rect" href="iterator__source_8h.html" title=" " alt="" coords="2780,80,2903,121"/>
-<area shape="rect" title=" " alt="" coords="2093,177,2133,203"/>
-<area shape="rect" title=" " alt="" coords="2157,177,2224,203"/>
-<area shape="rect" title=" " alt="" coords="2249,177,2367,203"/>
-<area shape="rect" title=" " alt="" coords="2743,177,2939,203"/>
-<area shape="rect" title=" " alt="" coords="2391,169,2534,211"/>
-<area shape="rect" title=" " alt="" coords="2558,177,2719,203"/>
-<area shape="rect" title=" " alt="" coords="2963,177,3146,203"/>
+<area shape="rect" title=" " alt="" coords="28,177,223,203"/>
+<area shape="rect" title=" " alt="" coords="1053,87,1224,114"/>
+<area shape="rect" title=" " alt="" coords="1248,80,1408,121"/>
+<area shape="rect" title=" " alt="" coords="1432,80,1589,121"/>
+<area shape="rect" title=" " alt="" coords="1613,80,1771,121"/>
+<area shape="rect" title=" " alt="" coords="1795,80,1971,121"/>
+<area shape="rect" title=" " alt="" coords="1995,80,2138,121"/>
+<area shape="rect" title=" " alt="" coords="247,169,371,211"/>
+<area shape="rect" href="filters_8h.html" title=" " alt="" coords="758,87,882,114"/>
+<area shape="rect" href="iterator__source_8h.html" title=" " alt="" coords="907,80,1029,121"/>
+<area shape="rect" title=" " alt="" coords="761,177,801,203"/>
+<area shape="rect" title=" " alt="" coords="825,177,892,203"/>
+<area shape="rect" title=" " alt="" coords="917,177,1035,203"/>
+<area shape="rect" title=" " alt="" coords="1411,177,1607,203"/>
+<area shape="rect" title=" " alt="" coords="1059,169,1202,211"/>
+<area shape="rect" title=" " alt="" coords="1226,177,1387,203"/>
+<area shape="rect" title=" " alt="" coords="395,169,562,211"/>
+<area shape="rect" title=" " alt="" coords="586,169,737,211"/>
+<area shape="rect" title=" " alt="" coords="1631,177,1814,203"/>
 </map>
 </div>
 </div><table class="memberdecls">
@@ -131,19 +130,24 @@ $(function() {
 Классы</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structfilters_1_1symmetric_1_1impl_1_1BlockFilter.html">filters::symmetric::impl::BlockFilter</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structfilters_1_1symmetric_1_1impl_1_1Base64Encoder.html">filters::symmetric::impl::Base64Encoder</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structfilters_1_1symmetric_1_1FilterT.html">filters::symmetric::FilterT&lt; Impl, Alloc &gt;</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="define-members" name="define-members"></a>
+Макросы</h2></td></tr>
+<tr class="memitem:a2c98a66cf11e8c35336523641da968aa"><td class="memItemLeft" align="right" valign="top"><a id="a2c98a66cf11e8c35336523641da968aa" name="a2c98a66cf11e8c35336523641da968aa"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>LOG_PREFIX</b>(prefix,  strm)&#160;&#160;&#160;do{ std::cout &lt;&lt; __FUNCTION__ &lt;&lt; &quot;: &quot; &lt;&lt; prefix &lt;&lt; strm &lt;&lt; '\n'; }while( false )</td></tr>
+<tr class="separator:a2c98a66cf11e8c35336523641da968aa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afbf755acf4a90ea3f1a665ddc99ca0bf"><td class="memItemLeft" align="right" valign="top"><a id="afbf755acf4a90ea3f1a665ddc99ca0bf" name="afbf755acf4a90ea3f1a665ddc99ca0bf"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>LOG</b>(strm)&#160;&#160;&#160;LOG_PREFIX( &quot;&quot;, strm )</td></tr>
+<tr class="separator:afbf755acf4a90ea3f1a665ddc99ca0bf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2cb86674d3a297215a6fde6297bca3e3"><td class="memItemLeft" align="right" valign="top"><a id="a2cb86674d3a297215a6fde6297bca3e3" name="a2cb86674d3a297215a6fde6297bca3e3"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>LOG_INDENT</b>(n,  strm)&#160;&#160;&#160;LOG_PREFIX( std::string( n, ' ' ), strm )</td></tr>
+<tr class="separator:a2cb86674d3a297215a6fde6297bca3e3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="typedef-members" name="typedef-members"></a>
 Определения типов</h2></td></tr>
-<tr class="memitem:a9d29fd216ee978dc52d951441fa03183"><td class="memItemLeft" align="right" valign="top"><a id="a9d29fd216ee978dc52d951441fa03183" name="a9d29fd216ee978dc52d951441fa03183"></a>
-using&#160;</td><td class="memItemRight" valign="bottom"><b>filters::symmetric::Transparent</b> = FilterT&lt; impl::BlockFilter &gt;</td></tr>
-<tr class="separator:a9d29fd216ee978dc52d951441fa03183"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afb5d7a057a49cc262d33fb1af6c96442"><td class="memItemLeft" align="right" valign="top"><a id="afb5d7a057a49cc262d33fb1af6c96442" name="afb5d7a057a49cc262d33fb1af6c96442"></a>
-using&#160;</td><td class="memItemRight" valign="bottom"><b>filters::symmetric::Base64Encoder</b> = FilterT&lt; impl::Base64Encoder &gt;</td></tr>
-<tr class="separator:afb5d7a057a49cc262d33fb1af6c96442"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a42bd5e0fb7e9c62c147d13aceb339b74"><td class="memItemLeft" align="right" valign="top"><a id="a42bd5e0fb7e9c62c147d13aceb339b74" name="a42bd5e0fb7e9c62c147d13aceb339b74"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>filters::symmetric::Transparent</b> = <a class="el" href="structusing__boost_1_1iostreams_1_1filters_1_1symmetric_1_1FilterT.html">using_boost::iostreams::filters::symmetric::FilterT</a>&lt; impl::BlockFilter &gt;</td></tr>
+<tr class="separator:a42bd5e0fb7e9c62c147d13aceb339b74"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Функции</h2></td></tr>
