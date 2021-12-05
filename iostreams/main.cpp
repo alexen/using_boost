@@ -18,8 +18,6 @@
 #include <boost/exception/diagnostic_information.hpp>
 #include <boost/iostreams/filter/counter.hpp>
 #include <boost/utility/string_view.hpp>
-#include <boost/archive/iterators/base64_from_binary.hpp>
-#include <boost/archive/iterators/transform_width.hpp>
 
 #include <iostreams/filters.h>
 #include <iostreams/iterator_source.h>
@@ -186,6 +184,11 @@ void test_readers()
 }
 
 
+#define LOG_PREFIX( prefix, strm ) do{ std::cout << __FUNCTION__ << ": " << prefix << strm << '\n'; }while( false )
+#define LOG( strm ) LOG_PREFIX( "", strm )
+#define LOG_INDENT( n, strm ) LOG_PREFIX( std::string( n, ' ' ), strm )
+
+
 namespace filters {
 namespace symmetric {
 namespace impl {
@@ -240,83 +243,11 @@ private:
 };
 
 
-struct Base64Encoder
-{
-     using Base64EncodingIterator =
-          boost::archive::iterators::base64_from_binary<
-               boost::archive::iterators::transform_width<
-                    const char*
-                    , 6
-                    , 8
-               >
-          >;
-     boost::iostreams::stream< boost::iostreams::null_sink > os{
-          boost::iostreams::null_sink{}
-     };
-
-     using char_type = char;
-
-     bool filter( const char*& ibeg, const char* iend, char*& obeg, char* oend, const bool flush )
-     {
-          const auto ilen = std::distance( ibeg, iend );
-          const auto olen = std::distance( obeg, oend );
-
-          std::cout << __FUNCTION__ << ": src <" << std::setw( 4 ) << ilen << ">[" << boost::string_view( ibeg, ilen ) << "] -> <" << olen << ">\n";
-
-          bytes_ += std::distance( ibeg, iend );
-
-          const auto old = obeg;
-
-          obeg = std::copy(
-               Base64EncodingIterator{ ibeg }
-               , Base64EncodingIterator{ iend }
-               , obeg
-               );
-
-          const auto owr = std::distance( old, obeg );
-
-          std::cout << __FUNCTION__ << ": dst <" << std::setw( 4 ) << owr << ">[" << boost::string_view( old, owr ) << "]:\n";
-
-          ibeg = iend;
-
-          if( flush && ibeg == iend )
-          {
-               obeg = finalize( obeg );
-          }
-
-          return flush ? ibeg != iend : flush;
-     }
-
-     void close() {}
-
-private:
-     char* finalize( char* out )
-     {
-          if( !finalized_ )
-          {
-               finalized_ = true;
-               const auto n = bytes_ % 3;
-               return std::fill_n( out, n ? 3 - n : 0, '=' );
-          }
-          return out;
-     }
-     bool finalized_ = false;
-     unsigned bytes_ = 0;
-};
-
-
 } // namespace impl
 
 
-template< typename Impl, typename Alloc = std::allocator< typename Impl::char_type > >
-struct FilterT : boost::iostreams::symmetric_filter< Impl, Alloc >
-{
-     using Base = boost::iostreams::symmetric_filter< Impl, Alloc >;
-     FilterT() : Base{ boost::iostreams::default_device_buffer_size } {}
-};
 
-using Transparent = FilterT< impl::BlockFilter >;
-using Base64Encoder = FilterT< impl::Base64Encoder >;
+using Transparent = using_boost::iostreams::filters::symmetric::FilterT< impl::BlockFilter >;
 
 
 } // namespace symmetric
@@ -336,18 +267,24 @@ int main( int argc, char** argv )
                "consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse "
                "cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non "
                "proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
-
-          filters::symmetric::Transparent tr;
+          static constexpr auto expected =
+               "TG9yZW0gaXBzdW0gZG9sb3Igc2l0IGFtZXQsIGNvbnNlY3RldHVyIGFkaXBpc2ljaW5nIGVsaXQs"
+               "IHNlZCBkbyBlaXVzbW9kIHRlbXBvciBpbmNpZGlkdW50IHV0IGxhYm9yZSBldCBkb2xvcmUgbWFn"
+               "bmEgYWxpcXVhLiBVdCBlbmltIGFkIG1pbmltIHZlbmlhbSwgcXVpcyBub3N0cnVkIGV4ZXJjaXRh"
+               "dGlvbiB1bGxhbWNvIGxhYm9yaXMgbmlzaSB1dCBhbGlxdWlwIGV4IGVhIGNvbW1vZG8gY29uc2Vx"
+               "dWF0LiBEdWlzIGF1dGUgaXJ1cmUgZG9sb3IgaW4gcmVwcmVoZW5kZXJpdCBpbiB2b2x1cHRhdGUg"
+               "dmVsaXQgZXNzZSBjaWxsdW0gZG9sb3JlIGV1IGZ1Z2lhdCBudWxsYSBwYXJpYXR1ci4gRXhjZXB0"
+               "ZXVyIHNpbnQgb2NjYWVjYXQgY3VwaWRhdGF0IG5vbiBwcm9pZGVudCwgc3VudCBpbiBjdWxwYSBx"
+               "dWkgb2ZmaWNpYSBkZXNlcnVudCBtb2xsaXQgYW5pbSBpZCBlc3QgbGFib3J1bS4=";
 
           std::istringstream is{ text };
           std::ostringstream os;
           boost::iostreams::filtering_ostream fos;
-//          fos.push( boost::ref( tr ) );
-          fos.push( filters::symmetric::Base64Encoder{} );
+          fos.push( using_boost::iostreams::filters::symmetric::Base64Encoder{} );
           fos.push( os );
           boost::iostreams::copy( is, fos );
 
-          if( auto&& result = os.str(); result != text )
+          if( auto&& result = os.str(); result != expected )
           {
                BOOST_THROW_EXCEPTION( std::runtime_error{ "bad result: " + result } );
           }

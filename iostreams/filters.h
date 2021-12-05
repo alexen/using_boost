@@ -8,10 +8,13 @@
 #include <iomanip>
 
 #include <boost/assert.hpp>
+#include <boost/core/ignore_unused.hpp>
 #include <boost/iostreams/concepts.hpp>
 #include <boost/iostreams/filter/symmetric.hpp>
 #include <boost/iostreams/get.hpp>
 #include <boost/utility/string_view.hpp>
+#include <boost/archive/iterators/base64_from_binary.hpp>
+#include <boost/archive/iterators/transform_width.hpp>
 
 
 namespace using_boost {
@@ -349,6 +352,88 @@ private:
 };
 
 
+struct Base64Encoder
+{
+     using char_type = char;
+     using buffer = std::vector< char_type >;
+     using base64_encode_iterator =
+          boost::archive::iterators::base64_from_binary<
+               boost::archive::iterators::transform_width<
+                    buffer::const_iterator
+                    , 6
+                    , 8
+               >
+          >;
+
+     bool filter( const char*& ibeg, const char* iend, char*& obeg, char* oend, const bool flush )
+     {
+          boost::ignore_unused( oend );
+
+          if( ibeg != iend )
+          {
+               ibeg = prepareBuffer( ibeg, std::distance( ibeg, iend ) );
+          }
+
+          obeg = encodeBuffer( obeg );
+
+          if( ibeg != iend )
+          {
+               ibeg = saveRemaining( ibeg, std::distance( ibeg, iend ) );
+          }
+
+          if( flush && ibeg == iend )
+          {
+               obeg = appendTail( obeg );
+          }
+
+          return flush ? ibeg != iend : flush;
+     }
+
+     void close() {}
+
+private:
+     const char* prepareBuffer( const char* src, const std::size_t n )
+     {
+          const auto end = src + (n - n % 3 - buffer_.size());
+          buffer_.insert( buffer_.end(), src, end );
+          return end;
+     }
+
+     char* encodeBuffer( char* dst )
+     {
+          nbytes_ += buffer_.size();
+          return std::copy(
+               base64_encode_iterator{ buffer_.cbegin() }
+               , base64_encode_iterator{ buffer_.cend() }
+               , dst
+               );
+     }
+
+     const char* saveRemaining( const char* src, const std::size_t n )
+     {
+          const auto end = src + n;
+          buffer_.assign( src, end );
+          return end;
+     }
+
+     char* appendTail( char* dst )
+     {
+          static bool done = false;
+          static char tail = '=';
+          if( !done )
+          {
+               const auto n =  nbytes_ % 3;
+               dst = std::fill_n( dst, n ? 3 - n : 0, tail );
+               done = true;
+          }
+          return dst;
+     }
+
+     buffer buffer_;
+     unsigned nbytes_ = 0;
+};
+
+
 } // namespace impl
 
 
@@ -369,7 +454,16 @@ struct MonitorT : boost::iostreams::symmetric_filter< Impl, Alloc >
 };
 
 
+template< typename Impl, typename Alloc = std::allocator< typename Impl::char_type > >
+struct FilterT : boost::iostreams::symmetric_filter< Impl, Alloc >
+{
+     using Base = boost::iostreams::symmetric_filter< Impl, Alloc >;
+     FilterT() : Base{ boost::iostreams::default_device_buffer_size } {}
+};
+
+
 using Monitor = MonitorT<>;
+using Base64Encoder = FilterT< impl::Base64Encoder >;
 
 
 } // namespace symmetric
