@@ -55,8 +55,9 @@ jobs:
 #     - name: Autobuild
 #       uses: github/codeql-action/autobuild@v1
 
-    - name: Configure & build
+    - name: Install requirements, configure & build
       run: |
+        xargs sudo apt-get install --yes < requirements.txt
         cmake -B ${{github.workspace}}/build
         cmake --build ${{github.workspace}}/build --parallel $(nproc)
 
