@@ -5,6 +5,8 @@
 #include <sstream>
 
 #include <boost/test/unit_test.hpp>
+#include <boost/test/data/test_case.hpp>
+#include <boost/test/data/monomorphic.hpp>
 #include <boost/test/tools/output_test_stream.hpp>
 #include <boost/utility/string_view.hpp>
 #include <boost/iostreams/copy.hpp>
@@ -1040,5 +1042,70 @@ BOOST_AUTO_TEST_CASE( BinaryStream )
 BOOST_AUTO_TEST_SUITE_END() /// Output
 BOOST_AUTO_TEST_SUITE_END() /// CharMultiplier
 BOOST_AUTO_TEST_SUITE_END() /// Multichar
+BOOST_AUTO_TEST_SUITE( Symmetric )
+BOOST_AUTO_TEST_SUITE( Base64Encoder )
+
+using using_boost::iostreams::filters::symmetric::Base64Encoder;
+
+BOOST_AUTO_TEST_SUITE( Output )
+BOOST_AUTO_TEST_CASE( EmptyStream )
+{
+     std::istringstream is;
+     boost::test_tools::output_test_stream os;
+
+     boost::iostreams::filtering_ostream fos;
+     fos.push( Base64Encoder{} );
+     fos.push( os );
+
+     boost::iostreams::copy( is, fos );
+
+     BOOST_TEST( os.is_empty() );
+}
+BOOST_DATA_TEST_CASE(
+     TextStream
+     , boost::unit_test::data::make({
+          ""
+          , "I"
+          , "Ut"
+          , "sed"
+          , "amet"
+          , "Lorem"
+          , "tempor"
+          , "laboris"
+          , "proident"
+          , "Excepteur"
+          })
+     ^ boost::unit_test::data::make({
+          ""
+          , "SQ=="
+          , "VXQ="
+          , "c2Vk"
+          , "YW1ldA=="
+          , "TG9yZW0="
+          , "dGVtcG9y"
+          , "bGFib3Jpcw=="
+          , "cHJvaWRlbnQ="
+          , "RXhjZXB0ZXVy"
+          })
+     , source
+     , encoded
+     )
+{
+     std::istringstream is{ source };
+     boost::test_tools::output_test_stream os;
+
+     boost::iostreams::filtering_ostream fos;
+     fos.push( Base64Encoder{} );
+     fos.push( os );
+
+     boost::iostreams::copy( is, fos );
+
+     BOOST_TEST( os.is_equal( encoded ) );
+}
+BOOST_AUTO_TEST_CASE( BinaryStream )
+{}
+BOOST_AUTO_TEST_SUITE_END() /// Output
+BOOST_AUTO_TEST_SUITE_END() /// Base64Encoder
+BOOST_AUTO_TEST_SUITE_END() /// Symmetric
 BOOST_AUTO_TEST_SUITE_END() /// Modifying
 BOOST_AUTO_TEST_SUITE_END() /// IoFilters
