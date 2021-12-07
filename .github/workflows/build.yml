@@ -1,6 +1,5 @@
-name: Configure and build
+name: Configure, build & test
 
-# Реагируем на любой push в любую ветку
 on:
   push:
     branches:
