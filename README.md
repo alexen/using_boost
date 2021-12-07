@@ -1,3 +1,6 @@
+[![Configure and build](https://github.com/alexen/using_boost/actions/workflows/build.yml/badge.svg)](https://github.com/alexen/using_boost/actions/workflows/build.yml)
+[![Generate Doxygen](https://github.com/alexen/using_boost/actions/workflows/gendoc.yml/badge.svg)](https://github.com/alexen/using_boost/actions/workflows/gendoc.yml)
+
 ## Проект для изучения фреймворка [Boost (версия 1.69)](https://www.boost.org/doc/libs/1_69_0/?view=categorized)
 
 Ссылки на используемую документацию:  
