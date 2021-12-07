@@ -378,7 +378,7 @@ struct Base64Encoder
 
           if( ibeg != iend )
           {
-               ibeg = saveRemaining( ibeg, std::distance( ibeg, iend ) );
+               ibeg = saveRemaining( ibeg, iend );
           }
 
           if( flush && ibeg == iend )
@@ -409,22 +409,20 @@ private:
                );
      }
 
-     const char* saveRemaining( const char* src, const std::size_t n )
+     const char* saveRemaining( const char* begin, const char* end )
      {
-          const auto end = src + n;
-          buffer_.assign( src, end );
+          buffer_.assign( begin, end );
           return end;
      }
 
      char* appendTail( char* dst )
      {
+          static constexpr char tail = '=';
           static bool done = false;
-          static char tail = '=';
-          if( !done )
+          if( !std::exchange( done, true ) )
           {
                const auto n =  nbytes_ % 3;
-               dst = std::fill_n( dst, n ? 3 - n : 0, tail );
-               done = true;
+               return std::fill_n( dst, n ? 3 - n : 0, tail );
           }
           return dst;
      }
