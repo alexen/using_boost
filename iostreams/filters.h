@@ -434,6 +434,37 @@ private:
 };
 
 
+struct Counter
+{
+     using char_type = char;
+
+     bool filter( const char*& ibeg, const char* iend, char*& obeg, char* oend, const bool flush )
+     {
+          const auto n = std::min(
+               std::distance( ibeg, iend ),
+               std::distance( obeg, oend )
+               );
+
+          obeg = std::copy_n( ibeg, n, obeg );
+          ibeg += n;
+
+          bytes_ += n;
+
+          return flush ? ibeg != iend : flush;
+     }
+
+     void close() {}
+
+     unsigned bytes() const noexcept
+     {
+          return bytes_;
+     }
+
+private:
+     unsigned bytes_ = 0;
+};
+
+
 } // namespace impl
 
 
@@ -464,6 +495,7 @@ struct FilterT : boost::iostreams::symmetric_filter< Impl, Alloc >
 
 using Monitor = MonitorT<>;
 using Base64Encoder = FilterT< impl::Base64Encoder >;
+using Counter = FilterT< impl::Counter >;
 
 
 } // namespace symmetric
