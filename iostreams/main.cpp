@@ -8,23 +8,15 @@
 #include <stdexcept>
 #include <iostream>
 #include <algorithm>
+#include <iterator>
 
 #include <boost/core/ignore_unused.hpp>
-#include <boost/range/irange.hpp>
 #include <boost/iostreams/copy.hpp>
-#include <boost/iostreams/invert.hpp>
-#include <boost/iostreams/operations.hpp>
-#include <boost/iostreams/read.hpp>
-#include <boost/iostreams/flush.hpp>
-#include <boost/iostreams/tee.hpp>
-#include <boost/iostreams/close.hpp>
-#include <boost/iostreams/filter/gzip.hpp>
-#include <boost/iostreams/filter/stdio.hpp>
-#include <boost/iostreams/filter/counter.hpp>
 #include <boost/iostreams/filtering_stream.hpp>
 #include <boost/iostreams/device/array.hpp>
 #include <boost/iostreams/device/back_inserter.hpp>
 #include <boost/exception/diagnostic_information.hpp>
+#include <boost/iostreams/filter/counter.hpp>
 #include <boost/utility/string_view.hpp>
 
 #include <iostreams/filters.h>
@@ -190,6 +182,76 @@ void test_readers()
           }
      }
 }
+
+
+#define LOG_PREFIX( prefix, strm ) do{ std::cout << __FUNCTION__ << ": " << prefix << strm << '\n'; }while( false )
+#define LOG( strm ) LOG_PREFIX( "", strm )
+#define LOG_INDENT( n, strm ) LOG_PREFIX( std::string( n, ' ' ), strm )
+
+
+namespace filters {
+namespace symmetric {
+namespace impl {
+
+
+struct BlockFilter
+{
+     using char_type = char;
+
+     bool filter( const char*& ibeg, const char* iend, char*& obeg, char* oend, const bool flush )
+     {
+          const auto n = std::min(
+               std::distance( ibeg, iend ),
+               std::distance( obeg, oend )
+               );
+
+          if( n > 0 )
+          {
+               processBlock( ibeg, static_cast< std::size_t >( n ) );
+          }
+
+          obeg = std::copy_n( ibeg, n, obeg );
+          ibeg += n;
+
+          const auto eos = ibeg == iend;
+          if( flush && eos )
+          {
+               finalize();
+          }
+
+          return flush ? !eos: flush;
+     }
+
+     void close() {}
+
+private:
+     void processBlock( const char* s, std::size_t n )
+     {
+          std::cout << __FUNCTION__ << ": block [" << boost::string_view{ s, n } << "]\n";
+     }
+
+     void finalize()
+     {
+          if( !finalized_ )
+          {
+               std::cout << __FUNCTION__ << ": finalize";
+               finalized_ = true;
+          }
+     }
+
+     bool finalized_ = false;
+};
+
+
+} // namespace impl
+
+
+
+using Transparent = using_boost::iostreams::filters::symmetric::FilterT< impl::BlockFilter >;
+
+
+} // namespace symmetric
+} // namespace filters
 
 
 int main( int argc, char** argv )

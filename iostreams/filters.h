@@ -5,11 +5,16 @@
 #pragma once
 
 #include <set>
+#include <iomanip>
 
 #include <boost/assert.hpp>
+#include <boost/core/ignore_unused.hpp>
 #include <boost/iostreams/concepts.hpp>
+#include <boost/iostreams/filter/symmetric.hpp>
 #include <boost/iostreams/get.hpp>
 #include <boost/utility/string_view.hpp>
+#include <boost/archive/iterators/base64_from_binary.hpp>
+#include <boost/archive/iterators/transform_width.hpp>
 
 
 namespace using_boost {
@@ -295,6 +300,208 @@ private:
 
 
 } // namespace multichar
+namespace symmetric {
+namespace impl {
+
+
+struct Monitor
+{
+     using char_type = char;
+
+     /*
+      * Attempts to filter the sequence [i1, i2), storing the result in the sequence [o1, o2).
+      * If flush is true, writes as much output to [o1, o2) as possible.
+      * If flush is false, returns false to indicate that a “natural” end of stream
+      * has been detected. Otherwise, returns true to indicate that additional characters,
+      * not yet stored in [o1, o2), are available for output.
+      */
+     bool filter( const char*& ibeg, const char* iend, char*& obeg, char* oend, const bool flush )
+     {
+          if( os_ )
+          {
+               const auto ilen = std::distance( ibeg, iend );
+               *os_ << __FUNCTION__
+                    << ": (" << (flush ? 'f' : ' ' )
+                    << ") <" << std::setw( 4 ) << ilen
+                    << "> -> <" << std::setw( 4 ) << std::distance( obeg, oend )
+                    << "> [" << boost::string_view( ibeg, ilen ) << ']'
+                    << '\n';
+          }
+
+          while( ibeg != iend && obeg != oend )
+          {
+               *obeg++ = *ibeg++;
+          }
+
+          return flush ? ibeg != iend : flush;
+     }
+     void close()
+     {
+          if( os_ )
+          {
+               *os_ << __FUNCTION__ << '\n';
+          }
+     }
+
+     void setOstream( std::ostream& os )
+     {
+          os_ = &os;
+     }
+private:
+     std::ostream* os_ = nullptr;
+};
+
+
+/// Фильтр Base64-кодирования работает, но может быть использован только в качестве
+/// учебного примера из-за следующих архитектурных недостатков:
+/// -# фильтр не учитывает размера выходного буфера [obeg, oend) и работает <b>только
+///    в качестве фильтра выходного потока</b>, когда размер выходного буфера гарантированно
+///    превышает размер входного;
+/// -# фильтр использует промежуточный внутренний буфер, т.к. при конвертации необходимо следить
+///    за кратностью обрабатываемых входных данных и переносить остаток на следующий цикл
+///    обработки.
+///
+struct Base64Encoder
+{
+     using char_type = char;
+     using buffer = std::vector< char_type >;
+     using base64_encode_iterator =
+          boost::archive::iterators::base64_from_binary<
+               boost::archive::iterators::transform_width<
+                    buffer::const_iterator
+                    , 6
+                    , 8
+               >
+          >;
+
+     bool filter( const char*& ibeg, const char* iend, char*& obeg, char* oend, const bool flush )
+     {
+          boost::ignore_unused( oend );
+
+          if( ibeg != iend )
+          {
+               ibeg = prepareBuffer( ibeg, std::distance( ibeg, iend ) );
+          }
+
+          obeg = encodeBuffer( obeg );
+          ibeg = saveRemaining( ibeg, iend );
+
+          if( flush && ibeg == iend )
+          {
+               obeg = appendTail( obeg );
+          }
+
+          return flush ? ibeg != iend : flush;
+     }
+
+     void close() {}
+
+private:
+     const char* prepareBuffer( const char* src, const std::size_t n )
+     {
+          const auto end = src + (n - n % 3 - buffer_.size());
+          buffer_.insert( buffer_.end(), src, end );
+          return end;
+     }
+
+     char* encodeBuffer( char* dst )
+     {
+          nbytes_ += buffer_.size();
+          return std::copy(
+               base64_encode_iterator{ buffer_.cbegin() }
+               , base64_encode_iterator{ buffer_.cend() }
+               , dst
+               );
+     }
+
+     const char* saveRemaining( const char* begin, const char* end )
+     {
+          buffer_.assign( begin, end );
+          return end;
+     }
+
+     char* appendTail( char* dst )
+     {
+          static constexpr char tail = '=';
+          if( !std::exchange( tailed_, true ) )
+          {
+               const auto n =  nbytes_ % 3;
+               return std::fill_n( dst, n ? 3 - n : 0, tail );
+          }
+          return dst;
+     }
+
+     buffer buffer_;
+     unsigned nbytes_ = 0;
+     bool tailed_ = false;
+};
+
+
+struct Counter
+{
+     using char_type = char;
+
+     bool filter( const char*& ibeg, const char* iend, char*& obeg, char* oend, const bool flush )
+     {
+          const auto n = std::min(
+               std::distance( ibeg, iend ),
+               std::distance( obeg, oend )
+               );
+
+          obeg = std::copy_n( ibeg, n, obeg );
+          ibeg += n;
+
+          bytes_ += n;
+
+          return flush ? ibeg != iend : flush;
+     }
+
+     void close() {}
+
+     unsigned bytes() const noexcept
+     {
+          return bytes_;
+     }
+
+private:
+     unsigned bytes_ = 0;
+};
+
+
+} // namespace impl
+
+
+template< typename Impl = impl::Monitor, typename Alloc = std::allocator< char > >
+struct MonitorT : boost::iostreams::symmetric_filter< Impl, Alloc >
+{
+     using Base = boost::iostreams::symmetric_filter< Impl, Alloc >;
+
+     explicit MonitorT()
+          : Base{ boost::iostreams::default_device_buffer_size }
+     {}
+
+     explicit MonitorT( std::ostream& os )
+          : MonitorT{}
+     {
+          this->filter().setOstream( os );
+     }
+};
+
+
+template< typename Impl, typename Alloc = std::allocator< typename Impl::char_type > >
+struct FilterT : boost::iostreams::symmetric_filter< Impl, Alloc >
+{
+     using Base = boost::iostreams::symmetric_filter< Impl, Alloc >;
+     FilterT() : Base{ boost::iostreams::default_device_buffer_size } {}
+};
+
+
+using Monitor = MonitorT<>;
+using Base64Encoder = FilterT< impl::Base64Encoder >;
+using Counter = FilterT< impl::Counter >;
+
+
+} // namespace symmetric
 } // namespace filters
 } // namespace iostreams
 } // namespace using_boost
