@@ -418,8 +418,7 @@ private:
      char* appendTail( char* dst )
      {
           static constexpr char tail = '=';
-          static bool done = false;
-          if( !std::exchange( done, true ) )
+          if( !std::exchange( tailed_, true ) )
           {
                const auto n =  nbytes_ % 3;
                return std::fill_n( dst, n ? 3 - n : 0, tail );
@@ -429,6 +428,7 @@ private:
 
      buffer buffer_;
      unsigned nbytes_ = 0;
+     bool tailed_ = false;
 };
 
 
