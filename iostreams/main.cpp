@@ -254,40 +254,11 @@ using Transparent = using_boost::iostreams::filters::symmetric::FilterT< impl::B
 } // namespace filters
 
 
-
 int main( int argc, char** argv )
 {
      boost::ignore_unused( argc, argv );
      try
      {
-          static constexpr auto text =
-               "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod "
-               "tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, "
-               "quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo "
-               "consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse "
-               "cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non "
-               "proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
-          static constexpr auto expected =
-               "TG9yZW0gaXBzdW0gZG9sb3Igc2l0IGFtZXQsIGNvbnNlY3RldHVyIGFkaXBpc2ljaW5nIGVsaXQs"
-               "IHNlZCBkbyBlaXVzbW9kIHRlbXBvciBpbmNpZGlkdW50IHV0IGxhYm9yZSBldCBkb2xvcmUgbWFn"
-               "bmEgYWxpcXVhLiBVdCBlbmltIGFkIG1pbmltIHZlbmlhbSwgcXVpcyBub3N0cnVkIGV4ZXJjaXRh"
-               "dGlvbiB1bGxhbWNvIGxhYm9yaXMgbmlzaSB1dCBhbGlxdWlwIGV4IGVhIGNvbW1vZG8gY29uc2Vx"
-               "dWF0LiBEdWlzIGF1dGUgaXJ1cmUgZG9sb3IgaW4gcmVwcmVoZW5kZXJpdCBpbiB2b2x1cHRhdGUg"
-               "dmVsaXQgZXNzZSBjaWxsdW0gZG9sb3JlIGV1IGZ1Z2lhdCBudWxsYSBwYXJpYXR1ci4gRXhjZXB0"
-               "ZXVyIHNpbnQgb2NjYWVjYXQgY3VwaWRhdGF0IG5vbiBwcm9pZGVudCwgc3VudCBpbiBjdWxwYSBx"
-               "dWkgb2ZmaWNpYSBkZXNlcnVudCBtb2xsaXQgYW5pbSBpZCBlc3QgbGFib3J1bS4=";
-
-          std::istringstream is{ text };
-          std::ostringstream os;
-          boost::iostreams::filtering_ostream fos;
-          fos.push( using_boost::iostreams::filters::symmetric::Base64Encoder{} );
-          fos.push( os );
-          boost::iostreams::copy( is, fos );
-
-          if( auto&& result = os.str(); result != expected )
-          {
-               BOOST_THROW_EXCEPTION( std::runtime_error{ "bad result: " + result } );
-          }
      }
      catch( const std::exception& e )
      {
