@@ -375,11 +375,7 @@ struct Base64Encoder
           }
 
           obeg = encodeBuffer( obeg );
-
-          if( ibeg != iend )
-          {
-               ibeg = saveRemaining( ibeg, iend );
-          }
+          ibeg = saveRemaining( ibeg, iend );
 
           if( flush && ibeg == iend )
           {
