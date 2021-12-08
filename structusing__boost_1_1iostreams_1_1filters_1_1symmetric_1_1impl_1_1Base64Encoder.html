@@ -73,6 +73,8 @@ $(function() {
   <div class="headertitle"><div class="title">Структура using_boost::iostreams::filters::symmetric::impl::Base64Encoder</div></div>
 </div><!--header-->
 <div class="contents">
+
+<p><code>#include &lt;<a class="el" href="filters_8h_source.html">filters.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-types" name="pub-types"></a>
 Открытые типы</h2></td></tr>
@@ -95,7 +97,12 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>filter</b> (const cha
 void&#160;</td><td class="memItemRight" valign="bottom"><b>close</b> ()</td></tr>
 <tr class="separator:a4ea93c1f734fd97ab9e205adea08caf4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<hr/>Объявления и описания членов структуры находятся в файле:<ul>
+<a name="details" id="details"></a><h2 class="groupheader">Подробное описание</h2>
+<div class="textblock"><p >Фильтр Base64-кодирования работает, но может быть использован только в качестве учебного примера из-за следующих архитектурных недостатков:</p><ol type="1">
+<li>фильтр не учитывает размера выходного буфера [obeg, oend) и работает <b>только в качестве фильтра выходного потока</b>, когда размер выходного буфера гарантированно превышает размер входного;</li>
+<li>фильтр использует промежуточный внутренний буфер, т.к. при конвертации необходимо следить за кратностью обрабатываемых входных данных и переносить остаток на следующий цикл обработки. </li>
+</ol>
+</div><hr/>Объявления и описания членов структуры находятся в файле:<ul>
 <li>iostreams/<a class="el" href="filters_8h_source.html">filters.h</a></li>
 </ul>
 </div><!-- contents -->
