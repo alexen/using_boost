@@ -73,6 +73,8 @@ $(function() {
 <div class="contents">
 <div class="textblock"><code>#include &lt;sstream&gt;</code><br />
 <code>#include &lt;boost/test/unit_test.hpp&gt;</code><br />
+<code>#include &lt;boost/test/data/test_case.hpp&gt;</code><br />
+<code>#include &lt;boost/test/data/monomorphic.hpp&gt;</code><br />
 <code>#include &lt;boost/test/tools/output_test_stream.hpp&gt;</code><br />
 <code>#include &lt;boost/utility/string_view.hpp&gt;</code><br />
 <code>#include &lt;boost/iostreams/copy.hpp&gt;</code><br />
@@ -87,27 +89,29 @@ $(function() {
 <div class="dyncontent">
 <div class="center"><img src="filters__test_8cpp__incl.png" border="0" usemap="#aiostreams_2test_2filters__test_8cpp" alt=""/></div>
 <map name="aiostreams_2test_2filters__test_8cpp" id="aiostreams_2test_2filters__test_8cpp">
-<area shape="rect" title=" " alt="" coords="726,5,866,47"/>
+<area shape="rect" title=" " alt="" coords="922,5,1062,47"/>
 <area shape="rect" title=" " alt="" coords="5,102,75,129"/>
 <area shape="rect" title=" " alt="" coords="99,102,258,129"/>
-<area shape="rect" title=" " alt="" coords="283,95,435,136"/>
-<area shape="rect" title=" " alt="" coords="670,184,794,225"/>
-<area shape="rect" title=" " alt="" coords="509,102,680,129"/>
-<area shape="rect" title=" " alt="" coords="705,102,887,129"/>
-<area shape="rect" title=" " alt="" coords="912,95,1069,136"/>
-<area shape="rect" title=" " alt="" coords="1093,95,1253,136"/>
-<area shape="rect" title=" " alt="" coords="1278,102,1437,129"/>
-<area shape="rect" title=" " alt="" coords="1461,95,1608,136"/>
-<area shape="rect" href="filters_8h.html" title=" " alt="" coords="1633,102,1757,129"/>
-<area shape="rect" title=" " alt="" coords="1079,191,1119,218"/>
-<area shape="rect" title=" " alt="" coords="1143,191,1209,218"/>
-<area shape="rect" title=" " alt="" coords="1234,191,1353,218"/>
-<area shape="rect" title=" " alt="" coords="1377,191,1572,218"/>
-<area shape="rect" title=" " alt="" coords="1597,191,1793,218"/>
-<area shape="rect" title=" " alt="" coords="1817,184,1959,225"/>
-<area shape="rect" title=" " alt="" coords="1983,191,2145,218"/>
-<area shape="rect" title=" " alt="" coords="2169,184,2335,225"/>
-<area shape="rect" title=" " alt="" coords="2359,184,2510,225"/>
+<area shape="rect" title=" " alt="" coords="282,95,417,136"/>
+<area shape="rect" title=" " alt="" coords="441,102,655,129"/>
+<area shape="rect" title=" " alt="" coords="680,95,832,136"/>
+<area shape="rect" title=" " alt="" coords="1067,184,1191,225"/>
+<area shape="rect" title=" " alt="" coords="907,102,1077,129"/>
+<area shape="rect" title=" " alt="" coords="1102,102,1285,129"/>
+<area shape="rect" title=" " alt="" coords="1309,95,1467,136"/>
+<area shape="rect" title=" " alt="" coords="1491,95,1651,136"/>
+<area shape="rect" title=" " alt="" coords="1675,102,1834,129"/>
+<area shape="rect" title=" " alt="" coords="1859,95,2005,136"/>
+<area shape="rect" href="filters_8h.html" title=" " alt="" coords="2030,102,2154,129"/>
+<area shape="rect" title=" " alt="" coords="1476,191,1516,218"/>
+<area shape="rect" title=" " alt="" coords="1540,191,1607,218"/>
+<area shape="rect" title=" " alt="" coords="1631,191,1750,218"/>
+<area shape="rect" title=" " alt="" coords="1775,191,1969,218"/>
+<area shape="rect" title=" " alt="" coords="1994,191,2190,218"/>
+<area shape="rect" title=" " alt="" coords="2214,184,2357,225"/>
+<area shape="rect" title=" " alt="" coords="2381,191,2542,218"/>
+<area shape="rect" title=" " alt="" coords="2566,184,2733,225"/>
+<area shape="rect" title=" " alt="" coords="2757,184,2907,225"/>
 </map>
 </div>
 </div><table class="memberdecls">
@@ -141,6 +145,9 @@ $(function() {
 <tr class="memitem:aa03d9622301df4f70436c79399b8ddc6"><td class="memItemLeft" align="right" valign="top"><a id="aa03d9622301df4f70436c79399b8ddc6" name="aa03d9622301df4f70436c79399b8ddc6"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>BOOST_AUTO_TEST_CASE</b> (LongTextStream)</td></tr>
 <tr class="separator:aa03d9622301df4f70436c79399b8ddc6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab44b027a4f1f9d1629b77580de0382a7"><td class="memItemLeft" align="right" valign="top"><a id="ab44b027a4f1f9d1629b77580de0382a7" name="ab44b027a4f1f9d1629b77580de0382a7"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>BOOST_DATA_TEST_CASE</b> (TextStream, boost::unit_test::data::make({ &quot;&quot;, &quot;I&quot;, &quot;Ut&quot;, &quot;sed&quot;, &quot;amet&quot;, &quot;Lorem&quot;, &quot;tempor&quot;, &quot;laboris&quot;, &quot;proident&quot;, &quot;Excepteur&quot; }) ^ boost::unit_test::data::make({ &quot;&quot;, &quot;SQ==&quot;, &quot;VXQ=&quot;, &quot;c2Vk&quot;, &quot;YW1ldA==&quot;, &quot;TG9yZW0=&quot;, &quot;dGVtcG9y&quot;, &quot;bGFib3Jpcw==&quot;, &quot;cHJvaWRlbnQ=&quot;, &quot;RXhjZXB0ZXVy&quot; }), source, encoded)</td></tr>
+<tr class="separator:ab44b027a4f1f9d1629b77580de0382a7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Подробное описание</h2>
 <div class="textblock"><dl class="section copyright"><dt>Авторство</dt><dd>Copyright (c) InfoTeCS. All Rights Reserved. </dd></dl>
@@ -162,9 +169,8 @@ $(function() {
 </div><div class="memdoc">
 
 <p>Output. </p>
-<p >Monitor.</p>
 <p >Transparent SingleChar</p>
-<p >Symmetric NonModifying</p>
+<p >Counter Symmetric NonModifying</p>
 <p >CharRemover SingleChar </p>
 
 </div>
@@ -186,10 +192,12 @@ $(function() {
 </div><div class="memdoc">
 
 <p>Output. </p>
+<p >Monitor.</p>
 <p >Transparent</p>
 <p >Counter Multichar</p>
 <p >CharRemover</p>
-<p >StreamInterrupter </p>
+<p >StreamInterrupter</p>
+<p >CharMultiplier Multichar </p>
 
 </div>
 </div>
