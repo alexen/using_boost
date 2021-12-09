@@ -1041,6 +1041,207 @@ BOOST_AUTO_TEST_CASE( BinaryStream )
 }
 BOOST_AUTO_TEST_SUITE_END() /// Output
 BOOST_AUTO_TEST_SUITE_END() /// CharMultiplier
+BOOST_AUTO_TEST_SUITE( CharReplacer )
+
+using using_boost::iostreams::filters::multichar::CharReplacer;
+
+BOOST_AUTO_TEST_SUITE( Input )
+BOOST_AUTO_TEST_CASE( EmptyStream )
+{
+     std::istringstream is;
+     boost::test_tools::output_test_stream os;
+
+     boost::iostreams::filtering_istream fis;
+     fis.push( CharReplacer{ "abc", "XYZ" } );
+     fis.push( is );
+
+     boost::iostreams::copy( fis, os );
+
+     BOOST_TEST( os.is_empty() );
+}
+BOOST_AUTO_TEST_CASE( TextStream )
+{
+     static constexpr auto source =
+          "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod "
+          "tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, "
+          "quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo "
+          "consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse "
+          "cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non "
+          "proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
+
+     static constexpr auto expected =
+          "LOr-m -psUm dOlOr s-t Am-t, cOns-ct-tUr Ad-p-s-c-ng -l-t, s-d dO --UsmOd "
+          "t-mpOr -nc-d-dUnt Ut lAbOr- -t dOlOr- mAgnA Al-qUA. Ut -n-m Ad m-n-m v-n-Am, "
+          "qU-s nOstrUd -x-rc-tAt-On UllAmcO lAbOr-s n-s- Ut Al-qU-p -x -A cOmmOdO "
+          "cOns-qUAt. DU-s AUt- -rUr- dOlOr -n r-pr-h-nd-r-t -n vOlUptAt- v-l-t -ss- "
+          "c-llUm dOlOr- -U fUg-At nUllA pAr-AtUr. Exc-pt-Ur s-nt OccA-cAt cUp-dAtAt nOn "
+          "prO-d-nt, sUnt -n cUlpA qU- Off-c-A d-s-rUnt mOll-t An-m -d -st lAbOrUm.";
+
+     std::istringstream is{ source };
+     boost::test_tools::output_test_stream os;
+
+     boost::iostreams::filtering_istream fis;
+     fis.push( CharReplacer{ "aouie", "AOU--" } );
+     fis.push( is );
+
+     boost::iostreams::copy( fis, os );
+
+     BOOST_TEST( os.is_equal( expected ) );
+}
+BOOST_AUTO_TEST_CASE( BinaryStream )
+{
+     static constexpr std::uint8_t source[] = {
+          0xdd, 0xf1, 0x69, 0xea, 0x41, 0x09,
+          0x1b, 0x3d, 0xe7, 0x0d, 0x09, 0xd6,
+          0x83, 0xc3, 0xd8, 0xea, 0x7b, 0x90,
+          0xb5, 0x0b, 0xb7, 0x1d, 0xba, 0x24,
+          0x58, 0xb6, 0x6f, 0x49, 0x63, 0xd9,
+          0x2c, 0xd9, 0x75, 0xc4, 0x14, 0x5c,
+          0x2f, 0x10, 0xba, 0x0b, 0x24, 0x20,
+          0x42, 0xef, 0x04, 0xa7, 0x4d, 0x85,
+          0xaf, 0x78, 0x52, 0x56, 0xa7, 0xfa,
+          0x08, 0x03, 0xbf, 0x45, 0xf3, 0x4c,
+          0xbd, 0xb1, 0x9c, 0x98
+     };
+     static constexpr std::uint8_t search[] = {
+          0x2c, 0xd9, 0x75, 0xc4, 0x14, 0x5c
+     };
+     static constexpr std::uint8_t replaceWith[] = {
+          0xaa, 0xbb, 0xcc, 0xdd, 0x12, 0x34
+     };
+     static constexpr std::uint8_t expected[] = {
+          0xdd, 0xf1, 0x69, 0xea, 0x41, 0x09,
+          0x1b, 0x3d, 0xe7, 0x0d, 0x09, 0xd6,
+          0x83, 0xc3, 0xd8, 0xea, 0x7b, 0x90,
+          0xb5, 0x0b, 0xb7, 0x1d, 0xba, 0x24,
+          0x58, 0xb6, 0x6f, 0x49, 0x63, 0xbb,
+          0xaa, 0xbb, 0xcc, 0xdd, 0x12, 0x34, /// <--
+          0x2f, 0x10, 0xba, 0x0b, 0x24, 0x20,
+          0x42, 0xef, 0x04, 0xa7, 0x4d, 0x85,
+          0xaf, 0x78, 0x52, 0x56, 0xa7, 0xfa,
+          0x08, 0x03, 0xbf, 0x45, 0xf3, 0x4c,
+          0xbd, 0xb1, 0x9c, 0x98
+     };
+     boost::iostreams::stream< boost::iostreams::array_source > is{
+          boost::iostreams::array_source{
+               reinterpret_cast< const char* >( source )
+               , sizeof( source )
+          }
+     };
+
+     CharReplacer charReplacer{
+          { reinterpret_cast< const char* >( search ), sizeof( search ) },
+          { reinterpret_cast< const char* >( replaceWith ), sizeof( replaceWith ) }
+     };
+     boost::test_tools::output_test_stream os;
+     boost::iostreams::filtering_istream fis;
+     fis.push( boost::ref( charReplacer ) );
+     fis.push( is );
+
+     boost::iostreams::copy( fis, os );
+
+     BOOST_TEST( os.is_equal( std::string( expected, expected + sizeof( expected ) ) ) );
+}
+BOOST_AUTO_TEST_SUITE_END() /// Input
+BOOST_AUTO_TEST_SUITE( Output )
+BOOST_AUTO_TEST_CASE( EmptyStream )
+{
+     std::istringstream is;
+     boost::test_tools::output_test_stream os;
+
+     boost::iostreams::filtering_ostream fos;
+     fos.push( CharReplacer{ "abc", "XYZ" } );
+     fos.push( os );
+
+     boost::iostreams::copy( is, fos );
+
+     BOOST_TEST( os.is_empty() );
+}
+BOOST_AUTO_TEST_CASE( TextStream )
+{
+     static constexpr auto source =
+          "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod "
+          "tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, "
+          "quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo "
+          "consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse "
+          "cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non "
+          "proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
+
+     static constexpr auto expected =
+          "$o$e$ i8su$ dolo$ sit a$et, 4oNse4tetu$ adi8isi4iNg elit, sed do eius$od "
+          "te$8o$ iN4ididuNt ut labo$e et dolo$e $agNa aliqua. Ut eNi$ ad $iNi$ veNia$, "
+          "quis Nost$ud exe$4itatioN ulla$4o labo$is Nisi ut aliqui8 ex ea 4o$$odo "
+          "4oNsequat. Duis aute i$u$e dolo$ iN $e8$eheNde$it iN volu8tate velit esse "
+          "4illu$ dolo$e eu fugiat Nulla 8a$iatu$. Ex4e8teu$ siNt o44ae4at 4u8idatat NoN "
+          "8$oideNt, suNt iN 4ul8a qui offi4ia dese$uNt $ollit aNi$ id est labo$u$.";
+
+     std::istringstream is{ source };
+     boost::test_tools::output_test_stream os;
+
+     boost::iostreams::filtering_ostream fos;
+     fos.push( CharReplacer{ "Lmnckpr", "$$N4K8$" } );
+     fos.push( os );
+
+     boost::iostreams::copy( is, fos );
+
+     BOOST_TEST( os.is_equal( expected ) );
+}
+BOOST_AUTO_TEST_CASE( BinaryStream )
+{
+     static constexpr std::uint8_t source[] = {
+          0x14, 0x94, 0x0e, 0x21, 0x0d, 0x34,
+          0x43, 0x4a, 0x2b, 0xfd, 0x8c, 0xfc,
+          0x9f, 0xde, 0xc8, 0x40, 0xb5, 0x24,
+          0x4a, 0x95, 0xe9, 0x19, 0x59, 0x5b,
+          0xa5, 0xff, 0x94, 0xa2, 0xcf, 0x85,
+          0x02, 0x59, 0x4e, 0x7f, 0x19, 0xe5,
+          0xb3, 0xba, 0xfe, 0xe7, 0x87, 0x5e,
+          0x3a, 0x49, 0x74, 0xab, 0xfc, 0x47,
+          0x99, 0x42, 0x28, 0xda, 0x28, 0x74,
+          0x47, 0x9b, 0x40, 0xd9, 0x20, 0x72,
+          0x98, 0x71, 0xc1, 0x7a
+     };
+     static constexpr std::uint8_t search[] = {
+          0xb3, 0xba, 0xfe, 0xe7, 0x87, 0x5e
+     };
+     static constexpr std::uint8_t replaceWith[] = {
+          0x01, 0x02, 0x03, 0xff, 0xee, 0xdd
+     };
+     static constexpr std::uint8_t expected[] = {
+          0x14, 0x94, 0x0e, 0x21, 0x0d, 0x34,
+          0x43, 0x4a, 0x2b, 0xfd, 0x8c, 0xfc,
+          0x9f, 0xde, 0xc8, 0x40, 0xb5, 0x24,
+          0x4a, 0x95, 0xe9, 0x19, 0x59, 0x5b,
+          0xa5, 0xff, 0x94, 0xa2, 0xcf, 0x85,
+          0x02, 0x59, 0x4e, 0x7f, 0x19, 0xe5,
+          0x01, 0x02, 0x03, 0xff, 0xee, 0xdd, /// <--
+          0x3a, 0x49, 0x74, 0xab, 0xfc, 0x47,
+          0x99, 0x42, 0x28, 0xda, 0x28, 0x74,
+          0x47, 0x9b, 0x40, 0xd9, 0x20, 0x72,
+          0x98, 0x71, 0xc1, 0x7a
+     };
+     boost::iostreams::stream< boost::iostreams::array_source > is{
+          boost::iostreams::array_source{
+               reinterpret_cast< const char* >( source )
+               , sizeof( source )
+          }
+     };
+
+     CharReplacer charReplacer{
+          { reinterpret_cast< const char* >( search ), sizeof( search ) },
+          { reinterpret_cast< const char* >( replaceWith ), sizeof( replaceWith ) }
+     };
+     boost::test_tools::output_test_stream os;
+     boost::iostreams::filtering_ostream fos;
+     fos.push( boost::ref( charReplacer ) );
+     fos.push( os );
+
+     boost::iostreams::copy( is, fos );
+
+     BOOST_TEST( os.is_equal( std::string( expected, expected + sizeof( expected ) ) ) );
+}
+BOOST_AUTO_TEST_SUITE_END() /// Output
+BOOST_AUTO_TEST_SUITE_END() /// CharReplacer
 BOOST_AUTO_TEST_SUITE_END() /// Multichar
 BOOST_AUTO_TEST_SUITE( Symmetric )
 BOOST_AUTO_TEST_SUITE( Base64Encoder )
@@ -1103,7 +1304,41 @@ BOOST_DATA_TEST_CASE(
      BOOST_TEST( os.is_equal( encoded ) );
 }
 BOOST_AUTO_TEST_CASE( BinaryStream )
-{}
+{
+     static constexpr std::uint8_t source[] = {
+          0xdd, 0x75, 0x69, 0x62, 0xb9, 0xa3, 0x69, 0x6c, 0x39, 0xe8, 0x42, 0xd5,
+          0x2d, 0x56, 0xf9, 0x05, 0xb3, 0xee, 0x69, 0x04, 0x77, 0xa5, 0x5d, 0x74,
+          0xbc, 0xca, 0x9a, 0x5e, 0x45, 0x99, 0xa9, 0x44, 0x2a, 0x65, 0x6f, 0x10,
+          0x89, 0x11, 0x78, 0x01, 0x93, 0x19, 0xa2, 0xb7, 0x3c, 0x0d, 0xfa, 0x73,
+          0x39, 0xda, 0xc7, 0x0e, 0x8e, 0x91, 0xa6, 0x30, 0x60, 0xc4, 0x29, 0x4f,
+          0xe5, 0x3e, 0x59, 0x03, 0x3b, 0x06, 0xab, 0x49, 0x28, 0x4d, 0x10, 0x6c,
+          0xbf, 0x06, 0xf2, 0x3d, 0x3b, 0xfb, 0x0e, 0xfa, 0xb3, 0x69, 0x32, 0x44,
+          0x37, 0x8a, 0xab, 0x77, 0x87, 0x13, 0x28, 0xc3, 0x76, 0x8c, 0xa0, 0xe2,
+          0x6a, 0x5a, 0x92, 0x58, 0x2d, 0xf1, 0xcc, 0xb6, 0x6b, 0xdc, 0xfd, 0xe7,
+          0x9e, 0x9e, 0x31, 0x35, 0x41, 0x8a, 0x29, 0xd9, 0xff, 0x56, 0x8b, 0x9c,
+          0xf7, 0xbf, 0x4f, 0xa7, 0xf8, 0x88, 0x05, 0x0c
+     };
+     static constexpr auto expected =
+          "3XVpYrmjaWw56ELVLVb5BbPuaQR3pV10vMqaXkWZqUQqZW8QiRF4AZMZorc8DfpzOdrHDo6RpjBg"
+          "xClP5T5ZAzsGq0koTRBsvwbyPTv7DvqzaTJEN4qrd4cTKMN2jKDialqSWC3xzLZr3P3nnp4xNUGK"
+          "Kdn/Vouc979Pp/iIBQw=";
+
+     boost::iostreams::stream< boost::iostreams::array_source > is{
+          boost::iostreams::array_source{
+               reinterpret_cast< const char* >( source )
+               , sizeof( source )
+          }
+     };
+     boost::test_tools::output_test_stream os;
+
+     boost::iostreams::filtering_ostream fos;
+     fos.push( Base64Encoder{} );
+     fos.push( os );
+
+     boost::iostreams::copy( is, fos );
+
+     BOOST_TEST( os.is_equal( expected ) );
+}
 BOOST_AUTO_TEST_SUITE_END() /// Output
 BOOST_AUTO_TEST_SUITE_END() /// Base64Encoder
 BOOST_AUTO_TEST_SUITE_END() /// Symmetric
