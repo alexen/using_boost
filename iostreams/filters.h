@@ -301,6 +301,45 @@ private:
 };
 
 
+/// Фильтр, заменяющий в потоке символы из @a from на символы из @a to
+///
+/// @note Размеры последовательностей @a from и @a to должны совпадать.
+///
+/// Замена осуществляется следующим образом: каждый символ из последовательности @a from
+/// заменяется символом из последовательности @a to, стоящим на той же позиции.
+/// Т.е. если @a from = "aouei", а @a to = "AOUEI", то:
+/// - 'a' => 'A'
+/// - 'o' => 'O'
+/// - 'u' => 'U'
+/// - 'e' => 'E'
+/// - 'i' => 'I'
+/// "Education" => "EdUcAtIOn"
+///
+/// @note Символы из последовательности @a to могут повторяться, символы из @a from - нет.
+///
+/// Для @a from = "aouei" и @a to = "AO***" получим:
+/// - 'a' => 'A'
+/// - 'o' => 'O'
+/// - 'u' => '*'
+/// - 'e' => '*'
+/// - 'i' => '*'
+/// "Education" => "Ed*cAt*On"
+///
+/// @note Разумеется, регистр имеет значение!
+///
+/// @code{.cpp}
+///
+/// std::istringstream is{ "Some text data" };
+/// std::ostringstream os;
+///
+/// boost::iostreams::filtering_istream fis;
+/// fis.push( CharReplacer{ "aou", "XYZ" } );
+/// fis.push( is );
+///
+/// boost::iostreams::copy( fis, os );
+///
+/// @endcode
+///
 struct CharReplacer : boost::iostreams::multichar_dual_use_filter
 {
      CharReplacer( boost::string_view from, boost::string_view to )
