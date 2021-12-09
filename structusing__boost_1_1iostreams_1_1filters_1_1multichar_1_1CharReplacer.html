@@ -110,21 +110,24 @@ template&lt;typename Sink &gt; </td></tr>
 <a name="details" id="details"></a><h2 class="groupheader">Подробное описание</h2>
 <div class="textblock"><p >Фильтр, заменяющий в потоке символы из <em>from</em> на символы из <em>to</em> </p>
 <dl class="section note"><dt>Заметки</dt><dd>Размеры последовательностей <em>from</em> и <em>to</em> должны совпадать.</dd></dl>
-<p>Замена осуществляется следующим образом: каждый символ из последовательности <em>from</em> заменяется символом из последовательности <em>to</em>, стоящим на той же позиции. Т.е. если <em>from</em> = "aouei", а <em>to</em> = "AOUEI", то:</p><ul>
+<p>Замена осуществляется следующим образом: каждый символ из последовательности <em>from</em> заменяется символом из последовательности <em>to</em>, стоящим на той же позиции.</p>
+<p >Т.е. если <em>from</em> = "aouei", а <em>to</em> = "AOUEI", то:</p><ul>
 <li>'a' =&gt; 'A'</li>
 <li>'o' =&gt; 'O'</li>
 <li>'u' =&gt; 'U'</li>
 <li>'e' =&gt; 'E'</li>
-<li>'i' =&gt; 'I' "Education" =&gt; "EdUcAtIOn"</li>
+<li>'i' =&gt; 'I'</li>
 </ul>
+<p >"Education" =&gt; "EdUcAtIOn"</p>
 <dl class="section note"><dt>Заметки</dt><dd>Символы из последовательности <em>to</em> могут повторяться, символы из <em>from</em> - нет.</dd></dl>
 <p>Для <em>from</em> = "aouei" и <em>to</em> = "AO***" получим:</p><ul>
 <li>'a' =&gt; 'A'</li>
 <li>'o' =&gt; 'O'</li>
 <li>'u' =&gt; '*'</li>
 <li>'e' =&gt; '*'</li>
-<li>'i' =&gt; '*' "Education" =&gt; "Ed*cAt*On"</li>
+<li>'i' =&gt; '*'</li>
 </ul>
+<p >"Education" =&gt; "Ed*cAt*On"</p>
 <dl class="section note"><dt>Заметки</dt><dd>Разумеется, регистр имеет значение!</dd></dl>
 <div class="fragment"><div class="line">std::istringstream is{ <span class="stringliteral">&quot;Some text data&quot;</span> };</div>
 <div class="line">std::ostringstream os;</div>
