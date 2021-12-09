@@ -72,6 +72,8 @@ $(function() {
   <div class="headertitle"><div class="title">Структура using_boost::iostreams::filters::multichar::CharReplacer</div></div>
 </div><!--header-->
 <div class="contents">
+
+<p><code>#include &lt;<a class="el" href="filters_8h_source.html">filters.h</a>&gt;</code></p>
 <div class="dynheader">
 Граф наследования:using_boost::iostreams::filters::multichar::CharReplacer:</div>
 <div class="dyncontent">
@@ -105,7 +107,34 @@ template&lt;typename Sink &gt; </td></tr>
 <tr class="memitem:a7fe1cff1d45b090a99891cd5516489a9"><td class="memTemplItemLeft" align="right" valign="top">std::streamsize&#160;</td><td class="memTemplItemRight" valign="bottom"><b>write</b> (Sink &amp;dst, const char *src, const std::streamsize n)</td></tr>
 <tr class="separator:a7fe1cff1d45b090a99891cd5516489a9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<hr/>Объявления и описания членов структуры находятся в файле:<ul>
+<a name="details" id="details"></a><h2 class="groupheader">Подробное описание</h2>
+<div class="textblock"><p >Фильтр, заменяющий в потоке символы из <em>from</em> на символы из <em>to</em> </p>
+<dl class="section note"><dt>Заметки</dt><dd>Размеры последовательностей <em>from</em> и <em>to</em> должны совпадать.</dd></dl>
+<p>Замена осуществляется следующим образом: каждый символ из последовательности <em>from</em> заменяется символом из последовательности <em>to</em>, стоящим на той же позиции. Т.е. если <em>from</em> = "aouei", а <em>to</em> = "AOUEI", то:</p><ul>
+<li>'a' =&gt; 'A'</li>
+<li>'o' =&gt; 'O'</li>
+<li>'u' =&gt; 'U'</li>
+<li>'e' =&gt; 'E'</li>
+<li>'i' =&gt; 'I' "Education" =&gt; "EdUcAtIOn"</li>
+</ul>
+<dl class="section note"><dt>Заметки</dt><dd>Символы из последовательности <em>to</em> могут повторяться, символы из <em>from</em> - нет.</dd></dl>
+<p>Для <em>from</em> = "aouei" и <em>to</em> = "AO***" получим:</p><ul>
+<li>'a' =&gt; 'A'</li>
+<li>'o' =&gt; 'O'</li>
+<li>'u' =&gt; '*'</li>
+<li>'e' =&gt; '*'</li>
+<li>'i' =&gt; '*' "Education" =&gt; "Ed*cAt*On"</li>
+</ul>
+<dl class="section note"><dt>Заметки</dt><dd>Разумеется, регистр имеет значение!</dd></dl>
+<div class="fragment"><div class="line">std::istringstream is{ <span class="stringliteral">&quot;Some text data&quot;</span> };</div>
+<div class="line">std::ostringstream os;</div>
+<div class="line"> </div>
+<div class="line">boost::iostreams::filtering_istream fis;</div>
+<div class="line">fis.push( CharReplacer{ <span class="stringliteral">&quot;aou&quot;</span>, <span class="stringliteral">&quot;XYZ&quot;</span> } );</div>
+<div class="line">fis.push( is );</div>
+<div class="line"> </div>
+<div class="line">boost::iostreams::copy( fis, os );</div>
+</div><!-- fragment --> </div><hr/>Объявления и описания членов структуры находятся в файле:<ul>
 <li>iostreams/<a class="el" href="filters_8h_source.html">filters.h</a></li>
 </ul>
 </div><!-- contents -->
