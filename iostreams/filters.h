@@ -5,6 +5,7 @@
 #pragma once
 
 #include <set>
+#include <map>
 #include <iomanip>
 
 #include <boost/assert.hpp>
@@ -15,6 +16,7 @@
 #include <boost/utility/string_view.hpp>
 #include <boost/archive/iterators/base64_from_binary.hpp>
 #include <boost/archive/iterators/transform_width.hpp>
+#include <boost/range/irange.hpp>
 
 
 namespace using_boost {
@@ -296,6 +298,60 @@ private:
      const int n_;
      char c_ = 0;
      int left_ = 0;
+};
+
+
+struct CharReplacer : boost::iostreams::multichar_dual_use_filter
+{
+     CharReplacer( boost::string_view from, boost::string_view to )
+          : dict_{ makeDict( from, to ) }
+     {}
+
+     template< typename Source >
+     std::streamsize read( Source& src, char* dst, std::streamsize n )
+     {
+          if( (n = boost::iostreams::read( src, dst, n )) > 0 )
+          {
+               std::transform( dst, dst + n, dst,
+                    [ this ]( const char c )
+                    {
+                         const auto found = dict_.find( c );
+                         return found != dict_.end() ? found->second : c;
+                    }
+                    );
+          }
+          return n;
+     }
+
+     template< typename Sink >
+     std::streamsize write( Sink& dst, const char* src, const std::streamsize n )
+     {
+          for( std::streamsize i = 0; i < n; ++i )
+          {
+               const auto c = src[ i ];
+               const auto found = dict_.find( c );
+               if( !boost::iostreams::put( dst, found != dict_.end() ? found->second : c ) )
+               {
+                    return i;
+               }
+          }
+          return n;
+     }
+
+private:
+     using CharDict = std::map< char, char >;
+     static CharDict makeDict( boost::string_view from, boost::string_view to )
+     {
+          BOOST_ASSERT( from.size() == to.size() );
+          CharDict dict;
+          for( auto&& i: boost::irange( from.size() ) )
+          {
+               dict.emplace( from[ i ], to[ i ] );
+          }
+          return dict;
+     }
+
+     CharDict dict_;
 };
 
 
