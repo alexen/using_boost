@@ -259,14 +259,6 @@ int main( int argc, char** argv )
      boost::ignore_unused( argc, argv );
      try
      {
-          std::istringstream is{ "Moana" };
-
-          using_boost::iostreams::filters::multichar::CharReplacer rep{ "aou", "---" };
-          boost::iostreams::filtering_istream fis;
-          fis.push( boost::ref( rep ) );
-          fis.push( is );
-
-          boost::iostreams::copy( fis, std::cout );
      }
      catch( const std::exception& e )
      {

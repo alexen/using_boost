@@ -1041,6 +1041,107 @@ BOOST_AUTO_TEST_CASE( BinaryStream )
 }
 BOOST_AUTO_TEST_SUITE_END() /// Output
 BOOST_AUTO_TEST_SUITE_END() /// CharMultiplier
+BOOST_AUTO_TEST_SUITE( CharReplacer )
+
+using using_boost::iostreams::filters::multichar::CharReplacer;
+
+BOOST_AUTO_TEST_SUITE( Input )
+BOOST_AUTO_TEST_CASE( EmptyStream )
+{
+     std::istringstream is;
+     boost::test_tools::output_test_stream os;
+
+     boost::iostreams::filtering_istream fis;
+     fis.push( CharReplacer{ "abc", "XYZ" } );
+     fis.push( is );
+
+     boost::iostreams::copy( fis, os );
+
+     BOOST_TEST( os.is_empty() );
+}
+BOOST_AUTO_TEST_CASE( TextStream )
+{
+     static constexpr auto source =
+          "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod "
+          "tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, "
+          "quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo "
+          "consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse "
+          "cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non "
+          "proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
+
+     static constexpr auto expected =
+          "LOr-m -psUm dOlOr s-t Am-t, cOns-ct-tUr Ad-p-s-c-ng -l-t, s-d dO --UsmOd "
+          "t-mpOr -nc-d-dUnt Ut lAbOr- -t dOlOr- mAgnA Al-qUA. Ut -n-m Ad m-n-m v-n-Am, "
+          "qU-s nOstrUd -x-rc-tAt-On UllAmcO lAbOr-s n-s- Ut Al-qU-p -x -A cOmmOdO "
+          "cOns-qUAt. DU-s AUt- -rUr- dOlOr -n r-pr-h-nd-r-t -n vOlUptAt- v-l-t -ss- "
+          "c-llUm dOlOr- -U fUg-At nUllA pAr-AtUr. Exc-pt-Ur s-nt OccA-cAt cUp-dAtAt nOn "
+          "prO-d-nt, sUnt -n cUlpA qU- Off-c-A d-s-rUnt mOll-t An-m -d -st lAbOrUm.";
+
+     std::istringstream is{ source };
+     boost::test_tools::output_test_stream os;
+
+     boost::iostreams::filtering_istream fis;
+     fis.push( CharReplacer{ "aouie", "AOU--" } );
+     fis.push( is );
+
+     boost::iostreams::copy( fis, os );
+
+     BOOST_TEST( os.is_equal( expected ) );
+}
+BOOST_AUTO_TEST_CASE( BinaryStream )
+{
+     BOOST_TEST_FAIL( "Not implemented" );
+}
+BOOST_AUTO_TEST_SUITE_END() /// Input
+BOOST_AUTO_TEST_SUITE( Output )
+BOOST_AUTO_TEST_CASE( EmptyStream )
+{
+     std::istringstream is;
+     boost::test_tools::output_test_stream os;
+
+     boost::iostreams::filtering_ostream fos;
+     fos.push( CharReplacer{ "abc", "XYZ" } );
+     fos.push( os );
+
+     boost::iostreams::copy( is, fos );
+
+     BOOST_TEST( os.is_empty() );
+}
+BOOST_AUTO_TEST_CASE( TextStream )
+{
+     static constexpr auto source =
+          "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod "
+          "tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, "
+          "quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo "
+          "consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse "
+          "cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non "
+          "proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
+
+     static constexpr auto expected =
+          "$o$e$ i8su$ dolo$ sit a$et, 4oNse4tetu$ adi8isi4iNg elit, sed do eius$od "
+          "te$8o$ iN4ididuNt ut labo$e et dolo$e $agNa aliqua. Ut eNi$ ad $iNi$ veNia$, "
+          "quis Nost$ud exe$4itatioN ulla$4o labo$is Nisi ut aliqui8 ex ea 4o$$odo "
+          "4oNsequat. Duis aute i$u$e dolo$ iN $e8$eheNde$it iN volu8tate velit esse "
+          "4illu$ dolo$e eu fugiat Nulla 8a$iatu$. Ex4e8teu$ siNt o44ae4at 4u8idatat NoN "
+          "8$oideNt, suNt iN 4ul8a qui offi4ia dese$uNt $ollit aNi$ id est labo$u$.";
+
+     std::istringstream is{ source };
+     boost::test_tools::output_test_stream os;
+
+     boost::iostreams::filtering_ostream fos;
+     fos.push( CharReplacer{ "Lmnckpr", "$$N4K8$" } );
+     fos.push( os );
+
+     boost::iostreams::copy( is, fos );
+
+     BOOST_TEST( os.is_equal( expected ) );
+}
+BOOST_AUTO_TEST_CASE( BinaryStream )
+{
+     BOOST_TEST_FAIL( "Not implemented" );
+}
+BOOST_AUTO_TEST_SUITE_END() /// Output
+BOOST_AUTO_TEST_SUITE_END() /// CharReplacer
 BOOST_AUTO_TEST_SUITE_END() /// Multichar
 BOOST_AUTO_TEST_SUITE( Symmetric )
 BOOST_AUTO_TEST_SUITE( Base64Encoder )
