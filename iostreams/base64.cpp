@@ -18,10 +18,25 @@
 namespace using_boost {
 namespace iostreams {
 namespace base64 {
+namespace options {
+
+
+/// Использовать URL and filename safe набор символов
+/// @see https://datatracker.ietf.org/doc/html/rfc3548#section-4
+enum class UseUrlSafeAlphabet: bool { No, Yes };
+
+
+/// Использовать хвостовые символы
+enum class PaddingRequired: bool { No, Yes };
+
+
+} // namespace options
+
 
 
 namespace {
 namespace impl {
+namespace boost_based {
 
 
 template< typename InputIterator, typename OutputIterator >
@@ -56,11 +71,78 @@ void decode( InputIterator begin, InputIterator end, OutputIterator out )
 }
 
 
+} // namespace boost_based
+
+
 template< typename OutputIterator >
 void padding( const std::size_t bytes, OutputIterator out )
 {
      const auto n = bytes % 3;
      std::fill_n( out, n ? 3 - n : 0, '=' );
+}
+
+
+void encode(
+     std::istream& is
+     , std::ostream& os
+     , const options::UseUrlSafeAlphabet useUrlSafeAbc
+     , const options::PaddingRequired paddingRequred
+)
+{
+     static filters::multichar::Counter counter;
+     static filters::multichar::CharReplacer replacer{ "+/", "-_" };
+
+     boost::iostreams::filtering_istream fis;
+     if( static_cast< bool >( paddingRequred ) )
+     {
+          counter.reset();
+          fis.push( boost::ref( counter ) );
+     }
+     fis.push( is );
+
+     boost::iostreams::filtering_ostream fos;
+     if( static_cast< bool >( useUrlSafeAbc ) )
+     {
+          fos.push( boost::ref( replacer ) );
+     }
+     fos.push( os );
+
+     boost_based::encode(
+          std::istreambuf_iterator< char >{ fis }
+          , std::istreambuf_iterator< char >{}
+          , std::ostreambuf_iterator< char >{ fos }
+          );
+     padding( counter.chars(), std::ostreambuf_iterator< char >{ fos } );
+}
+
+
+void decode(
+     std::istream& is
+     , std::ostream& os
+     , boost::string_view ignored
+     , const options::UseUrlSafeAlphabet useUrlSafeAbc
+)
+{
+     static filters::multichar::CharReplacer replacer{ "-_", "+/" };
+     static filters::multichar::StreamInterrupter interrupter{ "=" };
+
+     boost::iostreams::filtering_istream fis;
+     fis.push( boost::ref( interrupter ) );
+     if( static_cast< bool >( useUrlSafeAbc ) )
+     {
+          fis.push( boost::ref( replacer ) );
+     }
+     if( !ignored.empty() )
+     {
+          fis.push( std::move( filters::multichar::CharRemover{ ignored } ) );
+     }
+     fis.push( is );
+
+     boost_based::decode(
+          std::istreambuf_iterator< char >{ fis }
+          , std::istreambuf_iterator< char >{}
+          , std::ostreambuf_iterator< char >{ os }
+          );
 }
 
 
@@ -70,38 +152,22 @@ void padding( const std::size_t bytes, OutputIterator out )
 
 void encode( std::istream& is, std::ostream& os )
 {
-     boost::iostreams::filtering_istream fis;
-
-     filters::multichar::Counter counter;
-     fis.push( boost::ref( counter ) );
-     fis.push( is );
-
      impl::encode(
-          std::istreambuf_iterator< char >{ fis }
-          , std::istreambuf_iterator< char >{}
-          , std::ostreambuf_iterator< char >{ os }
+          is
+          , os
+          , options::UseUrlSafeAlphabet::No
+          , options::PaddingRequired::Yes
           );
-     impl::padding( counter.chars(), std::ostreambuf_iterator< char >{ os } );
 }
 
 
 void decode( std::istream& is, std::ostream& os, boost::string_view ignored )
 {
-     static filters::multichar::StreamInterrupter streamInterrupter{ "=" };
-
-     boost::iostreams::filtering_istream fis;
-
-     fis.push( boost::ref( streamInterrupter ) );
-     if( !ignored.empty() )
-     {
-          fis.push( std::move( filters::multichar::CharRemover{ ignored } ) );
-     }
-     fis.push( is );
-
      impl::decode(
-          std::istreambuf_iterator< char >{ fis }
-          , std::istreambuf_iterator< char >{}
-          , std::ostreambuf_iterator< char >{ os }
+          is
+          , os
+          , ignored
+          , options::UseUrlSafeAlphabet::No
           );
 }
 
