@@ -85,6 +85,32 @@ static constexpr auto encoded =
      "Ab16bmE2KOeMoxiai3/9HT7vGqTvzoGCsFn8/g==";
 
 
+namespace url_safe {
+namespace with_padding {
+
+
+static constexpr auto encoded =
+     "CDll6ap_PfPRrpDrQmAVjNA0QpzHSoWzD4jAgz8iz2PQzo8a0leXZeTuo-WMS4zc8-WGWmrBqPwv"
+     "i01cvdBibdGm5tWF_jsJc3tpHQnpmqzzMBdo-iAmFUgnrP0IlYD48IX4nZZTvS5L27yy4cAxq5ho"
+     "b7qRApouMWY4TqHnwh_ISbxl3rQwl1BniDm9B9_p_D3JG4Xanzxdf3O02Pf9-kTxOCkDKOxRaCeH"
+     "kJfiCuEvnNn-Jg8Tk3D3hmB5UTRmThQ3o83bWH6lt1ZbFCN_Nu2L9Ty-5FULws-MgWxvdVUV7ySB"
+     "Ab16bmE2KOeMoxiai3_9HT7vGqTvzoGCsFn8_g==";
+
+
+} // namespace with_padding
+namespace without_padding {
+
+
+static constexpr auto encoded =
+     "CDll6ap_PfPRrpDrQmAVjNA0QpzHSoWzD4jAgz8iz2PQzo8a0leXZeTuo-WMS4zc8-WGWmrBqPwv"
+     "i01cvdBibdGm5tWF_jsJc3tpHQnpmqzzMBdo-iAmFUgnrP0IlYD48IX4nZZTvS5L27yy4cAxq5ho"
+     "b7qRApouMWY4TqHnwh_ISbxl3rQwl1BniDm9B9_p_D3JG4Xanzxdf3O02Pf9-kTxOCkDKOxRaCeH"
+     "kJfiCuEvnNn-Jg8Tk3D3hmB5UTRmThQ3o83bWH6lt1ZbFCN_Nu2L9Ty-5FULws-MgWxvdVUV7ySB"
+     "Ab16bmE2KOeMoxiai3_9HT7vGqTvzoGCsFn8_g";
+
+
+} // namespace without_padding
+} // namespace url_safe
 } // namespace bin
 namespace multiline {
 
@@ -158,6 +184,7 @@ BOOST_DATA_TEST_CASE( Text
      base64::encode( is, os );
      BOOST_TEST( os.is_equal( expected ) );
 }
+BOOST_AUTO_TEST_SUITE( UsualAlphabet )
 BOOST_AUTO_TEST_CASE( Binary )
 {
      std::istringstream is{ std::ios::binary };
@@ -169,6 +196,35 @@ BOOST_AUTO_TEST_CASE( Binary )
      base64::encode( is, os );
      BOOST_TEST( os.is_equal( test_env::bin::encoded ) );
 }
+BOOST_AUTO_TEST_SUITE_END() /// UsualAlphabet
+BOOST_AUTO_TEST_SUITE( UrlSafeAlphabet )
+BOOST_AUTO_TEST_SUITE( WithPadding )
+BOOST_AUTO_TEST_CASE( Binary )
+{
+     std::istringstream is{ std::ios::binary };
+     is.rdbuf()->pubsetbuf(
+          const_cast< char* >( reinterpret_cast< const char* >( test_env::bin::decoded ) )
+          , sizeof( test_env::bin::decoded )
+          );
+     boost::test_tools::output_test_stream os;
+     base64::encode( is, os );
+     BOOST_TEST( os.is_equal( test_env::bin::url_safe::with_padding::encoded ) );
+}
+BOOST_AUTO_TEST_SUITE_END() /// WithPadding
+BOOST_AUTO_TEST_SUITE( WithoutPadding )
+BOOST_AUTO_TEST_CASE( Binary )
+{
+     std::istringstream is{ std::ios::binary };
+     is.rdbuf()->pubsetbuf(
+          const_cast< char* >( reinterpret_cast< const char* >( test_env::bin::decoded ) )
+          , sizeof( test_env::bin::decoded )
+          );
+     boost::test_tools::output_test_stream os;
+     base64::encode( is, os );
+     BOOST_TEST( os.is_equal( test_env::bin::url_safe::without_padding::encoded ) );
+}
+BOOST_AUTO_TEST_SUITE_END() /// WithoutPadding
+BOOST_AUTO_TEST_SUITE_END() /// UrlSafeAlphabet
 BOOST_AUTO_TEST_SUITE_END() // Encoding
 BOOST_AUTO_TEST_SUITE( Decoding )
 BOOST_DATA_TEST_CASE( Text
@@ -183,6 +239,7 @@ BOOST_DATA_TEST_CASE( Text
      base64::decode( is, os );
      BOOST_TEST( os.is_equal( expected ) );
 }
+BOOST_AUTO_TEST_SUITE( UsualAlphabet )
 BOOST_AUTO_TEST_CASE( Binary )
 {
      std::istringstream is{ test_env::bin::encoded };
@@ -195,6 +252,37 @@ BOOST_AUTO_TEST_CASE( Binary )
                }
           ));
 }
+BOOST_AUTO_TEST_SUITE_END() /// UsualAlphabet
+BOOST_AUTO_TEST_SUITE( UrlSafeAlphabet )
+BOOST_AUTO_TEST_SUITE( WithPadding )
+BOOST_AUTO_TEST_CASE( Binary )
+{
+     std::istringstream is{ test_env::bin::url_safe::with_padding::encoded };
+     boost::test_tools::output_test_stream os;
+     base64::decode( is, os );
+     BOOST_TEST( os.is_equal(
+          std::string{
+               test_env::bin::decoded
+               , test_env::bin::decoded + sizeof( test_env::bin::decoded )
+               }
+          ));
+}
+BOOST_AUTO_TEST_SUITE_END() /// WithPadding
+BOOST_AUTO_TEST_SUITE( WithoutPadding )
+BOOST_AUTO_TEST_CASE( Binary )
+{
+     std::istringstream is{ test_env::bin::url_safe::without_padding::encoded };
+     boost::test_tools::output_test_stream os;
+     base64::decode( is, os );
+     BOOST_TEST( os.is_equal(
+          std::string{
+               test_env::bin::decoded
+               , test_env::bin::decoded + sizeof( test_env::bin::decoded )
+               }
+          ));
+}
+BOOST_AUTO_TEST_SUITE_END() /// WithoutPadding
+BOOST_AUTO_TEST_SUITE_END() /// UrlSafeAlphabet
 BOOST_AUTO_TEST_CASE( MultilineText )
 {
      std::istringstream is{ test_env::multiline::encoded };
