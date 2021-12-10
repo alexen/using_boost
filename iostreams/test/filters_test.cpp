@@ -14,6 +14,7 @@
 #include <boost/iostreams/device/array.hpp>
 #include <boost/iostreams/filtering_stream.hpp>
 #include <boost/algorithm/hex.hpp>
+#include <boost/iostreams/device/null.hpp>
 #include <boost/range/algorithm/equal.hpp>
 
 #include <iostreams/filters.h>
@@ -271,6 +272,39 @@ BOOST_AUTO_TEST_CASE( TextStream )
      BOOST_TEST( c.chars() == std::strlen( test_env::text::source ) );
 }
 BOOST_AUTO_TEST_SUITE_END() /// Output
+BOOST_AUTO_TEST_CASE( TestResetMethod )
+{
+     static constexpr auto text =
+          "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod "
+          "tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, "
+          "quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo "
+          "consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse "
+          "cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non "
+          "proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
+     static constexpr auto textLen = std::strlen( text );
+
+     Counter counter;
+
+     boost::iostreams::stream< boost::iostreams::null_sink > os{
+          boost::iostreams::null_sink{}
+     };
+
+     boost::iostreams::filtering_ostream fos;
+     fos.push( boost::ref( counter ) );
+     fos.push( os );
+
+     /// Здесь нужен std::flush, иначе не все символы будут подсчитаны
+     /// на момент вызова Counter::chars()
+     fos << text << std::flush;
+
+     BOOST_TEST( counter.chars() == textLen );
+
+     counter.reset();
+
+     fos << text << std::flush;
+
+     BOOST_TEST( counter.chars() == textLen );
+}
 BOOST_AUTO_TEST_SUITE_END() /// Counter
 BOOST_AUTO_TEST_SUITE_END() /// Multichar
 BOOST_AUTO_TEST_SUITE( Symmetric )
