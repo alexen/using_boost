@@ -112,7 +112,11 @@ void encode(
           , std::istreambuf_iterator< char >{}
           , std::ostreambuf_iterator< char >{ fos }
           );
-     padding( counter.chars(), std::ostreambuf_iterator< char >{ fos } );
+
+     if( static_cast< bool >( paddingRequred ) )
+     {
+          padding( counter.chars(), std::ostreambuf_iterator< char >{ fos } );
+     }
 }
 
 
@@ -172,6 +176,32 @@ void decode( std::istream& is, std::ostream& os, boost::string_view ignored )
 }
 
 
+namespace url_safe {
+
+
+void encode( std::istream& is, std::ostream& os, const bool padding )
+{
+     impl::encode(
+          is
+          , os
+          , options::UseUrlSafeAlphabet::Yes
+          , static_cast< options::PaddingRequired >( padding )
+          );
+}
+
+
+void decode( std::istream& is, std::ostream& os, boost::string_view ignored )
+{
+     impl::decode(
+          is
+          , os
+          , ignored
+          , options::UseUrlSafeAlphabet::Yes
+          );
+}
+
+
+} // namespace url_safe
 } // namespace base64
 } // namespace iostreams
 } // namespace using_boost

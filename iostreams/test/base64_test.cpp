@@ -201,13 +201,15 @@ BOOST_AUTO_TEST_SUITE( UrlSafeAlphabet )
 BOOST_AUTO_TEST_SUITE( WithPadding )
 BOOST_AUTO_TEST_CASE( Binary )
 {
+     static constexpr auto withPadding = true;
+
      std::istringstream is{ std::ios::binary };
      is.rdbuf()->pubsetbuf(
           const_cast< char* >( reinterpret_cast< const char* >( test_env::bin::decoded ) )
           , sizeof( test_env::bin::decoded )
           );
      boost::test_tools::output_test_stream os;
-     base64::encode( is, os );
+     base64::url_safe::encode( is, os, withPadding );
      BOOST_TEST( os.is_equal( test_env::bin::url_safe::with_padding::encoded ) );
 }
 BOOST_AUTO_TEST_SUITE_END() /// WithPadding
@@ -220,7 +222,7 @@ BOOST_AUTO_TEST_CASE( Binary )
           , sizeof( test_env::bin::decoded )
           );
      boost::test_tools::output_test_stream os;
-     base64::encode( is, os );
+     base64::url_safe::encode( is, os );
      BOOST_TEST( os.is_equal( test_env::bin::url_safe::without_padding::encoded ) );
 }
 BOOST_AUTO_TEST_SUITE_END() /// WithoutPadding
@@ -259,7 +261,7 @@ BOOST_AUTO_TEST_CASE( Binary )
 {
      std::istringstream is{ test_env::bin::url_safe::with_padding::encoded };
      boost::test_tools::output_test_stream os;
-     base64::decode( is, os );
+     base64::url_safe::decode( is, os );
      BOOST_TEST( os.is_equal(
           std::string{
                test_env::bin::decoded
@@ -273,7 +275,7 @@ BOOST_AUTO_TEST_CASE( Binary )
 {
      std::istringstream is{ test_env::bin::url_safe::without_padding::encoded };
      boost::test_tools::output_test_stream os;
-     base64::decode( is, os );
+     base64::url_safe::decode( is, os );
      BOOST_TEST( os.is_equal(
           std::string{
                test_env::bin::decoded
