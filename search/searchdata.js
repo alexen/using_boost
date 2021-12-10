@@ -5,7 +5,8 @@ var indexSectionsWithContent =
   2: "s",
   3: "bcdefgimot",
   4: "b",
-  5: "r"
+  5: "pu",
+  6: "r"
 };
 
 var indexSectionNames =
@@ -15,7 +16,8 @@ var indexSectionNames =
   2: "namespaces",
   3: "files",
   4: "functions",
-  5: "pages"
+  5: "enums",
+  6: "pages"
 };
 
 var indexSectionLabels =
@@ -25,6 +27,7 @@ var indexSectionLabels =
   2: "Пространства имен",
   3: "Файлы",
   4: "Функции",
-  5: "Страницы"
+  5: "Перечисления",
+  6: "Страницы"
 };
 
