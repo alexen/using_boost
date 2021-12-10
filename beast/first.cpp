@@ -1,7 +1,7 @@
 /// @file first.cpp
 /// @brief
 ///
-/// @copyright Copyright 2019 InfoTeCS.
+
 
 #include <stdexcept>
 #include <iostream>
