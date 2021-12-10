@@ -60,6 +60,13 @@ static void decode( std::istream& is, std::ostream& os )
 }
 
 
+static void padding( const std::size_t bytes, std::ostream& os )
+{
+     const auto n = bytes % 3;
+     std::fill_n( std::ostreambuf_iterator< char >{ os }, n ? 3 - n : 0, '=' );
+}
+
+
 } // namespace impl
 } // namespace {unnamed}
 
@@ -73,9 +80,7 @@ void encode( std::istream& is, std::ostream& os )
      fis.push( is );
 
      impl::encode( fis, os );
-
-     const auto n = counter.chars() % 3;
-     std::fill_n( std::ostreambuf_iterator< char >{ os }, n ? 3 - n : 0, '=' );
+     impl::padding( counter.chars(), os );
 }
 
 
