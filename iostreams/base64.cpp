@@ -24,46 +24,43 @@ namespace {
 namespace impl {
 
 
-static void encode( std::istream& is, std::ostream& os )
+template< typename InputIterator, typename OutputIterator >
+void encode( InputIterator begin, InputIterator end, OutputIterator out )
 {
      using Base64EncodingIterator =
           boost::archive::iterators::base64_from_binary<
-               boost::archive::iterators::transform_width<
-                    std::istreambuf_iterator< char >
-                    , 6
-                    , 8
-               >
+               boost::archive::iterators::transform_width< InputIterator, 6, 8 >
           >;
      std::copy(
-          Base64EncodingIterator{ std::istreambuf_iterator< char >{ is } }
-          , Base64EncodingIterator{ std::istreambuf_iterator< char >{} }
-          , std::ostreambuf_iterator< char >{ os }
+          Base64EncodingIterator{ begin }
+          , Base64EncodingIterator{ end }
+          , out
      );
 }
 
 
-static void decode( std::istream& is, std::ostream& os )
+template< typename InputIterator, typename OutputIterator >
+void decode( InputIterator begin, InputIterator end, OutputIterator out )
 {
      using Base64DecodingIterator =
           boost::archive::iterators::transform_width<
-               boost::archive::iterators::binary_from_base64<
-                    std::istreambuf_iterator< char >
-               >
+               boost::archive::iterators::binary_from_base64< InputIterator >
                , 8
                , 6
                >;
      std::copy(
-          Base64DecodingIterator{ std::istreambuf_iterator< char >{ is } }
-          , Base64DecodingIterator{ std::istreambuf_iterator< char >{} }
-          , std::ostreambuf_iterator< char >{ os }
+          Base64DecodingIterator{ begin }
+          , Base64DecodingIterator{ end }
+          , out
           );
 }
 
 
-static void padding( const std::size_t bytes, std::ostream& os )
+template< typename OutputIterator >
+void padding( const std::size_t bytes, OutputIterator out )
 {
      const auto n = bytes % 3;
-     std::fill_n( std::ostreambuf_iterator< char >{ os }, n ? 3 - n : 0, '=' );
+     std::fill_n( out, n ? 3 - n : 0, '=' );
 }
 
 
@@ -79,8 +76,12 @@ void encode( std::istream& is, std::ostream& os )
      fis.push( boost::ref( counter ) );
      fis.push( is );
 
-     impl::encode( fis, os );
-     impl::padding( counter.chars(), os );
+     impl::encode(
+          std::istreambuf_iterator< char >{ fis }
+          , std::istreambuf_iterator< char >{}
+          , std::ostreambuf_iterator< char >{ os }
+          );
+     impl::padding( counter.chars(), std::ostreambuf_iterator< char >{ os } );
 }
 
 
@@ -97,7 +98,11 @@ void decode( std::istream& is, std::ostream& os, boost::string_view ignored )
      }
      fis.push( is );
 
-     impl::decode( fis, os );
+     impl::decode(
+          std::istreambuf_iterator< char >{ fis }
+          , std::istreambuf_iterator< char >{}
+          , std::ostreambuf_iterator< char >{ os }
+          );
 }
 
 
