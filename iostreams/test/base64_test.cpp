@@ -85,6 +85,32 @@ static constexpr auto encoded =
      "Ab16bmE2KOeMoxiai3/9HT7vGqTvzoGCsFn8/g==";
 
 
+namespace url_safe {
+namespace with_padding {
+
+
+static constexpr auto encoded =
+     "CDll6ap_PfPRrpDrQmAVjNA0QpzHSoWzD4jAgz8iz2PQzo8a0leXZeTuo-WMS4zc8-WGWmrBqPwv"
+     "i01cvdBibdGm5tWF_jsJc3tpHQnpmqzzMBdo-iAmFUgnrP0IlYD48IX4nZZTvS5L27yy4cAxq5ho"
+     "b7qRApouMWY4TqHnwh_ISbxl3rQwl1BniDm9B9_p_D3JG4Xanzxdf3O02Pf9-kTxOCkDKOxRaCeH"
+     "kJfiCuEvnNn-Jg8Tk3D3hmB5UTRmThQ3o83bWH6lt1ZbFCN_Nu2L9Ty-5FULws-MgWxvdVUV7ySB"
+     "Ab16bmE2KOeMoxiai3_9HT7vGqTvzoGCsFn8_g==";
+
+
+} // namespace with_padding
+namespace without_padding {
+
+
+static constexpr auto encoded =
+     "CDll6ap_PfPRrpDrQmAVjNA0QpzHSoWzD4jAgz8iz2PQzo8a0leXZeTuo-WMS4zc8-WGWmrBqPwv"
+     "i01cvdBibdGm5tWF_jsJc3tpHQnpmqzzMBdo-iAmFUgnrP0IlYD48IX4nZZTvS5L27yy4cAxq5ho"
+     "b7qRApouMWY4TqHnwh_ISbxl3rQwl1BniDm9B9_p_D3JG4Xanzxdf3O02Pf9-kTxOCkDKOxRaCeH"
+     "kJfiCuEvnNn-Jg8Tk3D3hmB5UTRmThQ3o83bWH6lt1ZbFCN_Nu2L9Ty-5FULws-MgWxvdVUV7ySB"
+     "Ab16bmE2KOeMoxiai3_9HT7vGqTvzoGCsFn8_g";
+
+
+} // namespace without_padding
+} // namespace url_safe
 } // namespace bin
 namespace multiline {
 
@@ -141,13 +167,12 @@ static constexpr auto encoded =
 
 
 
-BOOST_AUTO_TEST_SUITE( Base64ConversionTest )
+BOOST_AUTO_TEST_SUITE( Base64 )
 
 using namespace using_boost::iostreams;
 
-BOOST_AUTO_TEST_SUITE( Base64Encoding )
-BOOST_DATA_TEST_CASE(
-     TextEncoding
+BOOST_AUTO_TEST_SUITE( Encoding )
+BOOST_DATA_TEST_CASE( Text
      , boost::unit_test::data::make( test_env::text::decoded )
           ^ boost::unit_test::data::make( test_env::text::encoded )
      , source
@@ -159,8 +184,8 @@ BOOST_DATA_TEST_CASE(
      base64::encode( is, os );
      BOOST_TEST( os.is_equal( expected ) );
 }
-BOOST_AUTO_TEST_SUITE_END()
-BOOST_AUTO_TEST_CASE( BinaryEncoding )
+BOOST_AUTO_TEST_SUITE( UsualAlphabet )
+BOOST_AUTO_TEST_CASE( Binary )
 {
      std::istringstream is{ std::ios::binary };
      is.rdbuf()->pubsetbuf(
@@ -171,9 +196,40 @@ BOOST_AUTO_TEST_CASE( BinaryEncoding )
      base64::encode( is, os );
      BOOST_TEST( os.is_equal( test_env::bin::encoded ) );
 }
-BOOST_AUTO_TEST_SUITE( Base64Decoding )
-BOOST_DATA_TEST_CASE(
-     TextDecoding
+BOOST_AUTO_TEST_SUITE_END() /// UsualAlphabet
+BOOST_AUTO_TEST_SUITE( UrlSafeAlphabet )
+BOOST_AUTO_TEST_SUITE( WithPadding )
+BOOST_AUTO_TEST_CASE( Binary )
+{
+     static constexpr auto withPadding = true;
+
+     std::istringstream is{ std::ios::binary };
+     is.rdbuf()->pubsetbuf(
+          const_cast< char* >( reinterpret_cast< const char* >( test_env::bin::decoded ) )
+          , sizeof( test_env::bin::decoded )
+          );
+     boost::test_tools::output_test_stream os;
+     base64::url_safe::encode( is, os, withPadding );
+     BOOST_TEST( os.is_equal( test_env::bin::url_safe::with_padding::encoded ) );
+}
+BOOST_AUTO_TEST_SUITE_END() /// WithPadding
+BOOST_AUTO_TEST_SUITE( WithoutPadding )
+BOOST_AUTO_TEST_CASE( Binary )
+{
+     std::istringstream is{ std::ios::binary };
+     is.rdbuf()->pubsetbuf(
+          const_cast< char* >( reinterpret_cast< const char* >( test_env::bin::decoded ) )
+          , sizeof( test_env::bin::decoded )
+          );
+     boost::test_tools::output_test_stream os;
+     base64::url_safe::encode( is, os );
+     BOOST_TEST( os.is_equal( test_env::bin::url_safe::without_padding::encoded ) );
+}
+BOOST_AUTO_TEST_SUITE_END() /// WithoutPadding
+BOOST_AUTO_TEST_SUITE_END() /// UrlSafeAlphabet
+BOOST_AUTO_TEST_SUITE_END() // Encoding
+BOOST_AUTO_TEST_SUITE( Decoding )
+BOOST_DATA_TEST_CASE( Text
      , boost::unit_test::data::make( test_env::text::encoded )
           ^ boost::unit_test::data::make( test_env::text::decoded )
      , source
@@ -185,26 +241,63 @@ BOOST_DATA_TEST_CASE(
      base64::decode( is, os );
      BOOST_TEST( os.is_equal( expected ) );
 }
-BOOST_AUTO_TEST_CASE( BinaryDecoding )
+BOOST_AUTO_TEST_SUITE( UsualAlphabet )
+BOOST_AUTO_TEST_CASE( Binary )
 {
      std::istringstream is{ test_env::bin::encoded };
      boost::test_tools::output_test_stream os;
      base64::decode( is, os );
-     BOOST_TEST( os.is_equal( std::string{ reinterpret_cast< const char* >( test_env::bin::decoded ), sizeof( test_env::bin::decoded ) } ) );
+     BOOST_TEST( os.is_equal(
+          std::string{
+               test_env::bin::decoded
+               , test_env::bin::decoded + sizeof( test_env::bin::decoded )
+               }
+          ));
 }
-BOOST_AUTO_TEST_CASE( DecodeMultiline )
+BOOST_AUTO_TEST_SUITE_END() /// UsualAlphabet
+BOOST_AUTO_TEST_SUITE( UrlSafeAlphabet )
+BOOST_AUTO_TEST_SUITE( WithPadding )
+BOOST_AUTO_TEST_CASE( Binary )
+{
+     std::istringstream is{ test_env::bin::url_safe::with_padding::encoded };
+     boost::test_tools::output_test_stream os;
+     base64::url_safe::decode( is, os );
+     BOOST_TEST( os.is_equal(
+          std::string{
+               test_env::bin::decoded
+               , test_env::bin::decoded + sizeof( test_env::bin::decoded )
+               }
+          ));
+}
+BOOST_AUTO_TEST_SUITE_END() /// WithPadding
+BOOST_AUTO_TEST_SUITE( WithoutPadding )
+BOOST_AUTO_TEST_CASE( Binary )
+{
+     std::istringstream is{ test_env::bin::url_safe::without_padding::encoded };
+     boost::test_tools::output_test_stream os;
+     base64::url_safe::decode( is, os );
+     BOOST_TEST( os.is_equal(
+          std::string{
+               test_env::bin::decoded
+               , test_env::bin::decoded + sizeof( test_env::bin::decoded )
+               }
+          ));
+}
+BOOST_AUTO_TEST_SUITE_END() /// WithoutPadding
+BOOST_AUTO_TEST_SUITE_END() /// UrlSafeAlphabet
+BOOST_AUTO_TEST_CASE( MultilineText )
 {
      std::istringstream is{ test_env::multiline::encoded };
      boost::test_tools::output_test_stream os;
      base64::decode( is, os, "\r\n" );
      BOOST_TEST( os.is_equal( test_env::multiline::decoded ) );
 }
-BOOST_AUTO_TEST_CASE( DecodeFormatted )
+BOOST_AUTO_TEST_CASE( FormattedText )
 {
      std::istringstream is{ test_env::formatted::encoded };
      boost::test_tools::output_test_stream os;
      base64::decode( is, os, "\r\n\t " );
      BOOST_TEST( os.is_equal( test_env::formatted::decoded ) );
 }
-BOOST_AUTO_TEST_SUITE_END()
-BOOST_AUTO_TEST_SUITE_END()
+BOOST_AUTO_TEST_SUITE_END() /// Decoding
+BOOST_AUTO_TEST_SUITE_END() /// Base64

@@ -18,6 +18,14 @@ void encode( std::istream&, std::ostream& );
 void decode( std::istream&, std::ostream&, boost::string_view ignored = {} );
 
 
+namespace url_safe {
+
+
+void encode( std::istream&, std::ostream&, bool padding = false );
+void decode( std::istream&, std::ostream&, boost::string_view ignored = {} );
+
+
+} // namespace url_safe
 } // namespace base64
 } // namespace iostreams
 } // namespace using_boost

@@ -124,6 +124,11 @@ struct Counter : boost::iostreams::multichar_dual_use_filter
           return result;
      }
 
+     void reset( std::size_t n = 0 )
+     {
+          chars_ = n;
+     }
+
      std::size_t chars() const noexcept
      {
           return chars_;
