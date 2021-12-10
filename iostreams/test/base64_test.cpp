@@ -141,13 +141,12 @@ static constexpr auto encoded =
 
 
 
-BOOST_AUTO_TEST_SUITE( Base64ConversionTest )
+BOOST_AUTO_TEST_SUITE( Base64 )
 
 using namespace using_boost::iostreams;
 
-BOOST_AUTO_TEST_SUITE( Base64Encoding )
-BOOST_DATA_TEST_CASE(
-     TextEncoding
+BOOST_AUTO_TEST_SUITE( Encoding )
+BOOST_DATA_TEST_CASE( Text
      , boost::unit_test::data::make( test_env::text::decoded )
           ^ boost::unit_test::data::make( test_env::text::encoded )
      , source
@@ -159,8 +158,7 @@ BOOST_DATA_TEST_CASE(
      base64::encode( is, os );
      BOOST_TEST( os.is_equal( expected ) );
 }
-BOOST_AUTO_TEST_SUITE_END()
-BOOST_AUTO_TEST_CASE( BinaryEncoding )
+BOOST_AUTO_TEST_CASE( Binary )
 {
      std::istringstream is{ std::ios::binary };
      is.rdbuf()->pubsetbuf(
@@ -171,9 +169,9 @@ BOOST_AUTO_TEST_CASE( BinaryEncoding )
      base64::encode( is, os );
      BOOST_TEST( os.is_equal( test_env::bin::encoded ) );
 }
-BOOST_AUTO_TEST_SUITE( Base64Decoding )
-BOOST_DATA_TEST_CASE(
-     TextDecoding
+BOOST_AUTO_TEST_SUITE_END() // Encoding
+BOOST_AUTO_TEST_SUITE( Decoding )
+BOOST_DATA_TEST_CASE( Text
      , boost::unit_test::data::make( test_env::text::encoded )
           ^ boost::unit_test::data::make( test_env::text::decoded )
      , source
@@ -185,26 +183,31 @@ BOOST_DATA_TEST_CASE(
      base64::decode( is, os );
      BOOST_TEST( os.is_equal( expected ) );
 }
-BOOST_AUTO_TEST_CASE( BinaryDecoding )
+BOOST_AUTO_TEST_CASE( Binary )
 {
      std::istringstream is{ test_env::bin::encoded };
      boost::test_tools::output_test_stream os;
      base64::decode( is, os );
-     BOOST_TEST( os.is_equal( std::string{ reinterpret_cast< const char* >( test_env::bin::decoded ), sizeof( test_env::bin::decoded ) } ) );
+     BOOST_TEST( os.is_equal(
+          std::string{
+               test_env::bin::decoded
+               , test_env::bin::decoded + sizeof( test_env::bin::decoded )
+               }
+          ));
 }
-BOOST_AUTO_TEST_CASE( DecodeMultiline )
+BOOST_AUTO_TEST_CASE( MultilineText )
 {
      std::istringstream is{ test_env::multiline::encoded };
      boost::test_tools::output_test_stream os;
      base64::decode( is, os, "\r\n" );
      BOOST_TEST( os.is_equal( test_env::multiline::decoded ) );
 }
-BOOST_AUTO_TEST_CASE( DecodeFormatted )
+BOOST_AUTO_TEST_CASE( FormattedText )
 {
      std::istringstream is{ test_env::formatted::encoded };
      boost::test_tools::output_test_stream os;
      base64::decode( is, os, "\r\n\t " );
      BOOST_TEST( os.is_equal( test_env::formatted::decoded ) );
 }
-BOOST_AUTO_TEST_SUITE_END()
-BOOST_AUTO_TEST_SUITE_END()
+BOOST_AUTO_TEST_SUITE_END() /// Decoding
+BOOST_AUTO_TEST_SUITE_END() /// Base64
