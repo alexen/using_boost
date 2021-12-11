@@ -35,7 +35,7 @@ void loggingHandler40( std::size_t n )
 
      for( auto i = 0u; i < n; ++i )
      {
-          BOOST_LOG( logger ) << "Th." << boost::this_thread::get_id() << ": handler is working...";
+          BOOST_LOG( logger ) << "handler is working...";
           boost::this_thread::sleep( boost::posix_time::milliseconds{ 40 } );
      }
 }
@@ -47,7 +47,7 @@ void loggingHandler100( std::size_t n )
 
      for( auto i = 0u; i < n; ++i )
      {
-          BOOST_LOG( logger ) << "Th." << boost::this_thread::get_id() << ": handler is working...";
+          BOOST_LOG( logger ) << "handler is working...";
           boost::this_thread::sleep( boost::posix_time::milliseconds{ 100 } );
      }
 }
@@ -59,7 +59,7 @@ void loggingHandler210( std::size_t n )
 
      for( auto i = 0u; i < n; ++i )
      {
-          BOOST_LOG( logger ) << "Th." << boost::this_thread::get_id() << ": handler is working...";
+          BOOST_LOG( logger ) << "handler is working...";
           boost::this_thread::sleep( boost::posix_time::milliseconds{ 210 } );
      }
 }
