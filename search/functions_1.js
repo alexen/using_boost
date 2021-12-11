@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['init_0',['init',['../log_2main_8cpp.html#a9e37c7d8d3d95213b406eeb8f2f47117',1,'log_to_file_with_rotation']]]
+  ['setlogrotation_0',['setLogRotation',['../init_8h.html#a2b64922ac72418049c137a6db6f4ff8d',1,'using_boost::log::init']]]
 ];
