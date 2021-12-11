@@ -9,6 +9,9 @@
 #include <boost/exception/diagnostic_information.hpp>
 
 #include <log/init.h>
+#include <log/handlers.h>
+
+using namespace using_boost::log;
 
 
 int main( int argc, char** argv )
@@ -16,15 +19,11 @@ int main( int argc, char** argv )
      boost::ignore_unused( argc, argv );
      try
      {
+#if 0
           using_boost::log::init::limitSeverity( boost::log::trivial::info );
           using_boost::log::init::setLogRotation( "boost_log_trivial.%N", 1_KB );
-
-          for( auto i = 0u; i < 1_KB; ++i )
-          {
-               BOOST_LOG_TRIVIAL( debug ) << "This is debug";
-               BOOST_LOG_TRIVIAL( info ) << "This is info";
-          }
-          BOOST_THROW_EXCEPTION( std::runtime_error{ "some kind of failure" } );
+#endif
+          using_boost::log::handler::starter::run();
      }
      catch( const std::exception& e )
      {
