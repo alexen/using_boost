@@ -10,6 +10,7 @@
 
 #include <log/init.h>
 #include <log/handlers.h>
+#include <log/application.h>
 
 
 int main( int argc, char** argv )
@@ -17,6 +18,10 @@ int main( int argc, char** argv )
      boost::ignore_unused( argc, argv );
      try
      {
+          using_boost::log::init::syslogBackend();
+
+          using_boost::log::app::Application app;
+          app.run();
      }
      catch( const std::exception& e )
      {
