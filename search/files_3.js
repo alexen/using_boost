@@ -1,4 +1,6 @@
 var searchData=
 [
-  ['enabling_5fdisabling_5ftest_2ecpp_0',['enabling_disabling_test.cpp',['../enabling__disabling__test_8cpp.html',1,'']]]
+  ['dataset_5ftest_2ecpp_0',['dataset_test.cpp',['../dataset__test_8cpp.html',1,'']]],
+  ['document_2ecpp_1',['document.cpp',['../document_8cpp.html',1,'']]],
+  ['document_2eh_2',['document.h',['../document_8h.html',1,'']]]
 ];

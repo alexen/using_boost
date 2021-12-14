@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['ostream_5ftest_2ecpp_0',['ostream_test.cpp',['../ostream__test_8cpp.html',1,'']]]
+  ['localfixture_0',['LocalFixture',['../structLocalFixture.html',1,'']]]
 ];

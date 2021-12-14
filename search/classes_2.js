@@ -1,8 +1,8 @@
 var searchData=
 [
-  ['data_0',['Data',['../structData.html',1,'']]],
-  ['dateutils_1',['DateUtils',['../structDateUtils.html',1,'']]],
-  ['directiteratorsource_2',['DirectIteratorSource',['../classDirectIteratorSource.html',1,'']]],
-  ['document_3',['Document',['../structusing__boost_1_1multiindex_1_1Document.html',1,'using_boost::multiindex']]],
-  ['dual_5fuse_5ffilter_4',['dual_use_filter',['../classboost_1_1iostreams_1_1dual__use__filter.html',1,'boost::iostreams']]]
+  ['charmultiplier_0',['CharMultiplier',['../structusing__boost_1_1iostreams_1_1filters_1_1multichar_1_1CharMultiplier.html',1,'using_boost::iostreams::filters::multichar']]],
+  ['charremover_1',['CharRemover',['../structusing__boost_1_1iostreams_1_1filters_1_1multichar_1_1CharRemover.html',1,'using_boost::iostreams::filters::multichar::CharRemover'],['../structusing__boost_1_1iostreams_1_1filters_1_1single__char_1_1CharRemover.html',1,'using_boost::iostreams::filters::single_char::CharRemover']]],
+  ['charreplacer_2',['CharReplacer',['../structusing__boost_1_1iostreams_1_1filters_1_1multichar_1_1CharReplacer.html',1,'using_boost::iostreams::filters::multichar']]],
+  ['code_3',['Code',['../structusing__boost_1_1multiindex_1_1Document_1_1Tag_1_1Code.html',1,'using_boost::multiindex::Document::Tag']]],
+  ['counter_4',['Counter',['../structusing__boost_1_1iostreams_1_1filters_1_1multichar_1_1Counter.html',1,'using_boost::iostreams::filters::multichar::Counter'],['../structusing__boost_1_1iostreams_1_1filters_1_1symmetric_1_1impl_1_1Counter.html',1,'using_boost::iostreams::filters::symmetric::impl::Counter']]]
 ];

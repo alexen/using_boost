@@ -1,9 +1,12 @@
 var searchData=
 [
-  ['main_2ecpp_0',['main.cpp',['../iostreams_2main_8cpp.html',1,'(Глобальное пространство имён)'],['../variant_2main_8cpp.html',1,'(Глобальное пространство имён)'],['../tribool_2main_8cpp.html',1,'(Глобальное пространство имён)'],['../stacktrace_2main_8cpp.html',1,'(Глобальное пространство имён)'],['../serialization_2main_8cpp.html',1,'(Глобальное пространство имён)'],['../regex_2main_8cpp.html',1,'(Глобальное пространство имён)'],['../range_2main_8cpp.html',1,'(Глобальное пространство имён)'],['../property__tree_2main_8cpp.html',1,'(Глобальное пространство имён)'],['../multiindex_2main_8cpp.html',1,'(Глобальное пространство имён)'],['../filesystem_2main_8cpp.html',1,'(Глобальное пространство имён)'],['../datetime_2main_8cpp.html',1,'(Глобальное пространство имён)'],['../coroutine2_2main_8cpp.html',1,'(Глобальное пространство имён)']]],
-  ['main_5fbenchmark_2ecpp_1',['main_benchmark.cpp',['../main__benchmark_8cpp.html',1,'']]],
-  ['main_5ftest_2ecpp_2',['main_test.cpp',['../main__test_8cpp.html',1,'']]],
-  ['monitor_3',['Monitor',['../structusing__boost_1_1iostreams_1_1filters_1_1symmetric_1_1impl_1_1Monitor.html',1,'using_boost::iostreams::filters::symmetric::impl']]],
-  ['monitort_4',['MonitorT',['../structusing__boost_1_1iostreams_1_1filters_1_1symmetric_1_1MonitorT.html',1,'using_boost::iostreams::filters::symmetric']]],
-  ['multichar_5fdual_5fuse_5ffilter_5',['multichar_dual_use_filter',['../classboost_1_1iostreams_1_1multichar__dual__use__filter.html',1,'boost::iostreams']]]
+  ['infinitesequence_0',['InfiniteSequence',['../structInfiniteSequence.html',1,'']]],
+  ['iniconfigerror_1',['IniConfigError',['../structIniConfigError.html',1,'']]],
+  ['iniconfigparser_2',['IniConfigParser',['../classIniConfigParser.html',1,'']]],
+  ['init_2eh_3',['init.h',['../init_8h.html',1,'']]],
+  ['initialize_2ecpp_4',['initialize.cpp',['../initialize_8cpp.html',1,'']]],
+  ['iostream_5fbenchmark_2ecpp_5',['iostream_benchmark.cpp',['../iostream__benchmark_8cpp.html',1,'']]],
+  ['is_5fdataset_3c_20infinitesequence_20_3e_6',['is_dataset&lt; InfiniteSequence &gt;',['../structboost_1_1unit__test_1_1data_1_1monomorphic_1_1is__dataset_3_01InfiniteSequence_01_4.html',1,'boost::unit_test::data::monomorphic']]],
+  ['iterator_7',['iterator',['../structInfiniteSequence_1_1iterator.html',1,'InfiniteSequence']]],
+  ['iterator_5fsource_2eh_8',['iterator_source.h',['../iterator__source_8h.html',1,'']]]
 ];
