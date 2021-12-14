@@ -10,6 +10,8 @@
 #include <boost/log/keywords/format.hpp>
 #include <boost/log/utility/setup/common_attributes.hpp>
 #include <boost/log/utility/setup/file.hpp>
+#include <boost/log/sinks/syslog_backend.hpp>
+#include <boost/log/expressions.hpp>
 #include <boost/utility/string_view.hpp>
 
 
@@ -42,6 +44,28 @@ inline void setLogRotation( boost::string_view logMask, const std::size_t maxByt
           );
      /// Эта запись нужна, чтобы работал плейсхолдер %TimeStamp%
      boost::log::add_common_attributes();
+}
+
+
+void syslogBackend()
+{
+     using SyslogBackend = boost::log::sinks::syslog_backend;
+     using SyslogSink = boost::log::sinks::synchronous_sink< SyslogBackend >;
+
+     auto syslogBackend = boost::make_shared< SyslogBackend >(
+          boost::log::keywords::facility = boost::log::sinks::syslog::user,
+          boost::log::keywords::use_impl = boost::log::sinks::syslog::native
+     );
+     syslogBackend->set_severity_mapper(
+          boost::log::sinks::syslog::direct_severity_mapping< int >( "Severity" )
+          );
+     auto sink = boost::make_shared< SyslogSink >( syslogBackend );
+     sink->set_formatter(
+          boost::log::expressions::format( "<%1%>: %2%" )
+               % boost::log::trivial::severity
+               % boost::log::expressions::smessage
+          );
+     boost::log::core::get()->add_sink( sink );
 }
 
 
