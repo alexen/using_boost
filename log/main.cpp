@@ -14,7 +14,6 @@
 #include <boost/exception/diagnostic_information.hpp>
 
 #include <boost/log/trivial.hpp>
-#include <boost/log/sources/logger.hpp>
 
 #include <log/init.h>
 
@@ -30,8 +29,8 @@ int main( int argc, char** argv )
           init_::addSink( boost::shared_ptr< std::ostream >{ &std::clog, boost::null_deleter{} } );
           init_::addSink( boost::shared_ptr< std::ostream >{ &std::cout, boost::null_deleter{} } );
 
-          boost::log::sources::logger lg;
-          BOOST_LOG( lg ) << "This is simple logger";
+          BOOST_LOG_TRIVIAL( info ) << "This is simple logger";
+          BOOST_LOG_TRIVIAL( trace ) << "Tracing message";
 
           BOOST_THROW_EXCEPTION( std::runtime_error{ "error" } );
      }
