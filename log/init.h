@@ -81,6 +81,14 @@ void addSink( boost::shared_ptr< std::ostream >&& os )
      auto sink = boost::make_shared< Sink >();
      sink->locked_backend()->add_stream( os );
 
+     boost::log::add_common_attributes();
+     sink->set_formatter(
+          boost::log::expressions::format( "[%1%]<%2%>: %3%" )
+               % boost::log::expressions::attr< unsigned >( "LineID" )
+               % boost::log::trivial::severity
+               % boost::log::expressions::smessage
+          );
+
      boost::log::core::get()->add_sink( sink );
 }
 
