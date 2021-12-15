@@ -51,19 +51,19 @@ inline void setLogRotation( boost::string_view logMask, const std::size_t maxByt
 }
 
 
-void syslogBackend()
+void addSyslogSink()
 {
-     using SyslogBackend = boost::log::sinks::syslog_backend;
-     using SyslogSink = boost::log::sinks::synchronous_sink< SyslogBackend >;
+     using Backend = boost::log::sinks::syslog_backend;
+     using Sink = boost::log::sinks::synchronous_sink< Backend >;
 
-     auto syslogBackend = boost::make_shared< SyslogBackend >(
+     auto syslogBackend = boost::make_shared< Backend >(
           boost::log::keywords::facility = boost::log::sinks::syslog::user,
           boost::log::keywords::use_impl = boost::log::sinks::syslog::native
      );
      syslogBackend->set_severity_mapper(
           boost::log::sinks::syslog::direct_severity_mapping< int >( "Severity" )
           );
-     auto sink = boost::make_shared< SyslogSink >( syslogBackend );
+     auto sink = boost::make_shared< Sink >( syslogBackend );
      sink->set_formatter(
           boost::log::expressions::format( "<%1%>: %2%" )
                % boost::log::trivial::severity
