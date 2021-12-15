@@ -3,6 +3,10 @@
 
 #pragma once
 
+#include <boost/make_shared.hpp>
+
+#include <boost/utility/string_view.hpp>
+
 #include <boost/log/core/core.hpp>
 #include <boost/log/trivial.hpp>
 #include <boost/log/keywords/file_name.hpp>
@@ -12,7 +16,7 @@
 #include <boost/log/utility/setup/file.hpp>
 #include <boost/log/sinks/syslog_backend.hpp>
 #include <boost/log/expressions.hpp>
-#include <boost/utility/string_view.hpp>
+#include <boost/log/sinks/text_ostream_backend.hpp>
 
 
 inline std::size_t operator ""_KB( long long unsigned kb )
@@ -65,6 +69,18 @@ void syslogBackend()
                % boost::log::trivial::severity
                % boost::log::expressions::smessage
           );
+     boost::log::core::get()->add_sink( sink );
+}
+
+
+void addSink( boost::shared_ptr< std::ostream >&& os )
+{
+     using Backend = boost::log::sinks::text_ostream_backend;
+     using Sink = boost::log::sinks::synchronous_sink< Backend >;
+
+     auto sink = boost::make_shared< Sink >();
+     sink->locked_backend()->add_stream( os );
+
      boost::log::core::get()->add_sink( sink );
 }
 
