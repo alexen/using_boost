@@ -71,9 +71,7 @@ $(function() {
   <div class="headertitle"><div class="title">Файл init.h</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><code>#include &lt;boost/make_shared.hpp&gt;</code><br />
-<code>#include &lt;boost/utility/string_view.hpp&gt;</code><br />
-<code>#include &lt;boost/log/core/core.hpp&gt;</code><br />
+<div class="textblock"><code>#include &lt;boost/log/core/core.hpp&gt;</code><br />
 <code>#include &lt;boost/log/trivial.hpp&gt;</code><br />
 <code>#include &lt;boost/log/keywords/file_name.hpp&gt;</code><br />
 <code>#include &lt;boost/log/keywords/rotation_size.hpp&gt;</code><br />
@@ -82,25 +80,23 @@ $(function() {
 <code>#include &lt;boost/log/utility/setup/file.hpp&gt;</code><br />
 <code>#include &lt;boost/log/sinks/syslog_backend.hpp&gt;</code><br />
 <code>#include &lt;boost/log/expressions.hpp&gt;</code><br />
-<code>#include &lt;boost/log/sinks/text_ostream_backend.hpp&gt;</code><br />
+<code>#include &lt;boost/utility/string_view.hpp&gt;</code><br />
 </div><div class="textblock"><div class="dynheader">
 Граф включаемых заголовочных файлов для init.h:</div>
 <div class="dyncontent">
 <div class="center"><img src="init_8h__incl.png" border="0" usemap="#alog_2init_8h" alt=""/></div>
 <map name="alog_2init_8h" id="alog_2init_8h">
-<area shape="rect" title=" " alt="" coords="947,5,1018,32"/>
-<area shape="rect" title=" " alt="" coords="5,87,165,114"/>
-<area shape="rect" title=" " alt="" coords="189,80,313,121"/>
-<area shape="rect" title=" " alt="" coords="337,87,495,114"/>
-<area shape="rect" title=" " alt="" coords="519,87,654,114"/>
-<area shape="rect" title=" " alt="" coords="678,80,813,121"/>
-<area shape="rect" title=" " alt="" coords="837,80,971,121"/>
-<area shape="rect" title=" " alt="" coords="995,80,1130,121"/>
-<area shape="rect" title=" " alt="" coords="1154,80,1315,121"/>
-<area shape="rect" title=" " alt="" coords="1339,80,1485,121"/>
-<area shape="rect" title=" " alt="" coords="1509,80,1659,121"/>
-<area shape="rect" title=" " alt="" coords="1683,87,1855,114"/>
-<area shape="rect" title=" " alt="" coords="1879,80,2035,121"/>
+<area shape="rect" title=" " alt="" coords="781,5,851,32"/>
+<area shape="rect" title=" " alt="" coords="5,87,163,114"/>
+<area shape="rect" title=" " alt="" coords="187,87,322,114"/>
+<area shape="rect" title=" " alt="" coords="346,80,481,121"/>
+<area shape="rect" title=" " alt="" coords="505,80,639,121"/>
+<area shape="rect" title=" " alt="" coords="663,80,798,121"/>
+<area shape="rect" title=" " alt="" coords="822,80,983,121"/>
+<area shape="rect" title=" " alt="" coords="1007,80,1153,121"/>
+<area shape="rect" title=" " alt="" coords="1177,80,1327,121"/>
+<area shape="rect" title=" " alt="" coords="1351,87,1523,114"/>
+<area shape="rect" title=" " alt="" coords="1547,80,1671,121"/>
 </map>
 </div>
 </div><div class="textblock"><div class="dynheader">
@@ -125,12 +121,9 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>using_boost::log::ini
 <tr class="separator:a5fd50ce30abf1c59860cbd3f17d8531d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2b64922ac72418049c137a6db6f4ff8d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="init_8h.html#a2b64922ac72418049c137a6db6f4ff8d">using_boost::log::init::setLogRotation</a> (boost::string_view logMask, const std::size_t maxBytes=10_KB)</td></tr>
 <tr class="separator:a2b64922ac72418049c137a6db6f4ff8d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a167552dd0f05d3856d2936f37a404300"><td class="memItemLeft" align="right" valign="top"><a id="a167552dd0f05d3856d2936f37a404300" name="a167552dd0f05d3856d2936f37a404300"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>using_boost::log::init::addSyslogSink</b> ()</td></tr>
-<tr class="separator:a167552dd0f05d3856d2936f37a404300"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9ff954feced586470292380d2b6f1938"><td class="memItemLeft" align="right" valign="top"><a id="a9ff954feced586470292380d2b6f1938" name="a9ff954feced586470292380d2b6f1938"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>using_boost::log::init::addSink</b> (boost::shared_ptr&lt; std::ostream &gt; &amp;&amp;os)</td></tr>
-<tr class="separator:a9ff954feced586470292380d2b6f1938"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aef99209ac5f21ba5601389afa4f52c46"><td class="memItemLeft" align="right" valign="top"><a id="aef99209ac5f21ba5601389afa4f52c46" name="aef99209ac5f21ba5601389afa4f52c46"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>using_boost::log::init::syslogBackend</b> ()</td></tr>
+<tr class="separator:aef99209ac5f21ba5601389afa4f52c46"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Функции</h2>
 <a id="a2b64922ac72418049c137a6db6f4ff8d" name="a2b64922ac72418049c137a6db6f4ff8d"></a>
