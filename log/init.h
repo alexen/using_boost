@@ -54,6 +54,12 @@ inline void setLogRotation( boost::string_view logMask, const std::size_t maxByt
 }
 
 
+BOOST_LOG_ATTRIBUTE_KEYWORD( LineId, "LineID", unsigned )
+BOOST_LOG_ATTRIBUTE_KEYWORD( Severity, "Severity", boost::log::trivial::severity_level )
+BOOST_LOG_ATTRIBUTE_KEYWORD( Message, "Message", std::string )
+BOOST_LOG_ATTRIBUTE_KEYWORD( Timestamp, "TimeStamp", boost::posix_time::ptime )
+
+
 void addSyslogSink()
 {
      using Backend = boost::log::sinks::syslog_backend;
@@ -70,10 +76,7 @@ void addSyslogSink()
      sink->set_formatter(
           boost::log::expressions::stream
                << '#' << std::setw( 8 ) << std::setfill( '0' )
-               << boost::log::expressions::attr< unsigned >( "LineID" )
-               << " [" << boost::log::expressions::attr< boost::posix_time::ptime >( "TimeStamp" )
-               << "} <" << boost::log::trivial::severity
-               << ">: " << boost::log::expressions::smessage
+               << LineId << " [" << Timestamp << "] <" << Severity << ">: " << Message
           );
      boost::log::core::get()->add_sink( sink );
      boost::log::add_common_attributes();
