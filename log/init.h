@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include <iomanip>
+
 #include <boost/make_shared.hpp>
 
 #include <boost/utility/string_view.hpp>
@@ -66,11 +68,12 @@ void addSyslogSink()
           );
      auto sink = boost::make_shared< Sink >( syslogBackend );
      sink->set_formatter(
-          boost::log::expressions::format( "#%1% [%2%] <%3%>: %4%" )
-               % boost::log::expressions::attr< unsigned >( "LineID" )
-               % boost::log::expressions::attr< boost::posix_time::ptime >( "TimeStamp" )
-               % boost::log::trivial::severity
-               % boost::log::expressions::smessage
+          boost::log::expressions::stream
+               << '#' << std::setw( 8 ) << std::setfill( '0' )
+               << boost::log::expressions::attr< unsigned >( "LineID" )
+               << " [" << boost::log::expressions::attr< boost::posix_time::ptime >( "TimeStamp" )
+               << "} <" << boost::log::trivial::severity
+               << ">: " << boost::log::expressions::smessage
           );
      boost::log::core::get()->add_sink( sink );
      boost::log::add_common_attributes();
