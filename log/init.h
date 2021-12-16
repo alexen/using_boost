@@ -6,6 +6,7 @@
 #include <boost/make_shared.hpp>
 
 #include <boost/utility/string_view.hpp>
+#include <boost/date_time/posix_time/posix_time_io.hpp>
 
 #include <boost/log/core/core.hpp>
 #include <boost/log/trivial.hpp>
@@ -65,11 +66,14 @@ void addSyslogSink()
           );
      auto sink = boost::make_shared< Sink >( syslogBackend );
      sink->set_formatter(
-          boost::log::expressions::format( "<%1%>: %2%" )
+          boost::log::expressions::format( "#%1% [%2%] <%3%>: %4%" )
+               % boost::log::expressions::attr< unsigned >( "LineID" )
+               % boost::log::expressions::attr< boost::posix_time::ptime >( "TimeStamp" )
                % boost::log::trivial::severity
                % boost::log::expressions::smessage
           );
      boost::log::core::get()->add_sink( sink );
+     boost::log::add_common_attributes();
 }
 
 

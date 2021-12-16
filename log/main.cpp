@@ -15,6 +15,7 @@
 
 #include <boost/log/trivial.hpp>
 
+#include <log/application.h>
 #include <log/init.h>
 
 
@@ -23,14 +24,13 @@ int main( int argc, char** argv )
      boost::ignore_unused( argc, argv );
      try
      {
-          namespace init_ = using_boost::log::init;
-
-          init_::addSink( boost::make_shared< std::ofstream >( "log.txt" ) );
-          init_::addSink( boost::shared_ptr< std::ostream >{ &std::clog, boost::null_deleter{} } );
-          init_::addSink( boost::shared_ptr< std::ostream >{ &std::cout, boost::null_deleter{} } );
+          using_boost::log::init::addSyslogSink();
 
           BOOST_LOG_TRIVIAL( info ) << "This is simple logger";
           BOOST_LOG_TRIVIAL( trace ) << "Tracing message";
+
+          using_boost::log::app::Application app;
+          app.run();
 
           BOOST_THROW_EXCEPTION( std::runtime_error{ "error" } );
      }
