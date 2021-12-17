@@ -12,13 +12,6 @@ namespace stacktrace {
 namespace tools {
 
 
-struct FuncError : std::runtime_error, virtual boost::exception
-{
-     explicit FuncError( const std::string& what )
-          : std::runtime_error{ what } {}
-};
-
-
 void main();
 
 void funcA();

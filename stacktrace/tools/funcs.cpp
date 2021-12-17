@@ -7,14 +7,11 @@
 #include <boost/exception/all.hpp>
 #include <boost/stacktrace.hpp>
 
+#include <stacktrace/stacktrace_exception.h>
+
 
 namespace using_boost {
 namespace stacktrace {
-
-
-using Stacktrace = boost::error_info< struct Stacktrace_, boost::stacktrace::stacktrace >;
-
-
 namespace tools {
 
 
@@ -24,8 +21,7 @@ namespace impl {
 
 static void funcB()
 {
-     BOOST_THROW_EXCEPTION( FuncError{ "some internal error" }
-          << Stacktrace{ boost::stacktrace::stacktrace() } );
+     THROW_STACKTRACE_EXCEPTION( std::logic_error{ "logic error" } );
 }
 
 
