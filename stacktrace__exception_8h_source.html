@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.9.2"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Learning Boost: Структура FuncError</title>
+<title>Learning Boost: Исходный файл stacktrace/stacktrace_exception.h</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -60,47 +60,31 @@ $(function() {
 </iframe>
 </div>
 
+<div id="nav-path" class="navpath">
+  <ul>
+<li class="navelem"><a class="el" href="dir_8a500efe0c85bb2b8da23ea8848df488.html">stacktrace</a></li>  </ul>
+</div>
 </div><!-- top -->
 <div class="header">
-  <div class="summary">
-<a href="#pub-methods">Открытые члены</a> &#124;
-<a href="structFuncError-members.html">Полный список членов класса</a>  </div>
-  <div class="headertitle"><div class="title">Структура FuncError</div></div>
+  <div class="headertitle"><div class="title">stacktrace_exception.h</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="dynheader">
-Граф наследования:FuncError:</div>
-<div class="dyncontent">
-<div class="center"><img src="structFuncError__inherit__graph.png" border="0" usemap="#aFuncError_inherit__map" alt="Inheritance graph"/></div>
-<map name="aFuncError_inherit__map" id="aFuncError_inherit__map">
-<area shape="rect" title=" " alt="" coords="98,155,177,181"/>
-<area shape="rect" title=" " alt="" coords="5,80,128,107"/>
-<area shape="rect" title=" " alt="" coords="16,5,117,32"/>
-<area shape="rect" title=" " alt="" coords="152,80,267,107"/>
-</map>
-<center><span class="legend">[<a href="graph_legend.html">см. легенду</a>]</span></center></div>
-<div class="dynheader">
-Граф связей класса FuncError:</div>
-<div class="dyncontent">
-<div class="center"><img src="structFuncError__coll__graph.png" border="0" usemap="#aFuncError_coll__map" alt="Collaboration graph"/></div>
-<map name="aFuncError_coll__map" id="aFuncError_coll__map">
-<area shape="rect" title=" " alt="" coords="98,155,177,181"/>
-<area shape="rect" title=" " alt="" coords="5,80,128,107"/>
-<area shape="rect" title=" " alt="" coords="16,5,117,32"/>
-<area shape="rect" title=" " alt="" coords="152,80,267,107"/>
-</map>
-<center><span class="legend">[<a href="graph_legend.html">см. легенду</a>]</span></center></div>
-<table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
-Открытые члены</h2></td></tr>
-<tr class="memitem:a5f17573001c7da8b978c74fd11f96280"><td class="memItemLeft" align="right" valign="top"><a id="a5f17573001c7da8b978c74fd11f96280" name="a5f17573001c7da8b978c74fd11f96280"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>FuncError</b> (const std::string &amp;what)</td></tr>
-<tr class="separator:a5f17573001c7da8b978c74fd11f96280"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table>
-<hr/>Объявления и описания членов структуры находятся в файле:<ul>
-<li>stacktrace/funcs/<a class="el" href="funcs_8h_source.html">funcs.h</a></li>
-</ul>
-</div><!-- contents -->
+<a href="stacktrace__exception_8h.html">См. документацию.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span> </div>
+<div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span> </div>
+<div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="preprocessor">#pragma once</span></div>
+<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span> </div>
+<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="preprocessor">#include &lt;boost/stacktrace/stacktrace.hpp&gt;</span></div>
+<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="preprocessor">#include &lt;boost/exception/enable_error_info.hpp&gt;</span></div>
+<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="preprocessor">#include &lt;boost/exception/error_info.hpp&gt;</span></div>
+<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span> </div>
+<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span> </div>
+<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="keyword">using</span> Stacktrace = boost::error_info&lt; struct Stacktrace_, boost::stacktrace::stacktrace &gt;;</div>
+<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span> </div>
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span> </div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span><span class="preprocessor">#define THROW_STACKTRACE_EXCEPTION( exc ) \</span></div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span><span class="preprocessor">     BOOST_THROW_EXCEPTION( boost::enable_error_info( exc ) \</span></div>
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span><span class="preprocessor">          &lt;&lt; Stacktrace{ boost::stacktrace::stacktrace() } )</span></div>
+</div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
 Создано системой&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.2
