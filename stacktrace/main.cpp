@@ -1,14 +1,13 @@
 /// @file
 /// @brief
 
-
 #include <stdexcept>
 #include <iostream>
 
 #include <boost/core/ignore_unused.hpp>
 #include <boost/exception/diagnostic_information.hpp>
 
-#include <stacktrace/funcs/funcs.h>
+#include <stacktrace/tools/funcs.h>
 
 
 int main( int argc, char** argv )
@@ -16,7 +15,7 @@ int main( int argc, char** argv )
      boost::ignore_unused( argc, argv );
      try
      {
-          funcA();
+          using_boost::stacktrace::tools::main();
      }
      catch( const std::exception& e )
      {
