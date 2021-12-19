@@ -21,7 +21,7 @@ namespace impl {
 
 static void funcB()
 {
-     THROW_STACKTRACE_EXCEPTION( std::logic_error{ "logic error" } );
+     THROW_EXCEPTION( std::logic_error{ "logic error" } );
 }
 
 
