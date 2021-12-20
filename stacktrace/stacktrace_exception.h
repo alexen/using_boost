@@ -7,7 +7,7 @@
 
 #ifdef __linux__
 
-#include <boost/exception/error_info.hpp>
+#include <boost/exception/info.hpp>
 #include <boost/exception/enable_error_info.hpp>
 #include <boost/stacktrace/stacktrace.hpp>
 
