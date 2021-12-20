@@ -5,9 +5,7 @@
 #include <iostream>
 
 #include <boost/core/ignore_unused.hpp>
-#include <boost/exception/error_info.hpp>
 #include <boost/exception/diagnostic_information.hpp>
-#include <boost/exception/exception.hpp>
 
 #include <stacktrace/tools/funcs.h>
 #include <stacktrace/stacktrace_exception.h>
@@ -33,6 +31,7 @@ int main( int argc, char** argv )
                << ErrorCode{ -171 } );
           THROW_EXCEPTION( Error{ "custom exception" } );
           THROW_EXCEPTION( std::runtime_error{ "std::runtime_error" } );
+          THROW_EXCEPTION( std::system_error{ std::make_error_code( std::errc::invalid_seek ) } );
 
           using_boost::stacktrace::tools::main();
      }

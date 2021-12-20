@@ -3,10 +3,7 @@
 
 #include <stacktrace/tools/funcs.h>
 
-#include <boost/throw_exception.hpp>
-#include <boost/exception/all.hpp>
-#include <boost/stacktrace.hpp>
-
+#include <stdexcept>
 #include <stacktrace/stacktrace_exception.h>
 
 

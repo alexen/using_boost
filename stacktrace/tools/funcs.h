@@ -3,9 +3,6 @@
 
 #pragma once
 
-#include <stdexcept>
-#include <boost/exception/exception.hpp>
-
 
 namespace using_boost {
 namespace stacktrace {
