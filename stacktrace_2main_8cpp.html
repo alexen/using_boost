@@ -67,6 +67,8 @@ $(function() {
 </div><!-- top -->
 <div class="header">
   <div class="summary">
+<a href="#nested-classes">Классы</a> &#124;
+<a href="#typedef-members">Определения типов</a> &#124;
 <a href="#func-members">Функции</a>  </div>
   <div class="headertitle"><div class="title">Файл main.cpp</div></div>
 </div><!--header-->
@@ -75,22 +77,38 @@ $(function() {
 <code>#include &lt;iostream&gt;</code><br />
 <code>#include &lt;boost/core/ignore_unused.hpp&gt;</code><br />
 <code>#include &lt;boost/exception/diagnostic_information.hpp&gt;</code><br />
-<code>#include &lt;<a class="el" href="funcs_8h_source.html">stacktrace/funcs/funcs.h</a>&gt;</code><br />
+<code>#include &lt;<a class="el" href="funcs_8h_source.html">stacktrace/tools/funcs.h</a>&gt;</code><br />
+<code>#include &lt;<a class="el" href="stacktrace__exception_8h_source.html">stacktrace/stacktrace_exception.h</a>&gt;</code><br />
 </div><div class="textblock"><div class="dynheader">
 Граф включаемых заголовочных файлов для main.cpp:</div>
 <div class="dyncontent">
 <div class="center"><img src="stacktrace_2main_8cpp__incl.png" border="0" usemap="#astacktrace_2main_8cpp" alt=""/></div>
 <map name="astacktrace_2main_8cpp" id="astacktrace_2main_8cpp">
-<area shape="rect" title=" " alt="" coords="151,5,290,32"/>
-<area shape="rect" title=" " alt="" coords="186,169,265,196"/>
-<area shape="rect" title=" " alt="" coords="27,87,99,114"/>
-<area shape="rect" title=" " alt="" coords="123,87,318,114"/>
-<area shape="rect" title=" " alt="" coords="342,80,518,121"/>
-<area shape="rect" href="funcs_8h.html" title=" " alt="" coords="542,87,707,114"/>
-<area shape="rect" title=" " alt="" coords="526,169,722,196"/>
+<area shape="rect" title=" " alt="" coords="337,5,475,32"/>
+<area shape="rect" title=" " alt="" coords="5,87,84,114"/>
+<area shape="rect" title=" " alt="" coords="109,87,181,114"/>
+<area shape="rect" title=" " alt="" coords="205,87,399,114"/>
+<area shape="rect" title=" " alt="" coords="423,80,599,121"/>
+<area shape="rect" href="funcs_8h.html" title=" " alt="" coords="624,87,785,114"/>
+<area shape="rect" href="stacktrace__exception_8h.html" title=" " alt="" coords="809,80,957,121"/>
+<area shape="rect" title=" " alt="" coords="795,169,971,196"/>
 </map>
 </div>
 </div><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="nested-classes" name="nested-classes"></a>
+Классы</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structError.html">Error</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="typedef-members" name="typedef-members"></a>
+Определения типов</h2></td></tr>
+<tr class="memitem:a239cf3d5f9db6287b249b6ff488822bc"><td class="memItemLeft" align="right" valign="top"><a id="a239cf3d5f9db6287b249b6ff488822bc" name="a239cf3d5f9db6287b249b6ff488822bc"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>ErrorDetails</b> = boost::error_info&lt; struct ErrorDetails_, std::string &gt;</td></tr>
+<tr class="separator:a239cf3d5f9db6287b249b6ff488822bc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a720aa643bcc82ba9b83851602a1af081"><td class="memItemLeft" align="right" valign="top"><a id="a720aa643bcc82ba9b83851602a1af081" name="a720aa643bcc82ba9b83851602a1af081"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>ErrorCode</b> = boost::error_info&lt; struct ErrorCode_, int &gt;</td></tr>
+<tr class="separator:a720aa643bcc82ba9b83851602a1af081"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Функции</h2></td></tr>
 <tr class="memitem:a3c04138a5bfe5d72780bb7e82a18e627"><td class="memItemLeft" align="right" valign="top"><a id="a3c04138a5bfe5d72780bb7e82a18e627" name="a3c04138a5bfe5d72780bb7e82a18e627"></a>
