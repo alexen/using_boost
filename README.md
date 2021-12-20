@@ -8,6 +8,7 @@
 - [Boost.Log](https://www.boost.org/doc/libs/1_69_0/libs/log/)
 - [Boost.Test](https://www.boost.org/doc/libs/1_69_0/libs/test/doc/html/index.html)
 - [Boost.Format](https://www.boost.org/doc/libs/1_69_0/libs/format/doc/format.html)
+- [Boost.Stacktrace](https://www.boost.org/doc/libs/1_69_0/doc/html/stacktrace.html)
 
 *(список будет пополняться по мере обращения к другим разделам документации)*
 
