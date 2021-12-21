@@ -81,6 +81,7 @@ $(function() {
 <code>#include &lt;iostream&gt;</code><br />
 <code>#include &lt;algorithm&gt;</code><br />
 <code>#include &lt;iterator&gt;</code><br />
+<code>#include &lt;boost/bind.hpp&gt;</code><br />
 <code>#include &lt;boost/core/ignore_unused.hpp&gt;</code><br />
 <code>#include &lt;boost/iostreams/copy.hpp&gt;</code><br />
 <code>#include &lt;boost/iostreams/filtering_stream.hpp&gt;</code><br />
@@ -96,14 +97,15 @@ $(function() {
 <div class="dyncontent">
 <div class="center"><img src="iostreams_2main_8cpp__incl.png" border="0" usemap="#aiostreams_2main_8cpp" alt=""/></div>
 <map name="aiostreams_2main_8cpp" id="aiostreams_2main_8cpp">
-<area shape="rect" title=" " alt="" coords="874,5,1009,32"/>
-<area shape="rect" title=" " alt="" coords="227,87,285,114"/>
-<area shape="rect" title=" " alt="" coords="310,87,375,114"/>
-<area shape="rect" title=" " alt="" coords="400,87,467,114"/>
-<area shape="rect" title=" " alt="" coords="491,87,570,114"/>
-<area shape="rect" title=" " alt="" coords="595,87,667,114"/>
-<area shape="rect" title=" " alt="" coords="691,87,765,114"/>
-<area shape="rect" title=" " alt="" coords="790,87,853,114"/>
+<area shape="rect" title=" " alt="" coords="849,5,983,32"/>
+<area shape="rect" title=" " alt="" coords="96,87,155,114"/>
+<area shape="rect" title=" " alt="" coords="179,87,245,114"/>
+<area shape="rect" title=" " alt="" coords="269,87,336,114"/>
+<area shape="rect" title=" " alt="" coords="361,87,439,114"/>
+<area shape="rect" title=" " alt="" coords="464,87,536,114"/>
+<area shape="rect" title=" " alt="" coords="560,87,635,114"/>
+<area shape="rect" title=" " alt="" coords="659,87,722,114"/>
+<area shape="rect" title=" " alt="" coords="747,87,853,114"/>
 <area shape="rect" title=" " alt="" coords="5,177,200,203"/>
 <area shape="rect" title=" " alt="" coords="1275,87,1445,114"/>
 <area shape="rect" title=" " alt="" coords="1469,80,1629,121"/>
@@ -171,6 +173,10 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>copy_by_boost_iostrea
 <tr class="memitem:ae6be72c0500837f3d2312ab53e3b3f10"><td class="memItemLeft" align="right" valign="top"><a id="ae6be72c0500837f3d2312ab53e3b3f10" name="ae6be72c0500837f3d2312ab53e3b3f10"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>test_readers</b> ()</td></tr>
 <tr class="separator:ae6be72c0500837f3d2312ab53e3b3f10"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a301439299be9075bcc0550a4fea0a4df"><td class="memTemplParams" colspan="2"><a id="a301439299be9075bcc0550a4fea0a4df" name="a301439299be9075bcc0550a4fea0a4df"></a>
+template&lt;typename DstCont &gt; </td></tr>
+<tr class="memitem:a301439299be9075bcc0550a4fea0a4df"><td class="memTemplItemLeft" align="right" valign="top">DstCont&#160;</td><td class="memTemplItemRight" valign="bottom"><b>getSequence</b> ()</td></tr>
+<tr class="separator:a301439299be9075bcc0550a4fea0a4df"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3c04138a5bfe5d72780bb7e82a18e627"><td class="memItemLeft" align="right" valign="top"><a id="a3c04138a5bfe5d72780bb7e82a18e627" name="a3c04138a5bfe5d72780bb7e82a18e627"></a>
 int&#160;</td><td class="memItemRight" valign="bottom"><b>main</b> (int argc, char **argv)</td></tr>
 <tr class="separator:a3c04138a5bfe5d72780bb7e82a18e627"><td class="memSeparator" colspan="2">&#160;</td></tr>
