@@ -4,5 +4,6 @@ var searchData=
   ['parameternotfound_1',['ParameterNotFound',['../structParameterNotFound.html',1,'']]],
   ['person_2',['Person',['../classPerson.html',1,'']]],
   ['personslist_3',['PersonsList',['../classPersonsList.html',1,'']]],
-  ['positiveinteger_4',['PositiveInteger',['../structPositiveInteger.html',1,'']]]
+  ['positiveinteger_4',['PositiveInteger',['../structPositiveInteger.html',1,'']]],
+  ['printer_5',['Printer',['../structPrinter.html',1,'']]]
 ];
