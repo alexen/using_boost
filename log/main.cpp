@@ -3,20 +3,14 @@
 /// @copyright Copyright (c) InfoTeCS. All Rights Reserved.
 
 #include <stdexcept>
-#include <iostream>
-#include <fstream>
-
-#include <boost/make_shared.hpp>
 
 #include <boost/core/ignore_unused.hpp>
-#include <boost/core/null_deleter.hpp>
-
 #include <boost/exception/diagnostic_information.hpp>
 
-#include <boost/log/trivial.hpp>
-
+#include <log/logger.h>
 #include <log/application.h>
 #include <log/init.h>
+#include <log/handlers.h>
 
 
 int main( int argc, char** argv )
@@ -26,17 +20,19 @@ int main( int argc, char** argv )
      {
           using_boost::log::init::addSyslogSink();
 
-          BOOST_LOG_TRIVIAL( info ) << "This is simple logger";
-          BOOST_LOG_TRIVIAL( trace ) << "Tracing message";
+          LOGGER( info ) << "This is simple logger";
+          LOGGER( trace ) << "Tracing message";
 
           using_boost::log::app::Application app;
           app.run();
+
+          using_boost::log::handler::starter::run();
 
           BOOST_THROW_EXCEPTION( std::runtime_error{ "error" } );
      }
      catch( const std::exception& e )
      {
-          BOOST_LOG_TRIVIAL( error ) << "exception: " << boost::diagnostic_information( e );
+          LOGGER( error ) << "exception: " << boost::diagnostic_information( e );
           return 1;
      }
      return 0;

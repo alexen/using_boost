@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include <unistd.h>
+
 #include <iomanip>
 
 #include <boost/make_shared.hpp>
@@ -54,16 +56,12 @@ inline void setLogRotation( boost::string_view logMask, const std::size_t maxByt
 }
 
 
-BOOST_LOG_ATTRIBUTE_KEYWORD( LineId, "LineID", unsigned )
-BOOST_LOG_ATTRIBUTE_KEYWORD( Severity, "Severity", boost::log::trivial::severity_level )
-BOOST_LOG_ATTRIBUTE_KEYWORD( Message, "Message", std::string )
-BOOST_LOG_ATTRIBUTE_KEYWORD( Timestamp, "TimeStamp", boost::posix_time::ptime )
-
-
 void addSyslogSink()
 {
      using Backend = boost::log::sinks::syslog_backend;
      using Sink = boost::log::sinks::synchronous_sink< Backend >;
+
+     static const auto pid = getpid();
 
      auto syslogBackend = boost::make_shared< Backend >(
           boost::log::keywords::facility = boost::log::sinks::syslog::user,
@@ -75,8 +73,15 @@ void addSyslogSink()
      auto sink = boost::make_shared< Sink >( syslogBackend );
      sink->set_formatter(
           boost::log::expressions::stream
-               << '#' << std::setw( 8 ) << std::setfill( '0' )
-               << LineId << " [" << Timestamp << "] <" << Severity << ">: " << Message
+               << '{' << pid
+               << '.' << boost::log::expressions::attr< boost::log::attributes::current_thread_id::value_type >( "ThreadID" )
+               << '}'
+               << ' ' << boost::log::expressions::attr< std::string >( "File" )
+               << ':' << boost::log::expressions::attr< int >( "Line" )
+               << ' '
+               << '<' << boost::log::trivial::severity
+               << '>'
+               << ' ' << boost::log::expressions::message
           );
      boost::log::core::get()->add_sink( sink );
      boost::log::add_common_attributes();

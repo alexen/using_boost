@@ -6,9 +6,10 @@
 #include <iomanip>
 
 #include <boost/utility/string_view.hpp>
-#include <boost/log/trivial.hpp>
 #include <boost/range/irange.hpp>
 #include <boost/thread.hpp>
+
+#include <log/logger.h>
 
 
 namespace using_boost {
@@ -25,16 +26,16 @@ public:
      explicit Handler( boost::string_view name )
           : name_{ name.cbegin(), name.cend() }
      {
-          BOOST_LOG_TRIVIAL( info ) << "Created handler " << std::quoted( name_ );
+          LOGGER( info ) << "Created handler " << std::quoted( name_ );
      }
 
      void run()
      {
-          BOOST_LOG_TRIVIAL( info ) << "Handler " << std::quoted( name_ ) << " is running...";
+          LOGGER( info ) << "Handler " << std::quoted( name_ ) << " is running...";
           unsigned n = 10;
           for( auto i = 0u; i < n; ++i )
           {
-               BOOST_LOG_TRIVIAL( debug ) << "Handler " << std::quoted( name_ )
+               LOGGER( debug ) << "Handler " << std::quoted( name_ )
                     << ": work step #" << i << '/' << n;
                boost::this_thread::sleep( boost::posix_time::milliseconds{ 123 } );
           }
@@ -50,19 +51,19 @@ private:
 
 Application::Application()
 {
-     BOOST_LOG_TRIVIAL( info ) << "Application created";
+     LOGGER( info ) << "Application created";
 }
 
 
 Application::~Application()
 {
-     BOOST_LOG_TRIVIAL( info ) << "Application destroyed";
+     LOGGER( info ) << "Application destroyed";
 }
 
 
 void Application::run()
 {
-     BOOST_LOG_TRIVIAL( info ) << "Application started";
+     LOGGER( info ) << "Application started";
 
      boost::thread_group tg;
      tg.create_thread( [ this ]{ startHandler( "Alice" ); } );
@@ -76,17 +77,17 @@ void Application::startHandler( boost::string_view name )
 {
      try
      {
-          BOOST_LOG_TRIVIAL( info ) << "Starting handler \"" << name << '"';
+          LOGGER( info ) << "Starting handler \"" << name << '"';
           impl::Handler handler{ name };
           handler.run();
      }
      catch( const std::exception& e )
      {
-          BOOST_LOG_TRIVIAL( error ) << "exception: " << boost::diagnostic_information( e );
+          LOGGER( error ) << "exception: " << boost::diagnostic_information( e );
      }
      catch( ... )
      {
-          BOOST_LOG_TRIVIAL( error ) << "exception: unknown";
+          LOGGER( error ) << "exception: unknown";
      }
 }
 
