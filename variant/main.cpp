@@ -8,6 +8,7 @@
 #include <boost/variant.hpp>
 #include <boost/core/ignore_unused.hpp>
 #include <boost/exception/diagnostic_information.hpp>
+#include <boost/utility/string_view.hpp>
 
 
 enum class Number
@@ -51,14 +52,27 @@ std::ostream& operator<<( std::ostream& os, const Data& d )
 }
 
 
+struct Printer
+{
+     explicit Printer( boost::string_view sv ) : _{ sv } { std::cout << __PRETTY_FUNCTION__ << '\n'; }
+     explicit Printer( std::istream& is ) : _{ is } { std::cout << __PRETTY_FUNCTION__ << '\n'; }
+     explicit Printer( const char* data, std::size_t size ) : Printer{{ data, size }} { std::cout << "2nd: " << __PRETTY_FUNCTION__ << '\n'; }
+
+     boost::variant< boost::string_view, std::istream& > _;
+};
+
+
 int main( int argc, char** argv )
 {
      boost::ignore_unused( argc, argv );
      try
      {
-          std::cout << Data{ 50 } << '\n';
-          std::cout << Data{ "1011" } << '\n';
-          std::cout << Data{ Number::Three } << '\n';
+          static constexpr auto text = "text";
+          static const char cc[] = { 't','e','x','t' };
+
+          Printer{ text };
+          Printer{ std::cin };
+          Printer( &cc[ 0 ], sizeof( cc ) );
      }
      catch( const std::exception& e )
      {
