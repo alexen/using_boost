@@ -10,6 +10,7 @@
 #include <algorithm>
 #include <iterator>
 
+#include <boost/bind.hpp>
 #include <boost/core/ignore_unused.hpp>
 #include <boost/iostreams/copy.hpp>
 #include <boost/iostreams/filtering_stream.hpp>
@@ -254,11 +255,35 @@ using Transparent = using_boost::iostreams::filters::symmetric::FilterT< impl::B
 } // namespace filters
 
 
+template< typename DstCont >
+DstCont getSequence()
+{
+     using OutputDevice = boost::iostreams::back_insert_device< DstCont >;
+     using OutputStream = boost::iostreams::stream< OutputDevice >;
+
+     static constexpr auto start = 'A';
+     static constexpr auto len = 10;
+
+     DstCont dst;
+     OutputStream os{ dst };
+
+     for( auto c = start; c < start + len; ++c )
+     {
+          os << c;
+          (std::cout << "Process: step#" << (c - start) << ": (buff: size: " << dst.size() << ", cap: " << dst.capacity() << ")")
+               .write( dst.data(), dst.size() ).put( '\n' );
+     }
+     return dst;
+}
+
+
 int main( int argc, char** argv )
 {
      boost::ignore_unused( argc, argv );
      try
      {
+          const auto dst = getSequence< std::vector< char > >();
+          (std::cout << "Result: ").write( dst.data(), dst.size() ).put( '\n' );
      }
      catch( const std::exception& e )
      {
