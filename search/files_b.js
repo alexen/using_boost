@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['ostream_5ftest_2ecpp_0',['ostream_test.cpp',['../ostream__test_8cpp.html',1,'']]]
+  ['stacktrace_5fexception_2eh_0',['stacktrace_exception.h',['../stacktrace__exception_8h.html',1,'']]]
 ];
