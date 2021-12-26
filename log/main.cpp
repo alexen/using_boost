@@ -7,10 +7,10 @@
 #include <boost/core/ignore_unused.hpp>
 #include <boost/exception/diagnostic_information.hpp>
 
-#include <log/logger.h>
 #include <log/application.h>
 #include <log/init.h>
 #include <log/handlers.h>
+#include <log/logger/logger.h>
 
 
 int main( int argc, char** argv )
@@ -18,7 +18,7 @@ int main( int argc, char** argv )
      boost::ignore_unused( argc, argv );
      try
      {
-          using_boost::log::init::addSyslogSink();
+          using_boost::log::logger::init::sinks::syslog();
 
           LOGGER( info ) << "This is simple logger";
           LOGGER( trace ) << "Tracing message";

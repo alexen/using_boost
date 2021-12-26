@@ -8,7 +8,7 @@
 #include <boost/thread.hpp>
 #include <boost/bind.hpp>
 
-#include <log/logger.h>
+#include <log/logger/logger.h>
 
 
 namespace using_boost {

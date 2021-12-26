@@ -9,7 +9,7 @@
 #include <boost/range/irange.hpp>
 #include <boost/thread.hpp>
 
-#include <log/logger.h>
+#include <log/logger/logger.h>
 
 
 namespace using_boost {

@@ -19,7 +19,6 @@
 #include <boost/log/keywords/format.hpp>
 #include <boost/log/utility/setup/common_attributes.hpp>
 #include <boost/log/utility/setup/file.hpp>
-#include <boost/log/sinks/syslog_backend.hpp>
 #include <boost/log/expressions.hpp>
 #include <boost/log/sinks/text_ostream_backend.hpp>
 
@@ -52,40 +51,6 @@ inline void setLogRotation( boost::string_view logMask, const std::size_t maxByt
           boost::log::keywords::format = "[%TimeStamp%]: %Message%"
           );
      /// Эта запись нужна, чтобы работал плейсхолдер %TimeStamp%
-     boost::log::add_common_attributes();
-}
-
-
-void addSyslogSink()
-{
-     using Backend = boost::log::sinks::syslog_backend;
-     using Sink = boost::log::sinks::synchronous_sink< Backend >;
-
-     static const auto pid = getpid();
-
-     boost::log::formatter formatter =
-          boost::log::expressions::stream
-               << '{' << pid
-               << '.' << boost::log::expressions::attr< boost::log::attributes::current_thread_id::value_type >( "ThreadID" )
-               << '}'
-               << ' ' << boost::log::expressions::attr< std::string >( "File" )
-               << ':' << boost::log::expressions::attr< int >( "Line" )
-               << ' '
-               << '<' << boost::log::trivial::severity
-               << '>'
-               << ' ' << boost::log::expressions::message
-               ;
-
-     auto syslogBackend = boost::make_shared< Backend >(
-          boost::log::keywords::facility = boost::log::sinks::syslog::user,
-          boost::log::keywords::use_impl = boost::log::sinks::syslog::native
-     );
-     syslogBackend->set_severity_mapper(
-          boost::log::sinks::syslog::direct_severity_mapping< int >( "Severity" )
-          );
-     auto sink = boost::make_shared< Sink >( syslogBackend );
-     sink->set_formatter( formatter );
-     boost::log::core::get()->add_sink( sink );
      boost::log::add_common_attributes();
 }
 
