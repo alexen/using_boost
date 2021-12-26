@@ -13,6 +13,13 @@
 #include <boost/log/utility/setup/common_attributes.hpp>
 
 
+BOOST_LOG_ATTRIBUTE_KEYWORD( ThreadId, "ThreadID", boost::log::attributes::current_thread_id::value_type )
+BOOST_LOG_ATTRIBUTE_KEYWORD( FilePath, "File", std::string )
+BOOST_LOG_ATTRIBUTE_KEYWORD( FileLine, "Line", int )
+BOOST_LOG_ATTRIBUTE_KEYWORD( FuncName, "Function", std::string )
+BOOST_LOG_ATTRIBUTE_KEYWORD( PrettyFuncName, "PrettyFunction", std::string )
+
+
 namespace using_boost {
 namespace log {
 namespace logger {
@@ -25,16 +32,14 @@ void syslog()
      using Backend = boost::log::sinks::syslog_backend;
      using Sink = boost::log::sinks::synchronous_sink< Backend >;
 
-     static const auto pid = getpid();
-
      boost::log::formatter formatter =
           boost::log::expressions::stream
-               << '{' << pid
-               << '.' << boost::log::expressions::attr< boost::log::attributes::current_thread_id::value_type >( "ThreadID" )
+               << '{' << getpid()
+               << '.' << ThreadId
                << '}'
-               << ' ' << boost::log::expressions::attr< std::string >( "File" )
-               << ':' << boost::log::expressions::attr< int >( "Line" )
-               << ' '
+               << '(' << FilePath
+               << ':' << FileLine
+               << ')'
                << '<' << boost::log::trivial::severity
                << '>'
                << ' ' << boost::log::expressions::message
