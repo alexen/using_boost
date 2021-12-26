@@ -24,7 +24,7 @@ BOOST_LOG_ATTRIBUTE_KEYWORD( TimeStamp, "TimeStamp", boost::log::attributes::loc
 BOOST_LOG_ATTRIBUTE_KEYWORD( Pid, "Pid", pid_t )
 BOOST_LOG_ATTRIBUTE_KEYWORD( Ppid, "Ppid", pid_t )
 BOOST_LOG_ATTRIBUTE_KEYWORD( Tid, "Tid", boost::thread::id )
-BOOST_LOG_ATTRIBUTE_KEYWORD( FilePath, "File", boost::filesystem::path )
+BOOST_LOG_ATTRIBUTE_KEYWORD( FilePath, "File", boost::string_view )
 BOOST_LOG_ATTRIBUTE_KEYWORD( FileLine, "Line", unsigned )
 BOOST_LOG_ATTRIBUTE_KEYWORD( FuncName, "Function", boost::string_view )
 BOOST_LOG_ATTRIBUTE_KEYWORD( PrettyFuncName, "PrettyFunction", boost::string_view )
@@ -35,21 +35,19 @@ namespace std {
 
 boost::log::formatting_ostream& operator<<(
      boost::log::formatting_ostream& os
-     , const boost::log::to_log_manip< boost::filesystem::path, tag::FilePath >& file
+     , const boost::log::to_log_manip< boost::string_view, tag::FilePath >& file
 )
 {
-     return os << file.get().filename().string();
+     return os << basename( file.get().data() );
 }
 
 
 } // namespace std
 
 
-
 namespace using_boost {
 namespace log {
 namespace logger {
-namespace init {
 namespace sinks {
 
 
@@ -71,22 +69,16 @@ void addCustomAttributes()
 } // namespace {unnamed}
 
 
-
-void syslog()
+SyslogSinkPtr makeSyslogSink()
 {
-     using Backend = boost::log::sinks::syslog_backend;
-     using Sink = boost::log::sinks::synchronous_sink< Backend >;
-
-     auto syslogBackend = boost::make_shared< Backend >(
+     auto syslogBackend = boost::make_shared< SyslogBackend >(
           boost::log::keywords::facility = boost::log::sinks::syslog::user,
           boost::log::keywords::use_impl = boost::log::sinks::syslog::native
      );
      syslogBackend->set_severity_mapper(
           boost::log::sinks::syslog::direct_severity_mapping< int >( "Severity" )
           );
-     auto sink = boost::make_shared< Sink >( syslogBackend );
-     boost::log::add_common_attributes();
-     aux::addCustomAttributes();
+     auto sink = boost::make_shared< SyslogSink >( syslogBackend );
      sink->set_formatter(
           boost::log::expressions::stream
                << '{' << Pid
@@ -96,20 +88,18 @@ void syslog()
                << ") <" << boost::log::trivial::severity
                << "> " << boost::log::expressions::message
           );
-     boost::log::core::get()->add_sink( sink );
+     boost::log::add_common_attributes();
+     aux::addCustomAttributes();
+     return sink;
 }
 
 
-void ostream( std::ostream& os )
+OstreamSinkPtr makeOstreamSink( std::ostream& os )
 {
-     using Backend = boost::log::sinks::text_ostream_backend;
-     using Sink = boost::log::sinks::synchronous_sink< Backend >;
-
-     auto sink = boost::make_shared< Sink >();
-     sink->locked_backend()->add_stream( boost::shared_ptr< std::ostream >{ &os, boost::null_deleter{} } );
-
-     boost::log::add_common_attributes();
-     aux::addCustomAttributes();
+     auto sink = boost::make_shared< OstreamSink >();
+     sink->locked_backend()->add_stream(
+          boost::shared_ptr< std::ostream >{ &os, boost::null_deleter{} }
+     );
      sink->set_formatter(
           boost::log::expressions::stream
                << '[' << TimeStamp
@@ -120,12 +110,13 @@ void ostream( std::ostream& os )
                << ") <" << boost::log::trivial::severity
                << ">: " << boost::log::expressions::message
           );
-     boost::log::core::get()->add_sink( sink );
+     boost::log::add_common_attributes();
+     aux::addCustomAttributes();
+     return sink;
 }
 
 
 } // namespace sinks
-} // namespace init
 } // namespace logger
 } // namespace log
 } // namespace using_boost
