@@ -2,13 +2,13 @@
 /// @brief
 /// @copyright Copyright (c) InfoTeCS. All Rights Reserved.
 
+#include <iostream>
 #include <stdexcept>
 
 #include <boost/core/ignore_unused.hpp>
 #include <boost/exception/diagnostic_information.hpp>
 
 #include <log/application.h>
-#include <log/init.h>
 #include <log/handlers.h>
 #include <log/logger/logger.h>
 
@@ -19,6 +19,7 @@ int main( int argc, char** argv )
      try
      {
           using_boost::log::logger::init::sinks::syslog();
+          using_boost::log::logger::init::sinks::ostream( std::cerr );
 
           LOGGER( info ) << "This is simple logger";
           LOGGER( trace ) << "Tracing message";
