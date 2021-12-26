@@ -3,7 +3,7 @@ project(logger)
 add_library(${PROJECT_NAME} logger.cpp)
 
 target_link_libraries(${PROJECT_NAME}
-     PRIVATE ${Boost_LOG_LIBRARY}
+     ${Boost_LOG_LIBRARY}
      )
 
 target_compile_definitions(${PROJECT_NAME}
