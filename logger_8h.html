@@ -68,24 +68,29 @@ $(function() {
 <div class="header">
   <div class="summary">
 <a href="#define-members">Макросы</a> &#124;
+<a href="#typedef-members">Определения типов</a> &#124;
 <a href="#func-members">Функции</a>  </div>
   <div class="headertitle"><div class="title">Файл logger.h</div></div>
 </div><!--header-->
 <div class="contents">
 <div class="textblock"><code>#include &lt;boost/log/trivial.hpp&gt;</code><br />
 <code>#include &lt;boost/log/utility/manipulators/add_value.hpp&gt;</code><br />
+<code>#include &lt;boost/log/sinks/sync_frontend.hpp&gt;</code><br />
+<code>#include &lt;boost/log/sinks/syslog_backend.hpp&gt;</code><br />
+<code>#include &lt;boost/log/sinks/text_ostream_backend.hpp&gt;</code><br />
 <code>#include &lt;boost/utility/string_view.hpp&gt;</code><br />
-<code>#include &lt;boost/filesystem/path.hpp&gt;</code><br />
 </div><div class="textblock"><div class="dynheader">
 Граф включаемых заголовочных файлов для logger.h:</div>
 <div class="dyncontent">
 <div class="center"><img src="logger_8h__incl.png" border="0" usemap="#alog_2logger_2logger_8h" alt=""/></div>
 <map name="alog_2logger_2logger_8h" id="alog_2logger_2logger_8h">
-<area shape="rect" title=" " alt="" coords="284,5,411,32"/>
+<area shape="rect" title=" " alt="" coords="468,5,595,32"/>
 <area shape="rect" title=" " alt="" coords="5,87,140,114"/>
 <area shape="rect" title=" " alt="" coords="165,80,351,121"/>
-<area shape="rect" title=" " alt="" coords="376,80,500,121"/>
-<area shape="rect" title=" " alt="" coords="524,87,693,114"/>
+<area shape="rect" title=" " alt="" coords="375,80,517,121"/>
+<area shape="rect" title=" " alt="" coords="541,80,692,121"/>
+<area shape="rect" title=" " alt="" coords="716,80,872,121"/>
+<area shape="rect" title=" " alt="" coords="896,80,1020,121"/>
 </map>
 </div>
 </div><div class="textblock"><div class="dynheader">
@@ -93,11 +98,12 @@ $(function() {
 <div class="dyncontent">
 <div class="center"><img src="logger_8h__dep__incl.png" border="0" usemap="#alog_2logger_2logger_8hdep" alt=""/></div>
 <map name="alog_2logger_2logger_8hdep" id="alog_2logger_2logger_8hdep">
-<area shape="rect" title=" " alt="" coords="229,5,356,32"/>
-<area shape="rect" href="application_8cpp.html" title=" " alt="" coords="5,80,135,107"/>
-<area shape="rect" href="handlers_8cpp.html" title=" " alt="" coords="159,80,275,107"/>
-<area shape="rect" href="logger_8cpp.html" title=" " alt="" coords="299,80,441,107"/>
-<area shape="rect" href="log_2main_8cpp.html" title=" " alt="" coords="465,80,560,107"/>
+<area shape="rect" title=" " alt="" coords="325,5,452,32"/>
+<area shape="rect" href="application_8cpp.html" title=" " alt="" coords="5,87,135,114"/>
+<area shape="rect" href="logger__benchmark_8cpp.html" title=" " alt="" coords="159,80,306,121"/>
+<area shape="rect" href="handlers_8cpp.html" title=" " alt="" coords="331,87,447,114"/>
+<area shape="rect" href="logger_8cpp.html" title=" " alt="" coords="471,87,613,114"/>
+<area shape="rect" href="log_2main_8cpp.html" title=" " alt="" coords="637,87,732,114"/>
 </map>
 </div>
 </div>
@@ -108,14 +114,35 @@ $(function() {
 <tr class="memitem:a1cf2e4f458ca490d2062de97ac95638c"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="logger_8h.html#a1cf2e4f458ca490d2062de97ac95638c">LOGGER</a>(severity)</td></tr>
 <tr class="separator:a1cf2e4f458ca490d2062de97ac95638c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="typedef-members" name="typedef-members"></a>
+Определения типов</h2></td></tr>
+<tr class="memitem:a3fedc4c9a387834ad1c7e3ee125e3e0b"><td class="memItemLeft" align="right" valign="top"><a id="a3fedc4c9a387834ad1c7e3ee125e3e0b" name="a3fedc4c9a387834ad1c7e3ee125e3e0b"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>using_boost::log::logger::sinks::SyslogBackend</b> = boost::log::sinks::syslog_backend</td></tr>
+<tr class="separator:a3fedc4c9a387834ad1c7e3ee125e3e0b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6ca4e97233bd54808915fb0f2f56f042"><td class="memItemLeft" align="right" valign="top"><a id="a6ca4e97233bd54808915fb0f2f56f042" name="a6ca4e97233bd54808915fb0f2f56f042"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>using_boost::log::logger::sinks::SyslogSink</b> = boost::log::sinks::synchronous_sink&lt; SyslogBackend &gt;</td></tr>
+<tr class="separator:a6ca4e97233bd54808915fb0f2f56f042"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa22e27ab1d4a892e9e7742475930073f"><td class="memItemLeft" align="right" valign="top"><a id="aa22e27ab1d4a892e9e7742475930073f" name="aa22e27ab1d4a892e9e7742475930073f"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>using_boost::log::logger::sinks::SyslogSinkPtr</b> = boost::shared_ptr&lt; SyslogSink &gt;</td></tr>
+<tr class="separator:aa22e27ab1d4a892e9e7742475930073f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afff2fb2cc9b6d1214cad302de028c95f"><td class="memItemLeft" align="right" valign="top"><a id="afff2fb2cc9b6d1214cad302de028c95f" name="afff2fb2cc9b6d1214cad302de028c95f"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>using_boost::log::logger::sinks::OstreamBackend</b> = boost::log::sinks::text_ostream_backend</td></tr>
+<tr class="separator:afff2fb2cc9b6d1214cad302de028c95f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af9cb44ccc358a5f929f128923b0421a4"><td class="memItemLeft" align="right" valign="top"><a id="af9cb44ccc358a5f929f128923b0421a4" name="af9cb44ccc358a5f929f128923b0421a4"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>using_boost::log::logger::sinks::OstreamSink</b> = boost::log::sinks::synchronous_sink&lt; OstreamBackend &gt;</td></tr>
+<tr class="separator:af9cb44ccc358a5f929f128923b0421a4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae0d587ca707c9e1971a18a2e24d6515b"><td class="memItemLeft" align="right" valign="top"><a id="ae0d587ca707c9e1971a18a2e24d6515b" name="ae0d587ca707c9e1971a18a2e24d6515b"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>using_boost::log::logger::sinks::OstreamSinkPtr</b> = boost::shared_ptr&lt; OstreamSink &gt;</td></tr>
+<tr class="separator:ae0d587ca707c9e1971a18a2e24d6515b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Функции</h2></td></tr>
-<tr class="memitem:acabffc3c8a317792b0d086fa696439dd"><td class="memItemLeft" align="right" valign="top"><a id="acabffc3c8a317792b0d086fa696439dd" name="acabffc3c8a317792b0d086fa696439dd"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>using_boost::log::logger::init::sinks::syslog</b> ()</td></tr>
-<tr class="separator:acabffc3c8a317792b0d086fa696439dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aeb8c3c97f517a96f985f84114f35527c"><td class="memItemLeft" align="right" valign="top"><a id="aeb8c3c97f517a96f985f84114f35527c" name="aeb8c3c97f517a96f985f84114f35527c"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>using_boost::log::logger::init::sinks::ostream</b> (std::ostream &amp;os)</td></tr>
-<tr class="separator:aeb8c3c97f517a96f985f84114f35527c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7d5f89e6d010e107cf45b80c43c669bf"><td class="memItemLeft" align="right" valign="top"><a id="a7d5f89e6d010e107cf45b80c43c669bf" name="a7d5f89e6d010e107cf45b80c43c669bf"></a>
+SyslogSinkPtr&#160;</td><td class="memItemRight" valign="bottom"><b>using_boost::log::logger::sinks::makeSyslogSink</b> ()</td></tr>
+<tr class="separator:a7d5f89e6d010e107cf45b80c43c669bf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af4a1690225f9ae3e755c63b894fe03b5"><td class="memItemLeft" align="right" valign="top"><a id="af4a1690225f9ae3e755c63b894fe03b5" name="af4a1690225f9ae3e755c63b894fe03b5"></a>
+OstreamSinkPtr&#160;</td><td class="memItemRight" valign="bottom"><b>using_boost::log::logger::sinks::makeOstreamSink</b> (std::ostream &amp;os)</td></tr>
+<tr class="separator:af4a1690225f9ae3e755c63b894fe03b5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Макросы</h2>
 <a id="a1cf2e4f458ca490d2062de97ac95638c" name="a1cf2e4f458ca490d2062de97ac95638c"></a>
@@ -134,7 +161,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>using_boost::log::log
       </table>
 </div><div class="memdoc">
 <b>Макроопределение:</b><div class="fragment"><div class="line">     BOOST_LOG_TRIVIAL( severity ) \</div>
-<div class="line">          &lt;&lt; boost::log::add_value&lt; boost::filesystem::path &gt;( <span class="stringliteral">&quot;File&quot;</span>, __FILE__ ) \</div>
+<div class="line">          &lt;&lt; boost::log::add_value&lt; boost::string_view &gt;( <span class="stringliteral">&quot;File&quot;</span>, __FILE__ ) \</div>
 <div class="line">          &lt;&lt; boost::log::add_value&lt; unsigned &gt;( <span class="stringliteral">&quot;Line&quot;</span>, __LINE__ ) \</div>
 <div class="line">          &lt;&lt; boost::log::add_value&lt; boost::string_view &gt;( <span class="stringliteral">&quot;Function&quot;</span>, __FUNCTION__ ) \</div>
 <div class="line">          &lt;&lt; boost::log::add_value&lt; boost::string_view &gt;( <span class="stringliteral">&quot;PrettyFunction&quot;</span>, __PRETTY_FUNCTION__ )</div>

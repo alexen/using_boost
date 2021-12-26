@@ -1,0 +1,173 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.9.2"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Learning Boost: Файл log/benchmark/logger_benchmark.cpp</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">Learning Boost
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Создано системой Doxygen 1.9.2 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+var searchBox = new SearchBox("searchBox", "search",'Поиск','.html');
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() {
+  initMenu('',true,false,'search.php','Поиск');
+  $(document).ready(function() { init_search(); });
+});
+/* @license-end */
+</script>
+<div id="main-nav"></div>
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<iframe src="javascript:void(0)" frameborder="0" 
+        name="MSearchResults" id="MSearchResults">
+</iframe>
+</div>
+
+<div id="nav-path" class="navpath">
+  <ul>
+<li class="navelem"><a class="el" href="dir_9381a7bbd03577d6d8720c7f35c94ffa.html">log</a></li><li class="navelem"><a class="el" href="dir_7215e6a6e83006accb776cc00f4709cd.html">benchmark</a></li>  </ul>
+</div>
+</div><!-- top -->
+<div class="header">
+  <div class="summary">
+<a href="#nested-classes">Классы</a> &#124;
+<a href="#define-members">Макросы</a> &#124;
+<a href="#func-members">Функции</a>  </div>
+  <div class="headertitle"><div class="title">Файл logger_benchmark.cpp</div></div>
+</div><!--header-->
+<div class="contents">
+<div class="textblock"><code>#include &lt;celero/Celero.h&gt;</code><br />
+<code>#include &lt;syslog.h&gt;</code><br />
+<code>#include &lt;sstream&gt;</code><br />
+<code>#include &lt;iostream&gt;</code><br />
+<code>#include &lt;boost/thread/thread.hpp&gt;</code><br />
+<code>#include &lt;<a class="el" href="logger_8h_source.html">log/logger/logger.h</a>&gt;</code><br />
+</div><div class="textblock"><div class="dynheader">
+Граф включаемых заголовочных файлов для logger_benchmark.cpp:</div>
+<div class="dyncontent">
+<div class="center"><img src="logger__benchmark_8cpp__incl.png" border="0" usemap="#alog_2benchmark_2logger__benchmark_8cpp" alt=""/></div>
+<map name="alog_2benchmark_2logger__benchmark_8cpp" id="alog_2benchmark_2logger__benchmark_8cpp">
+<area shape="rect" title=" " alt="" coords="239,5,386,47"/>
+<area shape="rect" title=" " alt="" coords="5,95,113,121"/>
+<area shape="rect" title=" " alt="" coords="138,95,207,121"/>
+<area shape="rect" title=" " alt="" coords="231,95,301,121"/>
+<area shape="rect" title=" " alt="" coords="325,95,397,121"/>
+<area shape="rect" title=" " alt="" coords="421,95,580,121"/>
+<area shape="rect" href="logger_8h.html" title=" " alt="" coords="604,95,731,121"/>
+<area shape="rect" title=" " alt="" coords="141,177,276,203"/>
+<area shape="rect" title=" " alt="" coords="301,169,487,211"/>
+<area shape="rect" title=" " alt="" coords="511,169,653,211"/>
+<area shape="rect" title=" " alt="" coords="677,169,828,211"/>
+<area shape="rect" title=" " alt="" coords="852,169,1008,211"/>
+<area shape="rect" title=" " alt="" coords="1032,169,1156,211"/>
+</map>
+</div>
+</div><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="nested-classes" name="nested-classes"></a>
+Классы</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classLoggerBenchmark.html">LoggerBenchmark</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="define-members" name="define-members"></a>
+Макросы</h2></td></tr>
+<tr class="memitem:aafe476b3feb574d72ce1b21e44f09b75"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="logger__benchmark_8cpp.html#aafe476b3feb574d72ce1b21e44f09b75">LOGGER_</a>(severity,  strm)</td></tr>
+<tr class="separator:aafe476b3feb574d72ce1b21e44f09b75"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
+Функции</h2></td></tr>
+<tr class="memitem:a5321b0d7769b7103fb176dfdd5f4d4b9"><td class="memItemLeft" align="right" valign="top"><a id="a5321b0d7769b7103fb176dfdd5f4d4b9" name="a5321b0d7769b7103fb176dfdd5f4d4b9"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>BASELINE_F</b> (Logging, Syslog, <a class="el" href="classLoggerBenchmark.html">LoggerBenchmark</a>, LoggerBenchmark::Samples, LoggerBenchmark::Iterations)</td></tr>
+<tr class="separator:a5321b0d7769b7103fb176dfdd5f4d4b9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a00860fac233aeb91bd807242302ec726"><td class="memItemLeft" align="right" valign="top"><a id="a00860fac233aeb91bd807242302ec726" name="a00860fac233aeb91bd807242302ec726"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>BENCHMARK_F</b> (Logging, BoostLog, <a class="el" href="classLoggerBenchmark.html">LoggerBenchmark</a>, LoggerBenchmark::Samples, LoggerBenchmark::Iterations)</td></tr>
+<tr class="separator:a00860fac233aeb91bd807242302ec726"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<h2 class="groupheader">Макросы</h2>
+<a id="aafe476b3feb574d72ce1b21e44f09b75" name="aafe476b3feb574d72ce1b21e44f09b75"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aafe476b3feb574d72ce1b21e44f09b75">&#9670;&nbsp;</a></span>LOGGER_</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define LOGGER_</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">severity, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">strm&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Макроопределение:</b><div class="fragment"><div class="line">     <span class="keywordflow">do</span> { \</div>
+<div class="line">          std::ostringstream oss; \</div>
+<div class="line">          oss \</div>
+<div class="line">               &lt;&lt; <span class="charliteral">&#39;{&#39;</span> \</div>
+<div class="line">               &lt;&lt; getpid() \</div>
+<div class="line">               &lt;&lt; <span class="charliteral">&#39;.&#39;</span> \</div>
+<div class="line">               &lt;&lt; boost::this_thread::get_id() \</div>
+<div class="line">               &lt;&lt; <span class="stringliteral">&quot;} (&quot;</span> \</div>
+<div class="line">               &lt;&lt; basename( __FILE__ ) \</div>
+<div class="line">               &lt;&lt; <span class="charliteral">&#39;:&#39;</span> \</div>
+<div class="line">               &lt;&lt; __LINE__ \</div>
+<div class="line">               &lt;&lt; <span class="stringliteral">&quot;) &lt;&quot;</span> \</div>
+<div class="line">               &lt;&lt; severity &lt;&lt; <span class="stringliteral">&quot;&gt; (&quot;</span> &lt;&lt; __FUNCTION__ &lt;&lt; <span class="stringliteral">&quot;): &quot;</span> &lt;&lt; strm; \</div>
+<div class="line">               const <span class="keyword">auto</span>&amp; str = oss.str(); \</div>
+<div class="line">               syslog( severity, <span class="stringliteral">&quot;%*s&quot;</span>, <span class="keyword">static_cast&lt;</span> <span class="keywordtype">int</span> <span class="keyword">&gt;</span>( str.size() ), str.data() ); \</div>
+<div class="line">     } <span class="keywordflow">while</span>( <span class="keyword">false</span> )</div>
+</div><!-- fragment -->
+</div>
+</div>
+</div><!-- contents -->
+<!-- start footer part -->
+<hr class="footer"/><address class="footer"><small>
+Создано системой&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.2
+</small></address>
+</body>
+</html>
