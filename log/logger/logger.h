@@ -6,11 +6,12 @@
 #include <boost/log/trivial.hpp>
 #include <boost/log/utility/manipulators/add_value.hpp>
 #include <boost/utility/string_view.hpp>
+#include <boost/filesystem/path.hpp>
 
 
 #define LOGGER( severity ) \
      BOOST_LOG_TRIVIAL( severity ) \
-          << boost::log::add_value< boost::string_view >( "File", __FILE__ ) \
+          << boost::log::add_value< boost::filesystem::path >( "File", __FILE__ ) \
           << boost::log::add_value< unsigned >( "Line", __LINE__ ) \
           << boost::log::add_value< boost::string_view >( "Function", __FUNCTION__ ) \
           << boost::log::add_value< boost::string_view >( "PrettyFunction", __PRETTY_FUNCTION__ )

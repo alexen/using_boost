@@ -4,6 +4,7 @@
 #include <log/logger/logger.h>
 
 #include <unistd.h>
+#include <cstring> // basename( const char* )
 
 #include <boost/log/attributes.hpp>
 #include <boost/log/expressions.hpp>
@@ -23,10 +24,26 @@ BOOST_LOG_ATTRIBUTE_KEYWORD( TimeStamp, "TimeStamp", boost::log::attributes::loc
 BOOST_LOG_ATTRIBUTE_KEYWORD( Pid, "Pid", pid_t )
 BOOST_LOG_ATTRIBUTE_KEYWORD( Ppid, "Ppid", pid_t )
 BOOST_LOG_ATTRIBUTE_KEYWORD( Tid, "Tid", boost::thread::id )
-BOOST_LOG_ATTRIBUTE_KEYWORD( FilePath, "File", boost::string_view )
+BOOST_LOG_ATTRIBUTE_KEYWORD( FilePath, "File", boost::filesystem::path )
 BOOST_LOG_ATTRIBUTE_KEYWORD( FileLine, "Line", unsigned )
 BOOST_LOG_ATTRIBUTE_KEYWORD( FuncName, "Function", boost::string_view )
 BOOST_LOG_ATTRIBUTE_KEYWORD( PrettyFuncName, "PrettyFunction", boost::string_view )
+
+
+namespace std {
+
+
+boost::log::formatting_ostream& operator<<(
+     boost::log::formatting_ostream& os
+     , const boost::log::to_log_manip< boost::filesystem::path, tag::FilePath >& file
+)
+{
+     return os << file.get().filename().string();
+}
+
+
+} // namespace std
+
 
 
 namespace using_boost {
