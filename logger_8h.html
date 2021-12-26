@@ -75,15 +75,17 @@ $(function() {
 <div class="textblock"><code>#include &lt;boost/log/trivial.hpp&gt;</code><br />
 <code>#include &lt;boost/log/utility/manipulators/add_value.hpp&gt;</code><br />
 <code>#include &lt;boost/utility/string_view.hpp&gt;</code><br />
+<code>#include &lt;boost/filesystem/path.hpp&gt;</code><br />
 </div><div class="textblock"><div class="dynheader">
 Граф включаемых заголовочных файлов для logger.h:</div>
 <div class="dyncontent">
 <div class="center"><img src="logger_8h__incl.png" border="0" usemap="#alog_2logger_2logger_8h" alt=""/></div>
 <map name="alog_2logger_2logger_8h" id="alog_2logger_2logger_8h">
-<area shape="rect" title=" " alt="" coords="195,5,321,32"/>
+<area shape="rect" title=" " alt="" coords="284,5,411,32"/>
 <area shape="rect" title=" " alt="" coords="5,87,140,114"/>
 <area shape="rect" title=" " alt="" coords="165,80,351,121"/>
 <area shape="rect" title=" " alt="" coords="376,80,500,121"/>
+<area shape="rect" title=" " alt="" coords="524,87,693,114"/>
 </map>
 </div>
 </div><div class="textblock"><div class="dynheader">
@@ -132,7 +134,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>using_boost::log::log
       </table>
 </div><div class="memdoc">
 <b>Макроопределение:</b><div class="fragment"><div class="line">     BOOST_LOG_TRIVIAL( severity ) \</div>
-<div class="line">          &lt;&lt; boost::log::add_value&lt; boost::string_view &gt;( <span class="stringliteral">&quot;File&quot;</span>, __FILE__ ) \</div>
+<div class="line">          &lt;&lt; boost::log::add_value&lt; boost::filesystem::path &gt;( <span class="stringliteral">&quot;File&quot;</span>, __FILE__ ) \</div>
 <div class="line">          &lt;&lt; boost::log::add_value&lt; unsigned &gt;( <span class="stringliteral">&quot;Line&quot;</span>, __LINE__ ) \</div>
 <div class="line">          &lt;&lt; boost::log::add_value&lt; boost::string_view &gt;( <span class="stringliteral">&quot;Function&quot;</span>, __FUNCTION__ ) \</div>
 <div class="line">          &lt;&lt; boost::log::add_value&lt; boost::string_view &gt;( <span class="stringliteral">&quot;PrettyFunction&quot;</span>, __PRETTY_FUNCTION__ )</div>
