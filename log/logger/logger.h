@@ -25,6 +25,7 @@ namespace sinks {
 
 
 void syslog();
+void ostream( std::ostream& );
 
 
 } // namespace sinks
