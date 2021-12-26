@@ -36,14 +36,10 @@ void syslog()
           boost::log::expressions::stream
                << '{' << getpid()
                << '.' << ThreadId
-               << '}'
-               << '(' << FilePath
+               << "} (" << FilePath
                << ':' << FileLine
-               << ')'
-               << '<' << boost::log::trivial::severity
-               << '>'
-               << ' ' << boost::log::expressions::message
-               ;
+               << ") <" << boost::log::trivial::severity
+               << "> " << boost::log::expressions::message;
 
      auto syslogBackend = boost::make_shared< Backend >(
           boost::log::keywords::facility = boost::log::sinks::syslog::user,
