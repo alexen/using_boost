@@ -8,7 +8,6 @@
 #include <boost/utility/string_view.hpp>
 
 
-
 #define LOGGER( severity ) \
      BOOST_LOG_TRIVIAL( severity ) \
           << boost::log::add_value< boost::string_view >( "File", __FILE__ ) \
