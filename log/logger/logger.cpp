@@ -38,15 +38,6 @@ void syslog()
      using Backend = boost::log::sinks::syslog_backend;
      using Sink = boost::log::sinks::synchronous_sink< Backend >;
 
-     boost::log::formatter formatter =
-          boost::log::expressions::stream
-               << '{' << getpid()
-               << '.' << ThreadId
-               << "} (" << FilePath
-               << ':' << FileLine
-               << ") <" << boost::log::trivial::severity
-               << "> " << boost::log::expressions::message;
-
      auto syslogBackend = boost::make_shared< Backend >(
           boost::log::keywords::facility = boost::log::sinks::syslog::user,
           boost::log::keywords::use_impl = boost::log::sinks::syslog::native
@@ -56,7 +47,15 @@ void syslog()
           );
      auto sink = boost::make_shared< Sink >( syslogBackend );
      boost::log::add_common_attributes();
-     sink->set_formatter( formatter );
+     sink->set_formatter(
+          boost::log::expressions::stream
+               << '{' << getpid()
+               << '.' << ThreadId
+               << "} (" << FilePath
+               << ':' << FileLine
+               << ") <" << boost::log::trivial::severity
+               << "> " << boost::log::expressions::message
+          );
      boost::log::core::get()->add_sink( sink );
 }
 
@@ -66,7 +65,11 @@ void ostream( std::ostream& os )
      using Backend = boost::log::sinks::text_ostream_backend;
      using Sink = boost::log::sinks::synchronous_sink< Backend >;
 
-     boost::log::formatter formatter =
+     auto sink = boost::make_shared< Sink >();
+     sink->locked_backend()->add_stream( boost::shared_ptr< std::ostream >{ &os, boost::null_deleter{} } );
+
+     boost::log::add_common_attributes();
+     sink->set_formatter(
           boost::log::expressions::stream
                << '[' << TimeStamp
                << "] {" << getpid()
@@ -74,13 +77,8 @@ void ostream( std::ostream& os )
                << "} (" << FilePath
                << ':' << FileLine
                << ") <" << boost::log::trivial::severity
-               << "> " << boost::log::expressions::message;
-
-     auto sink = boost::make_shared< Sink >();
-     sink->locked_backend()->add_stream( boost::shared_ptr< std::ostream >{ &os, boost::null_deleter{} } );
-
-     boost::log::add_common_attributes();
-     sink->set_formatter( formatter );
+               << "> " << boost::log::expressions::message
+          );
 
      boost::log::core::get()->add_sink( sink );
 }
