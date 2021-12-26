@@ -18,8 +18,9 @@ int main( int argc, char** argv )
      boost::ignore_unused( argc, argv );
      try
      {
-          using_boost::log::logger::init::sinks::syslog();
-          using_boost::log::logger::init::sinks::ostream( std::cerr );
+          boost::log::core::get()->remove_all_sinks();
+          boost::log::core::get()->add_sink( using_boost::log::logger::sinks::makeSyslogSink() );
+          boost::log::core::get()->add_sink( using_boost::log::logger::sinks::makeOstreamSink( std::cout ) );
 
           LOGGER( info ) << "This is simple logger";
           LOGGER( trace ) << "Tracing message";
