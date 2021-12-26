@@ -78,13 +78,16 @@ $(function() {
 <code>#include &lt;boost/log/sinks/sync_frontend.hpp&gt;</code><br />
 <code>#include &lt;boost/log/attributes/current_thread_id.hpp&gt;</code><br />
 <code>#include &lt;boost/log/sinks/syslog_constants.hpp&gt;</code><br />
+<code>#include &lt;boost/log/sinks/text_ostream_backend.hpp&gt;</code><br />
 <code>#include &lt;boost/log/utility/setup/common_attributes.hpp&gt;</code><br />
+<code>#include &lt;boost/core/null_deleter.hpp&gt;</code><br />
+<code>#include &lt;boost/make_shared.hpp&gt;</code><br />
 </div><div class="textblock"><div class="dynheader">
 Граф включаемых заголовочных файлов для logger.cpp:</div>
 <div class="dyncontent">
 <div class="center"><img src="logger_8cpp__incl.png" border="0" usemap="#alog_2logger_2logger_8cpp" alt=""/></div>
 <map name="alog_2logger_2logger_8cpp" id="alog_2logger_2logger_8cpp">
-<area shape="rect" title=" " alt="" coords="723,5,865,32"/>
+<area shape="rect" title=" " alt="" coords="979,5,1121,32"/>
 <area shape="rect" href="logger_8h.html" title=" " alt="" coords="195,87,321,114"/>
 <area shape="rect" title=" " alt="" coords="346,87,413,114"/>
 <area shape="rect" title=" " alt="" coords="437,87,609,114"/>
@@ -92,7 +95,10 @@ $(function() {
 <area shape="rect" title=" " alt="" coords="809,80,950,121"/>
 <area shape="rect" title=" " alt="" coords="975,80,1125,121"/>
 <area shape="rect" title=" " alt="" coords="1149,80,1300,121"/>
-<area shape="rect" title=" " alt="" coords="1324,80,1485,121"/>
+<area shape="rect" title=" " alt="" coords="1324,80,1480,121"/>
+<area shape="rect" title=" " alt="" coords="1504,80,1665,121"/>
+<area shape="rect" title=" " alt="" coords="1689,87,1867,114"/>
+<area shape="rect" title=" " alt="" coords="1891,87,2051,114"/>
 <area shape="rect" title=" " alt="" coords="5,177,140,203"/>
 <area shape="rect" title=" " alt="" coords="165,169,351,211"/>
 <area shape="rect" title=" " alt="" coords="376,169,500,211"/>
@@ -104,6 +110,9 @@ $(function() {
 <tr class="memitem:acabffc3c8a317792b0d086fa696439dd"><td class="memItemLeft" align="right" valign="top"><a id="acabffc3c8a317792b0d086fa696439dd" name="acabffc3c8a317792b0d086fa696439dd"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>using_boost::log::logger::init::sinks::syslog</b> ()</td></tr>
 <tr class="separator:acabffc3c8a317792b0d086fa696439dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aeb8c3c97f517a96f985f84114f35527c"><td class="memItemLeft" align="right" valign="top"><a id="aeb8c3c97f517a96f985f84114f35527c" name="aeb8c3c97f517a96f985f84114f35527c"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>using_boost::log::logger::init::sinks::ostream</b> (std::ostream &amp;os)</td></tr>
+<tr class="separator:aeb8c3c97f517a96f985f84114f35527c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 </div><!-- contents -->
 <!-- start footer part -->
