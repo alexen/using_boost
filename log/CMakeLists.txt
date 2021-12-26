@@ -7,6 +7,9 @@ add_executable(${PROJECT_NAME}
 target_link_libraries(${PROJECT_NAME}
      logger
      ${Boost_LOG_LIBRARY}
-     ${Boost_THREAD_LIBRARY}
      )
 add_subdirectory(logger)
+
+if(BUILD_BENCHMARKS)
+     add_subdirectory(benchmark)
+endif()
