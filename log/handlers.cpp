@@ -5,9 +5,10 @@
 
 #include <boost/thread.hpp>
 #include <boost/date_time/posix_time/posix_time_duration.hpp>
-#include <boost/log/sources/record_ostream.hpp>
 #include <boost/thread.hpp>
 #include <boost/bind.hpp>
+
+#include <log/logger/logger.h>
 
 
 namespace using_boost {
@@ -31,11 +32,10 @@ void run()
 
 void loggingHandler40( std::size_t n )
 {
-     auto& logger = mt_loggers::Logger::get();
-
+     LOGGER( info ) << "handler is starting";
      for( auto i = 0u; i < n; ++i )
      {
-          BOOST_LOG( logger ) << "handler is working...";
+          LOGGER( info ) << "handler is working...";
           boost::this_thread::sleep( boost::posix_time::milliseconds{ 40 } );
      }
 }
@@ -43,11 +43,10 @@ void loggingHandler40( std::size_t n )
 
 void loggingHandler100( std::size_t n )
 {
-     auto& logger = mt_loggers::Logger::get();
-
+     LOGGER( info ) << "handler is starting";
      for( auto i = 0u; i < n; ++i )
      {
-          BOOST_LOG( logger ) << "handler is working...";
+          LOGGER( info ) << "handler is working...";
           boost::this_thread::sleep( boost::posix_time::milliseconds{ 100 } );
      }
 }
@@ -55,11 +54,10 @@ void loggingHandler100( std::size_t n )
 
 void loggingHandler210( std::size_t n )
 {
-     auto& logger = mt_loggers::Logger::get();
-
+     LOGGER( info ) << "handler is starting";
      for( auto i = 0u; i < n; ++i )
      {
-          BOOST_LOG( logger ) << "handler is working...";
+          LOGGER( trace ) << "handler is working...";
           boost::this_thread::sleep( boost::posix_time::milliseconds{ 210 } );
      }
 }
