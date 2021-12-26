@@ -14,10 +14,10 @@
 
 
 BOOST_LOG_ATTRIBUTE_KEYWORD( ThreadId, "ThreadID", boost::log::attributes::current_thread_id::value_type )
-BOOST_LOG_ATTRIBUTE_KEYWORD( FilePath, "File", std::string )
-BOOST_LOG_ATTRIBUTE_KEYWORD( FileLine, "Line", int )
-BOOST_LOG_ATTRIBUTE_KEYWORD( FuncName, "Function", std::string )
-BOOST_LOG_ATTRIBUTE_KEYWORD( PrettyFuncName, "PrettyFunction", std::string )
+BOOST_LOG_ATTRIBUTE_KEYWORD( FilePath, "File", boost::string_view )
+BOOST_LOG_ATTRIBUTE_KEYWORD( FileLine, "Line", unsigned )
+BOOST_LOG_ATTRIBUTE_KEYWORD( FuncName, "Function", boost::string_view )
+BOOST_LOG_ATTRIBUTE_KEYWORD( PrettyFuncName, "PrettyFunction", boost::string_view )
 
 
 namespace using_boost {
