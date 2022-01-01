@@ -1,33 +1,21 @@
 var indexSectionsWithContent =
 {
-  0: "abcdefghilmoprstuv",
-  1: "abcdefgilmprstuv",
-  2: "s",
-  3: "abcdefghilmost",
-  4: "b",
-  5: "pu",
-  6: "r"
+  0: "abcdfhilmrst",
+  1: "abcdfmrst",
+  2: "abcdfhils"
 };
 
 var indexSectionNames =
 {
   0: "all",
   1: "classes",
-  2: "namespaces",
-  3: "files",
-  4: "functions",
-  5: "enums",
-  6: "pages"
+  2: "files"
 };
 
 var indexSectionLabels =
 {
   0: "Указатель",
   1: "Классы",
-  2: "Пространства имен",
-  3: "Файлы",
-  4: "Функции",
-  5: "Перечисления",
-  6: "Страницы"
+  2: "Файлы"
 };
 

@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['handlers_2ecpp_0',['handlers.cpp',['../handlers_8cpp.html',1,'']]],
-  ['handlers_2eh_1',['handlers.h',['../handlers_8h.html',1,'']]]
+  ['logger_2eh_0',['logger.h',['../logger_8h.html',1,'']]]
 ];

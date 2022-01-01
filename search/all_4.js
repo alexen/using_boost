@@ -1,5 +1,6 @@
 var searchData=
 [
-  ['enabling_5fdisabling_5ftest_2ecpp_0',['enabling_disabling_test.cpp',['../enabling__disabling__test_8cpp.html',1,'']]],
-  ['error_1',['Error',['../structError.html',1,'']]]
+  ['filters_2eh_0',['filters.h',['../filters_8h.html',1,'']]],
+  ['filtert_1',['FilterT',['../structusing__boost_1_1iostreams_1_1filters_1_1symmetric_1_1FilterT.html',1,'using_boost::iostreams::filters::symmetric']]],
+  ['funcs_2eh_2',['funcs.h',['../funcs_8h.html',1,'']]]
 ];
