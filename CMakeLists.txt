@@ -25,11 +25,10 @@ find_package(Boost 1.69 REQUIRED
      filesystem
      stacktrace_basic
      log
+     log_setup
      )
 include_directories(SYSTEM ${Boost_INCLUDE_DIRS})
 link_directories(${Boost_LIBRARY_DIRS})
-# https://github.com/boostorg/log/issues/18
-list(APPEND Boost_LOG_LIBRARY boost_log_setup)
 
 find_package(OpenSSL REQUIRED)
 include_directories(${OPENSSL_INCLUDE_DIR})
