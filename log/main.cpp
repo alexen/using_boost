@@ -13,6 +13,38 @@
 #include <log/logger/logger.h>
 
 
+struct ICertificate {};
+
+using ICertificateUptr = std::unique_ptr< ICertificate >;
+
+
+std::ostream& operator<<( std::ostream& os, const ICertificate& )
+{
+     return os << __PRETTY_FUNCTION__;
+}
+
+
+std::ostream& operator<<( std::ostream& os, const ICertificateUptr& p )
+{
+     if( p )
+     {
+          os << *p;
+     }
+     else
+     {
+          os << __PRETTY_FUNCTION__;
+     }
+     return os;
+}
+
+
+namespace impl {
+
+struct Certificate : ICertificate {};
+
+} // namespace impl
+
+
 int main( int argc, char** argv )
 {
      boost::ignore_unused( argc, argv );
@@ -25,12 +57,20 @@ int main( int argc, char** argv )
           LOGGER( info ) << "This is simple logger";
           LOGGER( trace ) << "Tracing message";
 
-          using_boost::log::app::Application app;
-          app.run();
+          const auto severity = boost::log::trivial::debug;
 
-          using_boost::log::handler::starter::run();
+          LOGGER_SEV( severity ) << "Hello!";
 
-          BOOST_THROW_EXCEPTION( std::runtime_error{ "error" } );
+          ICertificateUptr cp;
+
+          LOGGER( info ) << "We have certificate: " << cp;
+
+//          using_boost::log::app::Application app;
+//          app.run();
+//
+//          using_boost::log::handler::starter::run();
+//
+//          BOOST_THROW_EXCEPTION( std::runtime_error{ "error" } );
      }
      catch( const std::exception& e )
      {
