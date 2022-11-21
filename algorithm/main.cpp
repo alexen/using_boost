@@ -63,7 +63,7 @@ int main( int argc, char** argv )
           }
           std::cout << '\n';
 
-          boost::algorithm::join( nn, ", " );
+//          boost::algorithm::join( nn, ", " );
 
           std::copy(
                std::cbegin( nn ),
