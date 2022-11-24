@@ -98,8 +98,11 @@ $(function() {
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="define-members" name="define-members"></a>
 Макросы</h2></td></tr>
-<tr class="memitem:a1cf2e4f458ca490d2062de97ac95638c"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="logger_8h.html#a1cf2e4f458ca490d2062de97ac95638c">LOGGER</a>(severity)</td></tr>
-<tr class="separator:a1cf2e4f458ca490d2062de97ac95638c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1477ea76540a08d450c5b0e8dfef772c"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="logger_8h.html#a1477ea76540a08d450c5b0e8dfef772c">LOGGER_SEV</a>(lvl)</td></tr>
+<tr class="separator:a1477ea76540a08d450c5b0e8dfef772c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1f1ec6bfdad034d6c81fda01d33bf432"><td class="memItemLeft" align="right" valign="top"><a id="a1f1ec6bfdad034d6c81fda01d33bf432" name="a1f1ec6bfdad034d6c81fda01d33bf432"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>LOGGER</b>(lvl)&#160;&#160;&#160;     LOGGER_SEV( ::boost::log::trivial::lvl )</td></tr>
+<tr class="separator:a1f1ec6bfdad034d6c81fda01d33bf432"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="typedef-members" name="typedef-members"></a>
 Определения типов</h2></td></tr>
@@ -132,22 +135,23 @@ OstreamSinkPtr&#160;</td><td class="memItemRight" valign="bottom"><b>using_boost
 <tr class="separator:ae4360faf61644a04eca6b12384099510"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Макросы</h2>
-<a id="a1cf2e4f458ca490d2062de97ac95638c" name="a1cf2e4f458ca490d2062de97ac95638c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1cf2e4f458ca490d2062de97ac95638c">&#9670;&nbsp;</a></span>LOGGER</h2>
+<a id="a1477ea76540a08d450c5b0e8dfef772c" name="a1477ea76540a08d450c5b0e8dfef772c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1477ea76540a08d450c5b0e8dfef772c">&#9670;&nbsp;</a></span>LOGGER_SEV</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">#define LOGGER</td>
+          <td class="memname">#define LOGGER_SEV</td>
           <td>(</td>
           <td class="paramtype">&#160;</td>
-          <td class="paramname">severity</td><td>)</td>
+          <td class="paramname">lvl</td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
-<b>Макроопределение:</b><div class="fragment"><div class="line">     BOOST_LOG_TRIVIAL( severity ) \</div>
+<b>Макроопределение:</b><div class="fragment"><div class="line">     BOOST_LOG_STREAM_WITH_PARAMS(::boost::log::trivial::logger::get(),\</div>
+<div class="line">        (::boost::log::keywords::severity = lvl)) \</div>
 <div class="line">          &lt;&lt; boost::log::add_value&lt; boost::string_view &gt;( <span class="stringliteral">&quot;File&quot;</span>, __FILE__ ) \</div>
 <div class="line">          &lt;&lt; boost::log::add_value&lt; unsigned &gt;( <span class="stringliteral">&quot;Line&quot;</span>, __LINE__ ) \</div>
 <div class="line">          &lt;&lt; boost::log::add_value&lt; boost::string_view &gt;( <span class="stringliteral">&quot;Function&quot;</span>, __FUNCTION__ ) \</div>

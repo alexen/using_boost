@@ -1,0 +1,107 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.9.2"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Learning Boost: Структура alexen::error::Exception</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">Learning Boost
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Создано системой Doxygen 1.9.2 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+var searchBox = new SearchBox("searchBox", "search",'Поиск','.html');
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() {
+  initMenu('',true,false,'search.php','Поиск');
+  $(document).ready(function() { init_search(); });
+});
+/* @license-end */
+</script>
+<div id="main-nav"></div>
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<iframe src="javascript:void(0)" frameborder="0" 
+        name="MSearchResults" id="MSearchResults">
+</iframe>
+</div>
+
+<div id="nav-path" class="navpath">
+  <ul>
+<li class="navelem"><b>alexen</b></li><li class="navelem"><b>error</b></li><li class="navelem"><a class="el" href="structalexen_1_1error_1_1Exception.html">Exception</a></li>  </ul>
+</div>
+</div><!-- top -->
+<div class="header">
+  <div class="headertitle"><div class="title">Структура alexen::error::Exception</div></div>
+</div><!--header-->
+<div class="contents">
+
+<p><code>#include &lt;<a class="el" href="user__exception_8h_source.html">user_exception.h</a>&gt;</code></p>
+<div class="dynheader">
+Граф наследования:alexen::error::Exception:</div>
+<div class="dyncontent">
+<div class="center"><img src="structalexen_1_1error_1_1Exception__inherit__graph.png" border="0" usemap="#aalexen_1_1error_1_1Exception_inherit__map" alt="Inheritance graph"/></div>
+<map name="aalexen_1_1error_1_1Exception_inherit__map" id="aalexen_1_1error_1_1Exception_inherit__map">
+<area shape="rect" title=" " alt="" coords="45,80,198,107"/>
+<area shape="rect" title=" " alt="" coords="5,5,107,32"/>
+<area shape="rect" title=" " alt="" coords="131,5,245,32"/>
+</map>
+<center><span class="legend">[<a href="graph_legend.html">см. легенду</a>]</span></center></div>
+<div class="dynheader">
+Граф связей класса alexen::error::Exception:</div>
+<div class="dyncontent">
+<div class="center"><img src="structalexen_1_1error_1_1Exception__coll__graph.png" border="0" usemap="#aalexen_1_1error_1_1Exception_coll__map" alt="Collaboration graph"/></div>
+<map name="aalexen_1_1error_1_1Exception_coll__map" id="aalexen_1_1error_1_1Exception_coll__map">
+<area shape="rect" title=" " alt="" coords="45,80,198,107"/>
+<area shape="rect" title=" " alt="" coords="5,5,107,32"/>
+<area shape="rect" title=" " alt="" coords="131,5,245,32"/>
+</map>
+<center><span class="legend">[<a href="graph_legend.html">см. легенду</a>]</span></center></div>
+<a name="details" id="details"></a><h2 class="groupheader">Подробное описание</h2>
+<div class="textblock"><dl class="section note"><dt>Заметки</dt><dd>Заметьте, что не нужно больше создавать наследование от std::runtime_error чтобы передавать строковое значение для <code>const char* what() const</code>. Для этого используется инъекция <code>details::ErrorDescription</code>.</dd>
+<dd>
+Также заметьте, что используется <b>виртуальное</b> наследование. Это важно, подробности смотри <a href="https://www.boost.org/doc/libs/1_80_0/libs/exception/doc/using_virtual_inheritance_in_exception_types.html">здесь</a>. </dd></dl>
+</div><hr/>Объявления и описания членов структуры находятся в файле:<ul>
+<li>exception/<a class="el" href="user__exception_8h_source.html">user_exception.h</a></li>
+</ul>
+</div><!-- contents -->
+<!-- start footer part -->
+<hr class="footer"/><address class="footer"><small>
+Создано системой&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.2
+</small></address>
+</body>
+</html>
