@@ -6,10 +6,11 @@ jobs:
     steps:
     - name: Checkout repo (without submodules)
       uses: actions/checkout@v2
-
+      
     - name: Generate documentation
-      uses: langroodi/doxygenize@v1.5
+      uses: langroodi/doxygenize@v1.7.0
       with:
+        darkmode: true
         # Указание данного пути заставляет action копировать HTML-документацию
         # в корень ветки gh-pages.
         # Таким образом файл index.html оказывается в корневой директории и корректно
