@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.9.2"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Learning Boost: Содержание директории exception</title>
+<title>Learning Boost: Файл exception/uuid_exception.h</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -66,20 +66,42 @@ $(function() {
 </div>
 </div><!-- top -->
 <div class="header">
-  <div class="headertitle"><div class="title">Содержание директории exception</div></div>
+  <div class="summary">
+<a href="#typedef-members">Определения типов</a>  </div>
+  <div class="headertitle"><div class="title">Файл uuid_exception.h</div></div>
 </div><!--header-->
 <div class="contents">
+<div class="textblock"><code>#include &lt;boost/uuid/uuid.hpp&gt;</code><br />
+<code>#include &lt;boost/exception/info_tuple.hpp&gt;</code><br />
+<code>#include &quot;<a class="el" href="user__exception_8h_source.html">user_exception.h</a>&quot;</code><br />
+</div><div class="textblock"><div class="dynheader">
+Граф включаемых заголовочных файлов для uuid_exception.h:</div>
+<div class="dyncontent">
+<div class="center"><img src="uuid__exception_8h__incl.png" border="0" usemap="#aexception_2uuid__exception_8h" alt=""/></div>
+<map name="aexception_2uuid__exception_8h" id="aexception_2uuid__exception_8h">
+<area shape="rect" title=" " alt="" coords="89,5,267,32"/>
+<area shape="rect" title=" " alt="" coords="5,80,140,107"/>
+<area shape="rect" title=" " alt="" coords="99,155,238,196"/>
+<area shape="rect" href="user__exception_8h.html" title=" " alt="" coords="233,80,352,107"/>
+<area shape="rect" title=" " alt="" coords="262,162,339,189"/>
+<area shape="rect" title=" " alt="" coords="364,162,560,189"/>
+</map>
+</div>
+</div>
+<p><a href="uuid__exception_8h_source.html">См. исходные тексты.</a></p>
 <table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="files" name="files"></a>
-Файлы</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">файл &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tools_8h.html">tools.h</a> <a href="tools_8h_source.html">[Исходные тексты]</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">файл &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="user__exception_8h.html">user_exception.h</a> <a href="user__exception_8h_source.html">[Исходные тексты]</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">файл &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="uuid__exception_8h.html">uuid_exception.h</a> <a href="uuid__exception_8h_source.html">[Исходные тексты]</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="typedef-members" name="typedef-members"></a>
+Определения типов</h2></td></tr>
+<tr class="memitem:a7d91a7d6a55187150c8352dea0b70e3a"><td class="memItemLeft" align="right" valign="top"><a id="a7d91a7d6a55187150c8352dea0b70e3a" name="a7d91a7d6a55187150c8352dea0b70e3a"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>alexen::error::details::ErrorUuid</b> = boost::error_info&lt; struct ErrorUuid_, boost::uuids::uuid &gt;</td></tr>
+<tr class="separator:a7d91a7d6a55187150c8352dea0b70e3a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac4aa9b7de5a08e78e8705b50f563cb12"><td class="memItemLeft" align="right" valign="top"><a id="ac4aa9b7de5a08e78e8705b50f563cb12" name="ac4aa9b7de5a08e78e8705b50f563cb12"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>alexen::error::details::ErrorDescribedUuid</b> = boost::tuple&lt; ErrorDescription, ErrorUuid &gt;</td></tr>
+<tr class="separator:ac4aa9b7de5a08e78e8705b50f563cb12"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-</div><!-- contents -->
+<a name="details" id="details"></a><h2 class="groupheader">Подробное описание</h2>
+<div class="textblock"><dl class="section copyright"><dt>Авторство</dt><dd>Copyright 2022 InfoTeCS Internet Trust </dd></dl>
+</div></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
 Создано системой&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.2
