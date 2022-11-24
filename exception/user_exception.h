@@ -13,6 +13,12 @@ namespace alexen {
 namespace error {
 
 
+/// @note Заметьте, что не нужно больше создавать наследование от std::runtime_error
+/// чтобы передавать строковое значение для `const char* what() const`. Для этого
+/// используется инъекция `details::ErrorDescription`.
+///
+/// @note Также заметьте, что используется **виртуальное** наследование. Это важно,
+/// подробности смотри [здесь](https://www.boost.org/doc/libs/1_80_0/libs/exception/doc/using_virtual_inheritance_in_exception_types.html).
 struct Exception : virtual std::exception, virtual boost::exception {};
 
 
