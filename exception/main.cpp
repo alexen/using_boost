@@ -8,13 +8,13 @@
 #include <boost/uuid/uuid_io.hpp>
 #include <boost/uuid/string_generator.hpp>
 #include <boost/core/ignore_unused.hpp>
-#include <boost/exception/diagnostic_information.hpp>
+#include <boost/exception/all.hpp>
 
 #include "tools.h"
 #include "uuid_exception.h"
 
 
-void func()
+void func_a()
 {
      using namespace std::string_literals;
 
@@ -26,12 +26,29 @@ void func()
 }
 
 
+using ErrorException = boost::error_info< struct Exception_, std::exception_ptr >;
+
+
+void func_b()
+{
+     try
+     {
+          BOOST_THROW_EXCEPTION( std::runtime_error{ "this is std::runtime_error" } );
+     }
+     catch( const std::exception& e )
+     {
+          BOOST_THROW_EXCEPTION( alexen::error::Exception{}
+               << alexen::error::details::ErrorDescription{ boost::diagnostic_information( e ) } );
+     }
+}
+
+
 int main( int argc, char **argv )
 {
      boost::ignore_unused( argc, argv );
      try
      {
-          func();
+          func_b();
      }
      catch( const std::exception &e )
      {
