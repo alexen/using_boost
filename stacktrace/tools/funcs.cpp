@@ -34,22 +34,22 @@ static void funcA()
 
 void main()
 {
-     funcA();
+     funcA( std::string{} );
 }
 
-void funcA()
+void funcA( std::string )
 {
-     funcB();
+     funcB( 1.7 );
 }
 
 
-void funcB()
+void funcB( float )
 {
-     funcC();
+     funcC( 101 );
 }
 
 
-void funcC()
+void funcC( int )
 {
      impl::funcA();
 }

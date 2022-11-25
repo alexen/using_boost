@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include <string>
+
 
 namespace using_boost {
 namespace stacktrace {
@@ -11,9 +13,9 @@ namespace tools {
 
 void main();
 
-void funcA();
-void funcB();
-void funcC();
+void funcA( std::string );
+void funcB( float );
+void funcC( int );
 
 
 } // namespace tools
