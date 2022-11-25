@@ -26,7 +26,6 @@ namespace details {
 
 
 using ErrorDescription = boost::error_info< struct ErrorDescription_, std::string >;
-using ErrorCode        = boost::error_info< struct ErrorCode_, int >;
 
 
 } // namespace details

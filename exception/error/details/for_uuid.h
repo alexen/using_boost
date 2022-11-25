@@ -7,7 +7,7 @@
 #include <boost/uuid/uuid.hpp>
 #include <boost/exception/info_tuple.hpp>
 
-#include "user_exception.h"
+#include <exception/error/exception.h>
 
 
 namespace alexen {

@@ -10,8 +10,10 @@
 #include <boost/core/ignore_unused.hpp>
 #include <boost/exception/all.hpp>
 
+#include "error/exception.h"
+#include "error/details/for_uuid.h"
+
 #include "tools.h"
-#include "uuid_exception.h"
 
 
 void func_a()

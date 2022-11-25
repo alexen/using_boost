@@ -7,7 +7,7 @@
 #include <ostream>
 #include <boost/throw_exception.hpp>
 
-#include "user_exception.h"
+#include "error/exception.h"
 
 
 namespace alexen {
