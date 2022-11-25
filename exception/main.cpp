@@ -12,8 +12,18 @@
 
 #include "error/exception.h"
 #include "error/details/for_uuid.h"
+#include "error/details/format.h"
 
 #include "tools.h"
+
+
+enum class Enum
+{
+     Field1,
+     Field2
+};
+
+std::ostream& operator<<( std::ostream&, const Enum );
 
 
 void func_a()
@@ -24,6 +34,14 @@ void func_a()
      BOOST_THROW_EXCEPTION( alexen::error::Exception{}
           << alexen::error::details::ErrorUuid( uuid )
           << alexen::error::details::ErrorDescribedUuid( "just random UUID"s, uuid )
+          );
+}
+
+
+void func_fmt()
+{
+     BOOST_THROW_EXCEPTION( alexen::error::Exception{}
+          << alexen::error::details::ErrorTextFormat{ boost::format( "formatted string num=%1% enum=%2%" ) % 1 % Enum::Field1 }
           );
 }
 
@@ -45,12 +63,29 @@ void func_b()
 }
 
 
+std::ostream& operator<<( std::ostream& os, const Enum e )
+{
+     switch( e )
+     {
+          case Enum::Field1:
+               os << "FIELD_1";
+               break;
+          case Enum::Field2:
+               os << "FIELD_2";
+               break;
+          default:
+               os.setstate( std::ios_base::failbit );
+     }
+     return os;
+}
+
+
 int main( int argc, char **argv )
 {
      boost::ignore_unused( argc, argv );
      try
      {
-          func_b();
+          func_fmt();
      }
      catch( const std::exception &e )
      {
