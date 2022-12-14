@@ -48,19 +48,14 @@ static Documents documents {
 } // namespace {unnamed}
 
 
-const Document* Document::findByText( boost::string_view text )
+const Document* Document::findBy( boost::string_view text )
 {
-     return aux::findByKey( consts::documents.get< Document::Tag::Text >(), text );
+     const auto found = aux::findByKey( consts::documents.get< Document::Tag::Text >(), text );
+     return found ? found : aux::findByKey( consts::documents.get< Document::Tag::Code >(), text );
 }
 
 
-const Document* Document::findByCode( boost::string_view code )
-{
-     return aux::findByKey( consts::documents.get< Document::Tag::Code >(), code );
-}
-
-
-const Document* Document::findByType( const Document::Type type )
+const Document* Document::findBy( const Document::Type type )
 {
      return aux::findByKey( consts::documents.get< Document::Tag::Type >(), type );
 }

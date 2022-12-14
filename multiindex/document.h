@@ -37,20 +37,19 @@ struct Document
           struct Type {};
      };
 
-     static const Document* findByText( boost::string_view text );
-     static const Document* findByCode( boost::string_view code );
-     static const Document* findByType( Type type );
+     static const Document* findBy( boost::string_view text );
+     static const Document* findBy( Type type );
 };
 
 
 using Documents = boost::multi_index::multi_index_container<
      Document
      , boost::multi_index::indexed_by<
-          boost::multi_index::hashed_unique<
+          boost::multi_index::ordered_unique<
                boost::multi_index::tag< Document::Tag::Text >
                , boost::multi_index::member< Document, boost::string_view, &Document::text >
                >
-          , boost::multi_index::hashed_non_unique<
+          , boost::multi_index::ordered_unique<
                boost::multi_index::tag< Document::Tag::Code >
                , boost::multi_index::member< Document, boost::string_view, &Document::code >
                >
