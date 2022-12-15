@@ -6,6 +6,7 @@
 
 #include <boost/core/ignore_unused.hpp>
 #include <boost/exception/diagnostic_information.hpp>
+#include <boost/multi_index/composite_key.hpp>
 
 #include <multiindex/document.h>
 
@@ -36,6 +37,19 @@ using AnimalIndexedContainer = boost::multi_index::multi_index_container<
           >
      >;
 
+using AnimalCompositeContainer = boost::multi_index::multi_index_container<
+     Animal
+     , boost::multi_index::indexed_by<
+          boost::multi_index::ordered_unique<
+               boost::multi_index::composite_key<
+                    Animal
+                    , boost::multi_index::member< Animal, std::string, &Animal::name >
+                    , boost::multi_index::member< Animal, std::uint16_t, &Animal::legs >
+                    >
+               >
+          >
+     >;
+
 
 void usage1()
 {
@@ -58,14 +72,71 @@ void usage1()
 }
 
 
+void usage2()
+{
+     const AnimalIndexedContainer animals{
+          {   "Ostrich",  2 }
+        , {    "Spider",  8 }
+        , {      "Deer",  4 }
+        , {       "Bee",  6 }
+        , {  "Kangaroo",  2 }
+        , {    "Monkey",  2 }
+        , {    "Beatle",  6 }
+        , {     "Snake",  0 }
+        , {       "Dog",  4 }
+        , { "Centipede", 40 }
+        , {       "Cat",  4 }
+        , {      "Worm",  0 }
+     };
+
+     {
+          const auto& icont = animals.get< Animal::Tag::Legs >();
+          const auto found = icont.find( 2 );
+          if( found != icont.end() )
+          {
+               std::cout << "Yes, " << found->name << " has " << found->legs << " legs.\n";
+          }
+          else
+          {
+               std::cout << "Not found!\n";
+          }
+     }
+     {
+          const auto& icont = animals.get< Animal::Tag::Name >();
+          const auto found = icont.find( "Cat" );
+          if( found != icont.end() )
+          {
+               std::cout << "Yes, " << found->name << " has " << found->legs << " legs.\n";
+          }
+          else
+          {
+               std::cout << "Not found!\n";
+          }
+     }
+     {
+          static constexpr auto from = 4;
+          static constexpr auto upto = 8;
+
+          const auto& icont = animals.get< Animal::Tag::Legs >();
+          std::cout << "What animals has from " << from << " up to " << upto << " legs?\n";
+          std::for_each(
+               icont.lower_bound( from )
+               , icont.upper_bound( upto )
+               , []( const auto& each )
+               {
+                    std::cout << "- " << each.name << " has " << each.legs << " legs\n";
+               }
+               );
+     }
+}
+
+
 int main( int argc, char** argv )
 {
      boost::ignore_unused( argc, argv );
      try
      {
-          using namespace std::string_literals;
-
-          const AnimalIndexedContainer animals{
+          const AnimalCompositeContainer animals{
                {   "Ostrich",  2 }
              , {    "Spider",  8 }
              , {      "Deer",  4 }
@@ -80,44 +151,17 @@ int main( int argc, char** argv )
              , {      "Worm",  0 }
           };
 
-          {
-               const auto& icont = animals.get< Animal::Tag::Legs >();
-               const auto found = icont.find( 2 );
-               if( found != icont.end() )
-               {
-                    std::cout << "Yes, " << found->name << " has " << found->legs << " legs.\n";
-               }
-               else
-               {
-                    std::cout << "Not found!\n";
-               }
-          }
-          {
-               const auto& icont = animals.get< Animal::Tag::Name >();
-               const auto found = icont.find( "Cat" );
-               if( found != icont.end() )
-               {
-                    std::cout << "Yes, " << found->name << " has " << found->legs << " legs.\n";
-               }
-               else
-               {
-                    std::cout << "Not found!\n";
-               }
-          }
-          {
-               static constexpr auto from = 4;
-               static constexpr auto upto = 8;
+          static constexpr auto name = "Beatle";
+          static constexpr auto legs = 6;
 
-               const auto& icont = animals.get< Animal::Tag::Legs >();
-               std::cout << "What animals has from " << from << " up to " << upto << " legs?\n";
-               std::for_each(
-                    icont.lower_bound( from )
-                    , icont.upper_bound( upto )
-                    , []( const auto& each )
-                    {
-                         std::cout << "- " << each.name << " has " << each.legs << " legs\n";
-                    }
-                    );
+          const auto found = animals.find( std::make_tuple( name, legs ) );
+          if( found != animals.end() )
+          {
+               std::cout << "Yes, " << found->name << " has " << found->legs << " legs.\n";
+          }
+          else
+          {
+               std::cout << "Not found!\n";
           }
      }
      catch( const std::exception& e )
