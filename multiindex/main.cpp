@@ -11,6 +11,21 @@
 #include <multiindex/document.h>
 
 
+struct TagPrinter
+{
+     explicit TagPrinter( const char* tag ) : tag_{ tag }
+     {
+          std::cout << "-----[ BEGIN: " << tag_ << " ]-------------------------\n\n";
+     }
+     ~TagPrinter()
+     {
+          std::cout << "\n-----[   END: " << tag_ << " ]-------------------------\n";
+     }
+
+     const char* const tag_ = nullptr;
+};
+
+
 struct Animal
 {
      std::string name;
@@ -53,6 +68,8 @@ using AnimalCompositeContainer = boost::multi_index::multi_index_container<
 
 void usage1()
 {
+     TagPrinter _{ __FUNCTION__ };
+
      using using_boost::multiindex::Document;
 
      std::cout
@@ -74,6 +91,8 @@ void usage1()
 
 void usage2()
 {
+     TagPrinter _{ __FUNCTION__ };
+
      const AnimalIndexedContainer animals{
           {   "Ostrich",  2 }
         , {    "Spider",  8 }
@@ -133,6 +152,8 @@ void usage2()
 
 void usage3()
 {
+     TagPrinter _{ __FUNCTION__ };
+
      const AnimalCompositeContainer animals{
           {   "Ostrich",  2 }
         , {    "Spider",  8 }
@@ -168,6 +189,7 @@ int main( int argc, char** argv )
      boost::ignore_unused( argc, argv );
      try
      {
+          usage2();
           usage3();
      }
      catch( const std::exception& e )
