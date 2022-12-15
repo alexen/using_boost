@@ -41,7 +41,14 @@ struct Animal
 using AnimalIndexedContainer = boost::multi_index::multi_index_container<
      Animal
      , boost::multi_index::indexed_by<
-          boost::multi_index::hashed_unique<
+          boost::multi_index::ordered_unique<
+               boost::multi_index::composite_key<
+                    Animal
+                    , boost::multi_index::member< Animal, std::string, &Animal::name >
+                    , boost::multi_index::member< Animal, std::uint16_t, &Animal::legs >
+                    >
+               >
+          , boost::multi_index::hashed_unique<
                boost::multi_index::tag< Animal::Tag::Name >
                , boost::multi_index::member< Animal, std::string, &Animal::name >
                >
@@ -147,6 +154,20 @@ void usage2()
                }
                );
      }
+     {
+          static constexpr auto name = "Beatle";
+          static constexpr auto legs = 6;
+
+          const auto found = animals.find( std::make_tuple( name, legs ) );
+          if( found != animals.end() )
+          {
+               std::cout << "Yes, " << found->name << " has " << found->legs << " legs.\n";
+          }
+          else
+          {
+               std::cout << "Not found!\n";
+          }
+     }
 }
 
 
@@ -190,7 +211,6 @@ int main( int argc, char** argv )
      try
      {
           usage2();
-          usage3();
      }
      catch( const std::exception& e )
      {
