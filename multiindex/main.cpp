@@ -10,28 +10,28 @@
 #include <multiindex/document.h>
 
 
-struct DataPack
+struct Animal
 {
-     std::uint16_t number;
-     boost::optional< std::string > text;
+     std::string name;
+     std::uint16_t legs;
 
      struct Tag {
-          struct Number {};
-          struct Text {};
+          struct Name {};
+          struct Legs {};
      };
 };
 
 
-using DataPackIndexContainer = boost::multi_index::multi_index_container<
-     DataPack
+using AnimalIndexedContainer = boost::multi_index::multi_index_container<
+     Animal
      , boost::multi_index::indexed_by<
-          boost::multi_index::ordered_unique<
-               boost::multi_index::tag< DataPack::Tag::Number >
-               , boost::multi_index::member< DataPack, std::uint16_t, &DataPack::number >
+          boost::multi_index::hashed_unique<
+               boost::multi_index::tag< Animal::Tag::Name >
+               , boost::multi_index::member< Animal, std::string, &Animal::name >
                >
-          , boost::multi_index::ordered_unique<
-               boost::multi_index::tag< DataPack::Tag::Text >
-               , boost::multi_index::member< DataPack, boost::optional< std::string >, &DataPack::text >
+          , boost::multi_index::ordered_non_unique<
+               boost::multi_index::tag< Animal::Tag::Legs >
+               , boost::multi_index::member< Animal, std::uint16_t, &Animal::legs >
                >
           >
      >;
@@ -65,22 +65,27 @@ int main( int argc, char** argv )
      {
           using namespace std::string_literals;
 
-          const DataPackIndexContainer cont{
-                 {  1,   "One"s }
-               , {  2,   "Two"s }
-               , {  3, "Three"s }
-               , { 10,       {} }
-               , { 11,       {} }
-               , { 12,       {} }
+          const AnimalIndexedContainer cont{
+               {   "Ostrich",  2 }
+             , {    "Spider",  8 }
+             , {      "Deer",  4 }
+             , {       "Bee",  6 }
+             , {  "Kangaroo",  2 }
+             , {    "Monkey",  2 }
+             , {    "Beatle",  6 }
+             , {     "Snake",  0 }
+             , {       "Dog",  4 }
+             , { "Centipede", 40 }
+             , {       "Cat",  4 }
+             , {      "Worm",  0 }
           };
 
           {
-               const auto& icont = cont.get< DataPack::Tag::Number >();
+               const auto& icont = cont.get< Animal::Tag::Legs >();
                const auto found = icont.find( 2 );
                if( found != icont.end() )
                {
-                    std::cout << "Value: " << found->number
-                         << " <=> " << found->text.value_or( "--" ) << '\n';
+                    std::cout << "Yes, " << found->name << " has " << found->legs << " legs.\n";
                }
                else
                {
@@ -88,12 +93,11 @@ int main( int argc, char** argv )
                }
           }
           {
-               const auto& icont = cont.get< DataPack::Tag::Text >();
-               const auto found = icont.find( "Three"s );
+               const auto& icont = cont.get< Animal::Tag::Name >();
+               const auto found = icont.find( "Cat" );
                if( found != icont.end() )
                {
-                    std::cout << "Value: " << found->number
-                         << " <=> " << found->text.value_or( "--" ) << '\n';
+                    std::cout << "Yes, " << found->name << " has " << found->legs << " legs.\n";
                }
                else
                {
@@ -101,17 +105,18 @@ int main( int argc, char** argv )
                }
           }
           {
-               const auto& icont = cont.get< DataPack::Tag::Text >();
-               const auto found = icont.find( boost::none );
-               if( found != icont.end() )
-               {
-                    std::cout << "Value: " << found->number
-                         << " <=> " << found->text.value_or( "--" ) << '\n';
-               }
-               else
-               {
-                    std::cout << "Not found!\n";
-               }
+               const auto& icont = cont.get< Animal::Tag::Legs >();
+               const auto from = 4;
+               const auto upto = 8;
+               std::cout << "What animals has from " << from << " up to " << upto << " legs?\n";
+               std::for_each(
+                    icont.lower_bound( from )
+                    , icont.upper_bound( upto )
+                    , []( const auto& each )
+                    {
+                         std::cout << "- " << each.name << " has " << each.legs << " legs\n";
+                    }
+                    );
           }
      }
      catch( const std::exception& e )
