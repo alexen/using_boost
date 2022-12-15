@@ -65,7 +65,7 @@ int main( int argc, char** argv )
      {
           using namespace std::string_literals;
 
-          const AnimalIndexedContainer cont{
+          const AnimalIndexedContainer animals{
                {   "Ostrich",  2 }
              , {    "Spider",  8 }
              , {      "Deer",  4 }
@@ -81,7 +81,7 @@ int main( int argc, char** argv )
           };
 
           {
-               const auto& icont = cont.get< Animal::Tag::Legs >();
+               const auto& icont = animals.get< Animal::Tag::Legs >();
                const auto found = icont.find( 2 );
                if( found != icont.end() )
                {
@@ -93,7 +93,7 @@ int main( int argc, char** argv )
                }
           }
           {
-               const auto& icont = cont.get< Animal::Tag::Name >();
+               const auto& icont = animals.get< Animal::Tag::Name >();
                const auto found = icont.find( "Cat" );
                if( found != icont.end() )
                {
@@ -105,9 +105,10 @@ int main( int argc, char** argv )
                }
           }
           {
-               const auto& icont = cont.get< Animal::Tag::Legs >();
-               const auto from = 4;
-               const auto upto = 8;
+               static constexpr auto from = 4;
+               static constexpr auto upto = 8;
+
+               const auto& icont = animals.get< Animal::Tag::Legs >();
                std::cout << "What animals has from " << from << " up to " << upto << " legs?\n";
                std::for_each(
                     icont.lower_bound( from )
