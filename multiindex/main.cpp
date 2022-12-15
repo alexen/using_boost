@@ -131,38 +131,44 @@ void usage2()
 }
 
 
+void usage3()
+{
+     const AnimalCompositeContainer animals{
+          {   "Ostrich",  2 }
+        , {    "Spider",  8 }
+        , {      "Deer",  4 }
+        , {       "Bee",  6 }
+        , {  "Kangaroo",  2 }
+        , {    "Monkey",  2 }
+        , {    "Beatle",  6 }
+        , {     "Snake",  0 }
+        , {       "Dog",  4 }
+        , { "Centipede", 40 }
+        , {       "Cat",  4 }
+        , {      "Worm",  0 }
+     };
+
+     static constexpr auto name = "Beatle";
+     static constexpr auto legs = 6;
+
+     const auto found = animals.find( std::make_tuple( name, legs ) );
+     if( found != animals.end() )
+     {
+          std::cout << "Yes, " << found->name << " has " << found->legs << " legs.\n";
+     }
+     else
+     {
+          std::cout << "Not found!\n";
+     }
+}
+
+
 int main( int argc, char** argv )
 {
      boost::ignore_unused( argc, argv );
      try
      {
-          const AnimalCompositeContainer animals{
-               {   "Ostrich",  2 }
-             , {    "Spider",  8 }
-             , {      "Deer",  4 }
-             , {       "Bee",  6 }
-             , {  "Kangaroo",  2 }
-             , {    "Monkey",  2 }
-             , {    "Beatle",  6 }
-             , {     "Snake",  0 }
-             , {       "Dog",  4 }
-             , { "Centipede", 40 }
-             , {       "Cat",  4 }
-             , {      "Worm",  0 }
-          };
-
-          static constexpr auto name = "Beatle";
-          static constexpr auto legs = 6;
-
-          const auto found = animals.find( std::make_tuple( name, legs ) );
-          if( found != animals.end() )
-          {
-               std::cout << "Yes, " << found->name << " has " << found->legs << " legs.\n";
-          }
-          else
-          {
-               std::cout << "Not found!\n";
-          }
+          usage3();
      }
      catch( const std::exception& e )
      {
