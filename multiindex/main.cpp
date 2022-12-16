@@ -11,6 +11,12 @@
 #include <multiindex/document.h>
 
 
+#define THROW_ASSERT( cond ) \
+     do { if( not (cond) ){ \
+          BOOST_THROW_EXCEPTION( std::runtime_error{ "condition failed: " #cond } ); } \
+     } while( false )
+
+
 struct TagPrinter
 {
      explicit TagPrinter( const char* tag ) : tag_{ tag }
@@ -205,12 +211,136 @@ void usage3()
 }
 
 
+struct Card
+{
+     const std::uint32_t uniqueInt;
+     const std::string uniqueText;
+     const std::string nonUniqueText;
+};
+
+
+std::ostream& operator<<( std::ostream& os, const Card& c )
+{
+     return os
+          << "ui:" << c.uniqueInt
+          << ", utext:" << c.uniqueText
+          << ", nutext:" << c.nonUniqueText;
+}
+
+
+void usage4()
+{
+     TagPrinter _{ __FUNCTION__ };
+
+     using WrongCards = boost::multi_index::multi_index_container<
+          Card,
+          boost::multi_index::indexed_by<
+               boost::multi_index::ordered_unique<
+                    boost::multi_index::member< Card, const std::uint32_t, &Card::uniqueInt >
+                    >,
+               boost::multi_index::ordered_unique<
+                    boost::multi_index::member< Card, const std::string, &Card::uniqueText >
+                    >,
+               boost::multi_index::ordered_unique<
+                    boost::multi_index::member< Card, const std::string, &Card::nonUniqueText >
+                    >
+               >
+          >;
+
+     using GoodCards = boost::multi_index::multi_index_container<
+          Card,
+          boost::multi_index::indexed_by<
+               boost::multi_index::ordered_unique<
+                    boost::multi_index::member< Card, const std::uint32_t, &Card::uniqueInt >
+                    >,
+               boost::multi_index::ordered_unique<
+                    boost::multi_index::member< Card, const std::string, &Card::uniqueText >
+                    >,
+               boost::multi_index::ordered_non_unique<
+                    boost::multi_index::member< Card, const std::string, &Card::nonUniqueText >
+                    >
+               >
+          >;
+
+     try
+     {
+          const WrongCards cards {
+               { 1,   "One", "Number" },
+               { 2,   "Two", "Number" },
+               { 3, "Three", "Number" }
+          };
+
+          THROW_ASSERT( cards.get<0>().find( 1 ) != cards.get<0>().end() );
+          THROW_ASSERT( cards.get<0>().find( 2 ) != cards.get<0>().end() );
+          THROW_ASSERT( cards.get<0>().find( 3 ) != cards.get<0>().end() );
+          THROW_ASSERT( cards.get<0>().find( 0 ) == cards.get<0>().end() );
+
+          std::cout
+               << *cards.get<0>().find( 1 ) << '\n'
+               << *cards.get<0>().find( 2 ) << '\n'
+               << *cards.get<0>().find( 3 ) << '\n'
+               ;
+
+          THROW_ASSERT( cards.get<1>().find(   "One" ) != cards.get<1>().end() );
+          THROW_ASSERT( cards.get<1>().find(   "Two" ) != cards.get<1>().end() );
+          THROW_ASSERT( cards.get<1>().find( "Three" ) != cards.get<1>().end() );
+          THROW_ASSERT( cards.get<1>().find( "~~~~~" ) == cards.get<1>().end() );
+
+          std::cout
+               << *cards.get<1>().find( "Three" ) << '\n'
+               << *cards.get<1>().find(   "Two" ) << '\n'
+               << *cards.get<1>().find(   "One" ) << '\n'
+               ;
+     }
+     catch( const std::exception& e )
+     {
+          std::cout << "exception: " << boost::diagnostic_information( e ) << '\n';
+     }
+     try
+     {
+          const GoodCards cards {
+               { 1,   "One", "Number" },
+               { 2,   "Two", "Number" },
+               { 3, "Three", "Number" }
+          };
+
+          THROW_ASSERT( cards.get<0>().find( 1 ) != cards.get<0>().end() );
+          THROW_ASSERT( cards.get<0>().find( 2 ) != cards.get<0>().end() );
+          THROW_ASSERT( cards.get<0>().find( 3 ) != cards.get<0>().end() );
+          THROW_ASSERT( cards.get<0>().find( 0 ) == cards.get<0>().end() );
+
+          std::cout
+               << *cards.get<0>().find( 1 ) << '\n'
+               << *cards.get<0>().find( 2 ) << '\n'
+               << *cards.get<0>().find( 3 ) << '\n'
+               ;
+
+          THROW_ASSERT( cards.get<1>().find(   "One" ) != cards.get<1>().end() );
+          THROW_ASSERT( cards.get<1>().find(   "Two" ) != cards.get<1>().end() );
+          THROW_ASSERT( cards.get<1>().find( "Three" ) != cards.get<1>().end() );
+          THROW_ASSERT( cards.get<1>().find( "~~~~~" ) == cards.get<1>().end() );
+
+          std::cout
+               << *cards.get<1>().find( "Three" ) << '\n'
+               << *cards.get<1>().find(   "Two" ) << '\n'
+               << *cards.get<1>().find(   "One" ) << '\n'
+               ;
+     }
+     catch( const std::exception& e )
+     {
+          std::cout << "exception: " << boost::diagnostic_information( e ) << '\n';
+     }
+}
+
+
 int main( int argc, char** argv )
 {
+     using namespace std::string_literals;
+
      boost::ignore_unused( argc, argv );
      try
      {
-          usage2();
+          usage4();
      }
      catch( const std::exception& e )
      {
