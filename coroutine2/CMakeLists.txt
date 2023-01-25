@@ -4,3 +4,4 @@ target_link_libraries(${PROJECT_NAME}
      ${Boost_COROUTINE_LIBRARY}
      ${Boost_CONTEXT_LIBRARY}
      )
+install(TARGETS ${PROJECT_NAME})

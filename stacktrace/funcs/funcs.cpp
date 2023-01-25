@@ -1,10 +1,9 @@
 /// @file
 /// @brief
 
-#include <stacktrace/tools/funcs.h>
-
+#include <stacktrace/exception.h>
+#include <stacktrace/funcs/funcs.h>
 #include <stdexcept>
-#include <stacktrace/stacktrace_exception.h>
 
 
 namespace using_boost {

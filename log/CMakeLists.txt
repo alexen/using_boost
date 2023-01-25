@@ -13,3 +13,5 @@ add_subdirectory(logger)
 if(BUILD_BENCHMARKS)
      add_subdirectory(benchmark)
 endif()
+
+install(TARGETS ${PROJECT_NAME})
