@@ -9,6 +9,7 @@
 #include <boost/uuid/string_generator.hpp>
 #include <boost/core/ignore_unused.hpp>
 #include <boost/exception/all.hpp>
+#include <boost/variant/variant.hpp>
 
 #include "error/exception.h"
 #include "error/details/for_uuid.h"
@@ -63,6 +64,40 @@ void func_b()
 }
 
 
+void func_c()
+{
+     try
+     {
+          BOOST_THROW_EXCEPTION( std::runtime_error{ "this is std::runtime_error" } );
+     }
+     catch( const std::exception& e )
+     {
+          BOOST_THROW_EXCEPTION( alexen::error::Exception{}
+               << boost::errinfo_at_line{ __LINE__ }
+               << boost::errinfo_type_info_name{ typeid( e ).name() }
+               << boost::errinfo_nested_exception{ boost::current_exception() } );
+     }
+}
+
+struct ExceptionOne : virtual std::exception, virtual boost::exception {};
+struct ExceptionTwo : virtual std::exception, virtual boost::exception {};
+
+struct JointException : virtual ExceptionOne, virtual ExceptionTwo {};
+
+
+void func_d()
+{
+     try
+     {
+          BOOST_THROW_EXCEPTION( ExceptionOne{} );
+     }
+     catch( const JointException& e )
+     {
+          std::cout << "WARNING: " << boost::diagnostic_information( e ) << '\n';
+     }
+}
+
+
 std::ostream& operator<<( std::ostream& os, const Enum e )
 {
      switch( e )
@@ -85,7 +120,7 @@ int main( int argc, char **argv )
      boost::ignore_unused( argc, argv );
      try
      {
-          func_fmt();
+          func_d();
      }
      catch( const std::exception &e )
      {
