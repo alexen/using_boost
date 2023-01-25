@@ -44,6 +44,20 @@ struct Animal
 };
 
 
+using AnimalSimpleIndexedContainer = boost::multi_index::multi_index_container<
+     Animal
+     , boost::multi_index::indexed_by<
+          boost::multi_index::hashed_unique<
+               boost::multi_index::tag< Animal::Tag::Name >
+               , boost::multi_index::member< Animal, std::string, &Animal::name >
+               >
+          , boost::multi_index::ordered_non_unique<
+               boost::multi_index::tag< Animal::Tag::Legs >
+               , boost::multi_index::member< Animal, std::uint16_t, &Animal::legs >
+               >
+          >
+     >;
+
 using AnimalIndexedContainer = boost::multi_index::multi_index_container<
      Animal
      , boost::multi_index::indexed_by<
@@ -333,6 +347,49 @@ void usage4()
 }
 
 
+void usage5()
+{
+     TagPrinter _{ __FUNCTION__ };
+
+     const AnimalSimpleIndexedContainer animals {
+          {   "Ostrich",  2 }
+        , {    "Spider",  8 }
+        , {      "Deer",  4 }
+        , {       "Bee",  6 }
+        , {  "Kangaroo",  2 }
+        , {    "Monkey",  2 }
+        , {    "Beatle",  6 }
+        , {     "Snake",  0 }
+        , {       "Dog",  4 }
+        , { "Centipede", 40 }
+        , {       "Cat",  4 }
+        , {      "Worm",  0 }
+     };
+     {
+          const auto name = "Monkey";
+          std::cout << "How many legs has " << name << "?\n";
+          const auto& range = animals.get< Animal::Tag::Name >().equal_range( name );
+          std::for_each( range.first, range.second,
+               []( const auto& each )
+               {
+                    std::cout << "- " << each.name << " has " << each.legs << " legs\n";
+               }
+               );
+     }
+     {
+          const auto legs = 6;
+          std::cout << "Which animals have " << legs << " legs?\n";
+          const auto& range = animals.get< Animal::Tag::Legs >().equal_range( legs );
+          std::for_each( range.first, range.second,
+               []( const auto& each )
+               {
+                    std::cout << "- " << each.name << " has " << each.legs << " legs\n";
+               }
+               );
+     }
+}
+
+
 int main( int argc, char** argv )
 {
      using namespace std::string_literals;
@@ -340,7 +397,7 @@ int main( int argc, char** argv )
      boost::ignore_unused( argc, argv );
      try
      {
-          usage4();
+          usage5();
      }
      catch( const std::exception& e )
      {
