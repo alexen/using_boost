@@ -1,0 +1,14 @@
+#!/bin/sh -e
+
+LICENSE_FILE_NAME="LICENSE.txt"
+LICENSE_FILE_PATH="$(dirname $0)/$LICENSE_FILE_NAME"
+
+clear
+cat $LICENSE_FILE_PATH
+echo
+echo -n "Do you accept the license agreement? [Yn] "
+read answer
+case "$answer" in
+  [Nn]*) exit 1;;
+esac
+exit 0

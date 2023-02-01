@@ -6,9 +6,8 @@
 
 #include <boost/core/ignore_unused.hpp>
 #include <boost/exception/diagnostic_information.hpp>
-
-#include <stacktrace/tools/funcs.h>
-#include <stacktrace/stacktrace_exception.h>
+#include <stacktrace/exception.h>
+#include <stacktrace/funcs/funcs.h>
 
 
 struct Error : virtual std::exception, virtual boost::exception {};

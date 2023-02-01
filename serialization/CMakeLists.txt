@@ -5,3 +5,4 @@ target_link_libraries(${PROJECT_NAME}
      ${Boost_SERIALIZATION_LIBRARY}
      ${Boost_IOSTREAMS_LIBRARY}
      )
+install(TARGETS ${PROJECT_NAME})
