@@ -6,7 +6,7 @@
 #include <boost/thread.hpp>
 #include <boost/date_time/posix_time/posix_time_duration.hpp>
 #include <boost/thread.hpp>
-#include <boost/bind.hpp>
+#include <boost/bind/bind.hpp>
 
 #include <log/logger/logger.h>
 
