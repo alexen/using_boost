@@ -9,7 +9,7 @@ add_definitions(-Wall -Werror -Wpedantic -Wextra)
 
 set(CMAKE_CXX_FLAGS_DEBUG "-ggdb3 -O0 -fno-inline")
 option(BUILD_SHARED_LIBS "Build shared libs" ON)
-option(BUILD_BENCHMARKS "Enable benchmarks build" ON)
+option(BUILD_BENCHMARKS "Disable benchmarks build" OFF)
 
 include_directories(${CMAKE_SOURCE_DIR})
 
