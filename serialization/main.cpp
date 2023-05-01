@@ -6,7 +6,10 @@
 #include <stdexcept>
 #include <iostream>
 #include <fstream>
+#include <initializer_list>
 
+/// Этот хедер должен идти строго перед хедером boost/serialization/optional.hpp
+#include <boost/serialization/version.hpp>
 #include <boost/serialization/optional.hpp>
 #include <boost/serialization/vector.hpp>
 #include <boost/serialization/split_free.hpp>
