@@ -158,7 +158,7 @@ BOOST_DATA_TEST_CASE(
 }
 
 
-static const char* CSTRS_4[] = { "cake", "owl", "radio", "top" };
+static const char* const CSTRS_4[] = { "cake", "owl", "radio", "top" };
 
 
 BOOST_DATA_TEST_CASE(
@@ -171,7 +171,7 @@ BOOST_DATA_TEST_CASE(
      static const auto isPresent =
           []( const std::string& str )
           {
-               static constexpr auto end = CSTRS_4 + 4;
+               static const auto end = CSTRS_4 + 4;
                return end != std::find( CSTRS_4, end, str );
           };
 
