@@ -10,7 +10,6 @@
 #include <algorithm>
 #include <iterator>
 
-#include <boost/bind.hpp>
 #include <boost/core/ignore_unused.hpp>
 #include <boost/iostreams/copy.hpp>
 #include <boost/iostreams/filtering_stream.hpp>
