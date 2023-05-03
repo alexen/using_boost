@@ -16,8 +16,6 @@ set(CMAKE_CXX_FLAGS_DEBUG "-ggdb3 -O0 -fno-inline")
 option(BUILD_SHARED_LIBS "Build shared libs" ON)
 option(BUILD_BENCHMARKS "Disable benchmarks build" OFF)
 
-include_directories(${CMAKE_SOURCE_DIR})
-
 find_package(Boost 1.69 REQUIRED
      unit_test_framework
      serialization
@@ -43,38 +41,19 @@ enable_testing()
 message(STATUS "Build testing: ${BUILD_TESTING}")
 
 message(STATUS "Build benchmarks: ${BUILD_BENCHMARKS}")
-if(BUILD_BENCHMARKS)
-     add_subdirectory(celero)
-     include_directories(celero/include)
-endif()
 
 set(CMAKE_INSTALL_RPATH ${CMAKE_INSTALL_PREFIX}/lib)
 
-add_subdirectory(core)
-add_subdirectory(serialization)
-add_subdirectory(iostreams)
-add_subdirectory(coroutine2)
-add_subdirectory(property_tree)
-add_subdirectory(beast)
-add_subdirectory(locale)
-add_subdirectory(testing)
-add_subdirectory(datetime)
-add_subdirectory(regex)
-add_subdirectory(variant)
-add_subdirectory(range)
-add_subdirectory(multiindex)
-add_subdirectory(filesystem)
-add_subdirectory(tribool)
-add_subdirectory(stacktrace)
-add_subdirectory(log)
-add_subdirectory(algorithm)
-add_subdirectory(exception)
+add_subdirectory(3rdparty)
+
+include_directories(${CMAKE_SOURCE_DIR}/src)
+add_subdirectory(src)
 
 set(SRC_TAR_NAME "${PROJECT_NAME}.tar.bz2")
 add_custom_command(
      OUTPUT ${SRC_TAR_NAME}
      COMMAND tar ARGS --exclude='./.*' --exclude='./celero' -cjf ${CMAKE_BINARY_DIR}/${SRC_TAR_NAME} .
-     WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+     WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/src
 )
 add_custom_target(srctgz DEPENDS ${CMAKE_BINARY_DIR}/${SRC_TAR_NAME})
 
@@ -89,7 +68,7 @@ set(CPACK_PACKAGE_CHECKSUM SHA512)
 set(CPACK_DEBIAN_FILE_NAME DEB-DEFAULT)
 set(CPACK_DEBIAN_PACKAGE_SHLIBDEPS ON)
 set(CPACK_DEBIAN_PACKAGE_CONTROL_EXTRA
-     ${PROJECT_SOURCE_DIR}/deb/scripts/preinst
+     ${PROJECT_SOURCE_DIR}/package/deb/scripts/preinst
      ${PROJECT_SOURCE_DIR}/LICENSE.txt
      )
 
