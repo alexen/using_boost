@@ -1,0 +1,196 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.9.2"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Learning Boost: Исходный файл 3rdparty/celero/include/celero/TestFixture.h</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">Learning Boost
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Создано системой Doxygen 1.9.2 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+var searchBox = new SearchBox("searchBox", "search",'Поиск','.html');
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() {
+  initMenu('',true,false,'search.php','Поиск');
+  $(document).ready(function() { init_search(); });
+});
+/* @license-end */
+</script>
+<div id="main-nav"></div>
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<iframe src="javascript:void(0)" frameborder="0" 
+        name="MSearchResults" id="MSearchResults">
+</iframe>
+</div>
+
+<div id="nav-path" class="navpath">
+  <ul>
+<li class="navelem"><a class="el" href="dir_8cab8f464681f7cc51cee77e79a434cd.html">3rdparty</a></li><li class="navelem"><a class="el" href="dir_5dad5da5fa07e7a8893aad699b2a3a0d.html">celero</a></li><li class="navelem"><a class="el" href="dir_6d4089616196ee0a1f6b36bc2cabca01.html">include</a></li><li class="navelem"><a class="el" href="dir_42889b5e0da8a74394c81514984f1309.html">celero</a></li>  </ul>
+</div>
+</div><!-- top -->
+<div class="header">
+  <div class="headertitle"><div class="title">TestFixture.h</div></div>
+</div><!--header-->
+<div class="contents">
+<div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="preprocessor">#pragma once</span></div>
+<div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span> </div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span> </div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span><span class="preprocessor">#include &lt;celero/Export.h&gt;</span></div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span><span class="preprocessor">#include &lt;celero/Timer.h&gt;</span></div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span> </div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span><span class="preprocessor">#include &lt;cstddef&gt;</span></div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span><span class="preprocessor">#include &lt;cstdint&gt;</span></div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span><span class="preprocessor">#include &lt;limits&gt;</span></div>
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span><span class="preprocessor">#include &lt;memory&gt;</span></div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span><span class="preprocessor">#include &lt;string&gt;</span></div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span><span class="preprocessor">#include &lt;vector&gt;</span></div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span> </div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span><span class="comment">// This must be included last.</span></div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span><span class="preprocessor">#include &lt;celero/ThreadLocal.h&gt;</span></div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span> </div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespacecelero.html">celero</a></div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span>{</div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span>    <span class="keyword">class </span>Benchmark;</div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span>    <span class="keyword">class </span>UserDefinedMeasurement;</div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span> </div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno"><a class="line" href="classcelero_1_1TestFixture.html">   44</a></span>    <span class="keyword">class </span>CELERO_EXPORT <a class="code hl_class" href="classcelero_1_1TestFixture.html">TestFixture</a></div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span>    {</div>
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>    <span class="keyword">public</span>:</div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno"><a class="line" href="classcelero_1_1TestFixture.html#a4d5581388a914202c412463fd166921d">   50</a></span>        <a class="code hl_function" href="classcelero_1_1TestFixture.html#a4d5581388a914202c412463fd166921d">TestFixture</a>();</div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span> </div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno"><a class="line" href="classcelero_1_1TestFixture.html#a2caba71f0fbb8d349599d65dd8e4df01">   55</a></span>        <span class="keyword">virtual</span> <a class="code hl_function" href="classcelero_1_1TestFixture.html#a2caba71f0fbb8d349599d65dd8e4df01">~TestFixture</a>();</div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span> </div>
+<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>        <span class="keyword">enum class</span> Constants : int64_t</div>
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span>        {</div>
+<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span><span class="preprocessor">#ifdef _MSC_VER</span></div>
+<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span><span class="preprocessor">#if(_MSC_VER &lt; 1900)</span></div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span>            NoProblemSpaceValue = -9223372036854775807</div>
+<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span><span class="preprocessor">#else</span></div>
+<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span>            NoProblemSpaceValue = std::numeric_limits&lt;int64_t&gt;::min()</div>
+<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span><span class="preprocessor">#endif</span></div>
+<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span><span class="preprocessor">#else</span></div>
+<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span>            NoProblemSpaceValue = std::numeric_limits&lt;int64_t&gt;::min()</div>
+<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span><span class="preprocessor">#endif</span></div>
+<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span>        };</div>
+<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span> </div>
+<div class="line"><a id="l00075" name="l00075"></a><span class="lineno"><a class="line" href="classcelero_1_1TestFixture_1_1ExperimentValue.html">   75</a></span>        <span class="keyword">class </span><a class="code hl_class" href="classcelero_1_1TestFixture_1_1ExperimentValue.html">ExperimentValue</a></div>
+<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span>        {</div>
+<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span>        <span class="keyword">public</span>:</div>
+<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span>            <a class="code hl_class" href="classcelero_1_1TestFixture_1_1ExperimentValue.html">ExperimentValue</a>() = <span class="keywordflow">default</span>;</div>
+<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span>            <a class="code hl_class" href="classcelero_1_1TestFixture_1_1ExperimentValue.html">ExperimentValue</a>(int64_t v) : Value(v){};</div>
+<div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span>            <a class="code hl_class" href="classcelero_1_1TestFixture_1_1ExperimentValue.html">ExperimentValue</a>(int64_t v, int64_t i) : Value(v), Iterations(i){};</div>
+<div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span> </div>
+<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span>            <span class="keyword">virtual</span> <a class="code hl_class" href="classcelero_1_1TestFixture_1_1ExperimentValue.html">~ExperimentValue</a>() = <span class="keywordflow">default</span>;</div>
+<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span> </div>
+<div class="line"><a id="l00085" name="l00085"></a><span class="lineno"><a class="line" href="classcelero_1_1TestFixture_1_1ExperimentValue.html#ae00b1baaa53aa5d65fee26d633598abb">   85</a></span>            int64_t Value{0};</div>
+<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span> </div>
+<div class="line"><a id="l00089" name="l00089"></a><span class="lineno"><a class="line" href="classcelero_1_1TestFixture_1_1ExperimentValue.html#a5b8a737f21bc10ae89938fff9ebdffed">   89</a></span>            int64_t Iterations{0};</div>
+<div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span>        };</div>
+<div class="line"><a id="l00091" name="l00091"></a><span class="lineno">   91</span> </div>
+<div class="line"><a id="l00103" name="l00103"></a><span class="lineno"><a class="line" href="classcelero_1_1TestFixture.html#ab956d09c5be83d89e8e4d4f658f4ddb5">  103</a></span>        <span class="keyword">virtual</span> std::vector&lt;celero::TestFixture::ExperimentValue&gt; <a class="code hl_function" href="classcelero_1_1TestFixture.html#ab956d09c5be83d89e8e4d4f658f4ddb5">getExperimentValues</a>()<span class="keyword"> const</span></div>
+<div class="line"><a id="l00104" name="l00104"></a><span class="lineno">  104</span><span class="keyword">        </span>{</div>
+<div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span>            <span class="keywordflow">return</span> std::vector&lt;celero::TestFixture::ExperimentValue&gt;();</div>
+<div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span>        };</div>
+<div class="line"><a id="l00107" name="l00107"></a><span class="lineno">  107</span> </div>
+<div class="line"><a id="l00118" name="l00118"></a><span class="lineno"><a class="line" href="classcelero_1_1TestFixture.html#a89f6a1ef4cbbbeb095f08204e64f38db">  118</a></span>        <span class="keyword">virtual</span> <span class="keywordtype">double</span> <a class="code hl_function" href="classcelero_1_1TestFixture.html#a89f6a1ef4cbbbeb095f08204e64f38db">getExperimentValueResultScale</a>()<span class="keyword"> const</span></div>
+<div class="line"><a id="l00119" name="l00119"></a><span class="lineno">  119</span><span class="keyword">        </span>{</div>
+<div class="line"><a id="l00120" name="l00120"></a><span class="lineno">  120</span>            <span class="keywordflow">return</span> 1.0;</div>
+<div class="line"><a id="l00121" name="l00121"></a><span class="lineno">  121</span>        };</div>
+<div class="line"><a id="l00122" name="l00122"></a><span class="lineno">  122</span> </div>
+<div class="line"><a id="l00131" name="l00131"></a><span class="lineno"><a class="line" href="classcelero_1_1TestFixture.html#a068885adcefea6dd6a5e4441067d34cd">  131</a></span>        <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code hl_function" href="classcelero_1_1TestFixture.html#a068885adcefea6dd6a5e4441067d34cd">onExperimentStart</a>(<span class="keyword">const</span> <a class="code hl_class" href="classcelero_1_1TestFixture_1_1ExperimentValue.html">celero::TestFixture::ExperimentValue</a>&amp; x);</div>
+<div class="line"><a id="l00132" name="l00132"></a><span class="lineno">  132</span> </div>
+<div class="line"><a id="l00138" name="l00138"></a><span class="lineno"><a class="line" href="classcelero_1_1TestFixture.html#ad85ca2633ba251e74621b63badf7bfb0">  138</a></span>        <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code hl_function" href="classcelero_1_1TestFixture.html#ad85ca2633ba251e74621b63badf7bfb0">onExperimentEnd</a>();</div>
+<div class="line"><a id="l00139" name="l00139"></a><span class="lineno">  139</span> </div>
+<div class="line"><a id="l00149" name="l00149"></a><span class="lineno"><a class="line" href="classcelero_1_1TestFixture.html#a3c5442d6ca5a8a5a8d0a845617827a87">  149</a></span>        <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code hl_function" href="classcelero_1_1TestFixture.html#a3c5442d6ca5a8a5a8d0a845617827a87">setUp</a>(<span class="keyword">const</span> <a class="code hl_class" href="classcelero_1_1TestFixture_1_1ExperimentValue.html">celero::TestFixture::ExperimentValue</a>&amp; x);</div>
+<div class="line"><a id="l00150" name="l00150"></a><span class="lineno">  150</span> </div>
+<div class="line"><a id="l00154" name="l00154"></a><span class="lineno"><a class="line" href="classcelero_1_1TestFixture.html#ad432a0ea830dc1d9d363a14e432f0688">  154</a></span>        <span class="keywordtype">void</span> <a class="code hl_function" href="classcelero_1_1TestFixture.html#ad432a0ea830dc1d9d363a14e432f0688">setExperimentTime</a>(uint64_t x);</div>
+<div class="line"><a id="l00155" name="l00155"></a><span class="lineno">  155</span> </div>
+<div class="line"><a id="l00159" name="l00159"></a><span class="lineno"><a class="line" href="classcelero_1_1TestFixture.html#a60632d4f3c8cfe5a8dcebfc42c0e952e">  159</a></span>        uint64_t <a class="code hl_function" href="classcelero_1_1TestFixture.html#a60632d4f3c8cfe5a8dcebfc42c0e952e">getExperimentTime</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00160" name="l00160"></a><span class="lineno">  160</span> </div>
+<div class="line"><a id="l00164" name="l00164"></a><span class="lineno"><a class="line" href="classcelero_1_1TestFixture.html#a30aeb6b3ff0c984aefae601abb06e398">  164</a></span>        <span class="keywordtype">void</span> <a class="code hl_function" href="classcelero_1_1TestFixture.html#a30aeb6b3ff0c984aefae601abb06e398">setExperimentIterations</a>(uint64_t x);</div>
+<div class="line"><a id="l00165" name="l00165"></a><span class="lineno">  165</span> </div>
+<div class="line"><a id="l00169" name="l00169"></a><span class="lineno"><a class="line" href="classcelero_1_1TestFixture.html#ae7b4636c4ab2ef70bd105a1c624aec1c">  169</a></span>        uint64_t <a class="code hl_function" href="classcelero_1_1TestFixture.html#ae7b4636c4ab2ef70bd105a1c624aec1c">getExperimentIterations</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00170" name="l00170"></a><span class="lineno">  170</span> </div>
+<div class="line"><a id="l00178" name="l00178"></a><span class="lineno"><a class="line" href="classcelero_1_1TestFixture.html#a5033ac3987a205f68081aaaf1b5b5a7e">  178</a></span>        <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code hl_function" href="classcelero_1_1TestFixture.html#a5033ac3987a205f68081aaaf1b5b5a7e">tearDown</a>();</div>
+<div class="line"><a id="l00179" name="l00179"></a><span class="lineno">  179</span> </div>
+<div class="line"><a id="l00188" name="l00188"></a><span class="lineno"><a class="line" href="classcelero_1_1TestFixture.html#a55fede2e36fb6d954e9b0c2014386f01">  188</a></span>        <span class="keyword">virtual</span> uint64_t <a class="code hl_function" href="classcelero_1_1TestFixture.html#a55fede2e36fb6d954e9b0c2014386f01">run</a>(uint64_t threads, uint64_t iterations, <span class="keyword">const</span> <a class="code hl_class" href="classcelero_1_1TestFixture_1_1ExperimentValue.html">celero::TestFixture::ExperimentValue</a>&amp; experimentValue);</div>
+<div class="line"><a id="l00189" name="l00189"></a><span class="lineno">  189</span> </div>
+<div class="line"><a id="l00195" name="l00195"></a><span class="lineno"><a class="line" href="classcelero_1_1TestFixture.html#a323859419fe4517c7d401e21d0c310df">  195</a></span>        <span class="keyword">virtual</span> std::vector&lt;std::shared_ptr&lt;UserDefinedMeasurement&gt;&gt; <a class="code hl_function" href="classcelero_1_1TestFixture.html#a323859419fe4517c7d401e21d0c310df">getUserDefinedMeasurements</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00196" name="l00196"></a><span class="lineno">  196</span> </div>
+<div class="line"><a id="l00200" name="l00200"></a><span class="lineno"><a class="line" href="classcelero_1_1TestFixture.html#a0cab74ea843100d2529eb925507413ff">  200</a></span>        std::vector&lt;std::string&gt; <a class="code hl_function" href="classcelero_1_1TestFixture.html#a0cab74ea843100d2529eb925507413ff">getUserDefinedMeasurementNames</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00201" name="l00201"></a><span class="lineno">  201</span> </div>
+<div class="line"><a id="l00202" name="l00202"></a><span class="lineno">  202</span>    <span class="keyword">protected</span>:</div>
+<div class="line"><a id="l00204" name="l00204"></a><span class="lineno"><a class="line" href="classcelero_1_1TestFixture.html#a9b3ddd34a16b9341d1bc360d538520ec">  204</a></span>        <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code hl_function" href="classcelero_1_1TestFixture.html#a9b3ddd34a16b9341d1bc360d538520ec">UserBenchmark</a>();</div>
+<div class="line"><a id="l00205" name="l00205"></a><span class="lineno">  205</span> </div>
+<div class="line"><a id="l00209" name="l00209"></a><span class="lineno"><a class="line" href="classcelero_1_1TestFixture.html#aaf3a4cbe9d9e97dfcfc1858a156e8973">  209</a></span>        <span class="keyword">virtual</span> uint64_t <a class="code hl_function" href="classcelero_1_1TestFixture.html#aaf3a4cbe9d9e97dfcfc1858a156e8973">HardCodedMeasurement</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00210" name="l00210"></a><span class="lineno">  210</span> </div>
+<div class="line"><a id="l00211" name="l00211"></a><span class="lineno">  211</span>    <span class="keyword">private</span>:</div>
+<div class="line"><a id="l00212" name="l00212"></a><span class="lineno">  212</span>        uint64_t experimentIterations{0};</div>
+<div class="line"><a id="l00213" name="l00213"></a><span class="lineno">  213</span>        uint64_t experimentTime{0};</div>
+<div class="line"><a id="l00214" name="l00214"></a><span class="lineno">  214</span>    };</div>
+<div class="line"><a id="l00215" name="l00215"></a><span class="lineno">  215</span>} <span class="comment">// namespace celero</span></div>
+<div class="line"><a id="l00216" name="l00216"></a><span class="lineno">  216</span> </div>
+<div class="ttc" id="aclasscelero_1_1TestFixture_1_1ExperimentValue_html"><div class="ttname"><a href="classcelero_1_1TestFixture_1_1ExperimentValue.html">celero::TestFixture::ExperimentValue</a></div><div class="ttdef"><b>Definition:</b> TestFixture.h:76</div></div>
+<div class="ttc" id="aclasscelero_1_1TestFixture_html"><div class="ttname"><a href="classcelero_1_1TestFixture.html">celero::TestFixture</a></div><div class="ttdef"><b>Definition:</b> TestFixture.h:45</div></div>
+<div class="ttc" id="aclasscelero_1_1TestFixture_html_a068885adcefea6dd6a5e4441067d34cd"><div class="ttname"><a href="classcelero_1_1TestFixture.html#a068885adcefea6dd6a5e4441067d34cd">celero::TestFixture::onExperimentStart</a></div><div class="ttdeci">virtual void onExperimentStart(const celero::TestFixture::ExperimentValue &amp;x)</div></div>
+<div class="ttc" id="aclasscelero_1_1TestFixture_html_a0cab74ea843100d2529eb925507413ff"><div class="ttname"><a href="classcelero_1_1TestFixture.html#a0cab74ea843100d2529eb925507413ff">celero::TestFixture::getUserDefinedMeasurementNames</a></div><div class="ttdeci">std::vector&lt; std::string &gt; getUserDefinedMeasurementNames() const</div><div class="ttdoc">Returns the names of all user-defined measurements in this fixture.</div></div>
+<div class="ttc" id="aclasscelero_1_1TestFixture_html_a2caba71f0fbb8d349599d65dd8e4df01"><div class="ttname"><a href="classcelero_1_1TestFixture.html#a2caba71f0fbb8d349599d65dd8e4df01">celero::TestFixture::~TestFixture</a></div><div class="ttdeci">virtual ~TestFixture()</div></div>
+<div class="ttc" id="aclasscelero_1_1TestFixture_html_a30aeb6b3ff0c984aefae601abb06e398"><div class="ttname"><a href="classcelero_1_1TestFixture.html#a30aeb6b3ff0c984aefae601abb06e398">celero::TestFixture::setExperimentIterations</a></div><div class="ttdeci">void setExperimentIterations(uint64_t x)</div></div>
+<div class="ttc" id="aclasscelero_1_1TestFixture_html_a323859419fe4517c7d401e21d0c310df"><div class="ttname"><a href="classcelero_1_1TestFixture.html#a323859419fe4517c7d401e21d0c310df">celero::TestFixture::getUserDefinedMeasurements</a></div><div class="ttdeci">virtual std::vector&lt; std::shared_ptr&lt; UserDefinedMeasurement &gt; &gt; getUserDefinedMeasurements() const</div><div class="ttdoc">If you want to use user-defined measurements, override this method to return them.</div></div>
+<div class="ttc" id="aclasscelero_1_1TestFixture_html_a3c5442d6ca5a8a5a8d0a845617827a87"><div class="ttname"><a href="classcelero_1_1TestFixture.html#a3c5442d6ca5a8a5a8d0a845617827a87">celero::TestFixture::setUp</a></div><div class="ttdeci">virtual void setUp(const celero::TestFixture::ExperimentValue &amp;x)</div></div>
+<div class="ttc" id="aclasscelero_1_1TestFixture_html_a4d5581388a914202c412463fd166921d"><div class="ttname"><a href="classcelero_1_1TestFixture.html#a4d5581388a914202c412463fd166921d">celero::TestFixture::TestFixture</a></div><div class="ttdeci">TestFixture()</div></div>
+<div class="ttc" id="aclasscelero_1_1TestFixture_html_a5033ac3987a205f68081aaaf1b5b5a7e"><div class="ttname"><a href="classcelero_1_1TestFixture.html#a5033ac3987a205f68081aaaf1b5b5a7e">celero::TestFixture::tearDown</a></div><div class="ttdeci">virtual void tearDown()</div></div>
+<div class="ttc" id="aclasscelero_1_1TestFixture_html_a55fede2e36fb6d954e9b0c2014386f01"><div class="ttname"><a href="classcelero_1_1TestFixture.html#a55fede2e36fb6d954e9b0c2014386f01">celero::TestFixture::run</a></div><div class="ttdeci">virtual uint64_t run(uint64_t threads, uint64_t iterations, const celero::TestFixture::ExperimentValue &amp;experimentValue)</div></div>
+<div class="ttc" id="aclasscelero_1_1TestFixture_html_a60632d4f3c8cfe5a8dcebfc42c0e952e"><div class="ttname"><a href="classcelero_1_1TestFixture.html#a60632d4f3c8cfe5a8dcebfc42c0e952e">celero::TestFixture::getExperimentTime</a></div><div class="ttdeci">uint64_t getExperimentTime() const</div></div>
+<div class="ttc" id="aclasscelero_1_1TestFixture_html_a89f6a1ef4cbbbeb095f08204e64f38db"><div class="ttname"><a href="classcelero_1_1TestFixture.html#a89f6a1ef4cbbbeb095f08204e64f38db">celero::TestFixture::getExperimentValueResultScale</a></div><div class="ttdeci">virtual double getExperimentValueResultScale() const</div><div class="ttdef"><b>Definition:</b> TestFixture.h:118</div></div>
+<div class="ttc" id="aclasscelero_1_1TestFixture_html_a9b3ddd34a16b9341d1bc360d538520ec"><div class="ttname"><a href="classcelero_1_1TestFixture.html#a9b3ddd34a16b9341d1bc360d538520ec">celero::TestFixture::UserBenchmark</a></div><div class="ttdeci">virtual void UserBenchmark()</div><div class="ttdoc">Executed for each operation the benchmarking test is run.</div></div>
+<div class="ttc" id="aclasscelero_1_1TestFixture_html_aaf3a4cbe9d9e97dfcfc1858a156e8973"><div class="ttname"><a href="classcelero_1_1TestFixture.html#aaf3a4cbe9d9e97dfcfc1858a156e8973">celero::TestFixture::HardCodedMeasurement</a></div><div class="ttdeci">virtual uint64_t HardCodedMeasurement() const</div></div>
+<div class="ttc" id="aclasscelero_1_1TestFixture_html_ab956d09c5be83d89e8e4d4f658f4ddb5"><div class="ttname"><a href="classcelero_1_1TestFixture.html#ab956d09c5be83d89e8e4d4f658f4ddb5">celero::TestFixture::getExperimentValues</a></div><div class="ttdeci">virtual std::vector&lt; celero::TestFixture::ExperimentValue &gt; getExperimentValues() const</div><div class="ttdef"><b>Definition:</b> TestFixture.h:103</div></div>
+<div class="ttc" id="aclasscelero_1_1TestFixture_html_ad432a0ea830dc1d9d363a14e432f0688"><div class="ttname"><a href="classcelero_1_1TestFixture.html#ad432a0ea830dc1d9d363a14e432f0688">celero::TestFixture::setExperimentTime</a></div><div class="ttdeci">void setExperimentTime(uint64_t x)</div></div>
+<div class="ttc" id="aclasscelero_1_1TestFixture_html_ad85ca2633ba251e74621b63badf7bfb0"><div class="ttname"><a href="classcelero_1_1TestFixture.html#ad85ca2633ba251e74621b63badf7bfb0">celero::TestFixture::onExperimentEnd</a></div><div class="ttdeci">virtual void onExperimentEnd()</div></div>
+<div class="ttc" id="aclasscelero_1_1TestFixture_html_ae7b4636c4ab2ef70bd105a1c624aec1c"><div class="ttname"><a href="classcelero_1_1TestFixture.html#ae7b4636c4ab2ef70bd105a1c624aec1c">celero::TestFixture::getExperimentIterations</a></div><div class="ttdeci">uint64_t getExperimentIterations() const</div></div>
+<div class="ttc" id="anamespacecelero_html"><div class="ttname"><a href="namespacecelero.html">celero</a></div><div class="ttdef"><b>Definition:</b> Archive.h:26</div></div>
+</div><!-- fragment --></div><!-- contents -->
+<!-- start footer part -->
+<hr class="footer"/><address class="footer"><small>
+Создано системой&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.2
+</small></address>
+</body>
+</html>

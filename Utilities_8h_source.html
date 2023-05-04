@@ -1,0 +1,148 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.9.2"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Learning Boost: Исходный файл 3rdparty/celero/include/celero/Utilities.h</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">Learning Boost
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Создано системой Doxygen 1.9.2 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+var searchBox = new SearchBox("searchBox", "search",'Поиск','.html');
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() {
+  initMenu('',true,false,'search.php','Поиск');
+  $(document).ready(function() { init_search(); });
+});
+/* @license-end */
+</script>
+<div id="main-nav"></div>
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<iframe src="javascript:void(0)" frameborder="0" 
+        name="MSearchResults" id="MSearchResults">
+</iframe>
+</div>
+
+<div id="nav-path" class="navpath">
+  <ul>
+<li class="navelem"><a class="el" href="dir_8cab8f464681f7cc51cee77e79a434cd.html">3rdparty</a></li><li class="navelem"><a class="el" href="dir_5dad5da5fa07e7a8893aad699b2a3a0d.html">celero</a></li><li class="navelem"><a class="el" href="dir_6d4089616196ee0a1f6b36bc2cabca01.html">include</a></li><li class="navelem"><a class="el" href="dir_42889b5e0da8a74394c81514984f1309.html">celero</a></li>  </ul>
+</div>
+</div><!-- top -->
+<div class="header">
+  <div class="headertitle"><div class="title">Utilities.h</div></div>
+</div><!--header-->
+<div class="contents">
+<div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="preprocessor">#pragma once</span></div>
+<div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span> </div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span> </div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span><span class="preprocessor">#ifndef _WIN32</span></div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span><span class="preprocessor">#include &lt;unistd.h&gt;</span></div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span><span class="preprocessor">#endif</span></div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span> </div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span><span class="preprocessor">#ifdef __FreeBSD__</span></div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span><span class="preprocessor">#include &lt;stdio.h&gt;</span></div>
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span><span class="preprocessor">#endif</span></div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span> </div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span><span class="preprocessor">#include &lt;cstdint&gt;</span></div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span><span class="preprocessor">#include &lt;cstdio&gt;</span></div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span><span class="preprocessor">#include &lt;cstdlib&gt;</span></div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span><span class="preprocessor">#include &lt;functional&gt;</span></div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span><span class="preprocessor">#include &lt;thread&gt;</span></div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span> </div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span><span class="preprocessor">#include &lt;celero/Export.h&gt;</span></div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span> </div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespacecelero.html">celero</a></div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span>{</div>
+<div class="line"><a id="l00100" name="l00100"></a><span class="lineno">  100</span>    <span class="keyword">template</span> &lt;<span class="keyword">class</span> T&gt;</div>
+<div class="line"><a id="l00101" name="l00101"></a><span class="lineno"><a class="line" href="namespacecelero.html#a9c93f3964683c5988dcef98733621cf9">  101</a></span>    <span class="keywordtype">void</span> <a class="code hl_function" href="namespacecelero.html#a9c93f3964683c5988dcef98733621cf9">DoNotOptimizeAway</a>(T&amp;&amp; x)</div>
+<div class="line"><a id="l00102" name="l00102"></a><span class="lineno">  102</span>    {</div>
+<div class="line"><a id="l00103" name="l00103"></a><span class="lineno">  103</span>        <span class="keyword">static</span> <span class="keyword">auto</span> ttid = std::this_thread::get_id();</div>
+<div class="line"><a id="l00104" name="l00104"></a><span class="lineno">  104</span>        <span class="keywordflow">if</span>(ttid == std::thread::id())</div>
+<div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span>        {</div>
+<div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span>            <span class="comment">// This forces the value to never be optimized away</span></div>
+<div class="line"><a id="l00107" name="l00107"></a><span class="lineno">  107</span>            <span class="comment">// by taking a reference then using it.</span></div>
+<div class="line"><a id="l00108" name="l00108"></a><span class="lineno">  108</span>            <span class="keyword">const</span> <span class="keyword">auto</span>* p = &amp;x;</div>
+<div class="line"><a id="l00109" name="l00109"></a><span class="lineno">  109</span>            putchar(*<span class="keyword">reinterpret_cast&lt;</span><span class="keyword">const </span><span class="keywordtype">char</span>*<span class="keyword">&gt;</span>(p));</div>
+<div class="line"><a id="l00110" name="l00110"></a><span class="lineno">  110</span> </div>
+<div class="line"><a id="l00111" name="l00111"></a><span class="lineno">  111</span>            <span class="comment">// If we do get here, kick out because something has gone wrong.</span></div>
+<div class="line"><a id="l00112" name="l00112"></a><span class="lineno">  112</span>            std::abort();</div>
+<div class="line"><a id="l00113" name="l00113"></a><span class="lineno">  113</span>        }</div>
+<div class="line"><a id="l00114" name="l00114"></a><span class="lineno">  114</span>    }</div>
+<div class="line"><a id="l00115" name="l00115"></a><span class="lineno">  115</span> </div>
+<div class="line"><a id="l00117" name="l00117"></a><span class="lineno">  117</span>    <span class="keyword">template</span> &lt;<span class="keyword">class</span> T&gt;</div>
+<div class="line"><a id="l00118" name="l00118"></a><span class="lineno"><a class="line" href="namespacecelero.html#a63b17dda3762f49d460c83f0054ebd0b">  118</a></span>    <span class="keywordtype">void</span> <a class="code hl_function" href="namespacecelero.html#a9c93f3964683c5988dcef98733621cf9">DoNotOptimizeAway</a>(std::function&lt;T(<span class="keywordtype">void</span>)&gt;&amp;&amp; x)</div>
+<div class="line"><a id="l00119" name="l00119"></a><span class="lineno">  119</span>    {</div>
+<div class="line"><a id="l00120" name="l00120"></a><span class="lineno">  120</span>        <span class="keyword">volatile</span> <span class="keyword">auto</span> foo = x();</div>
+<div class="line"><a id="l00121" name="l00121"></a><span class="lineno">  121</span> </div>
+<div class="line"><a id="l00122" name="l00122"></a><span class="lineno">  122</span>        <span class="keyword">static</span> <span class="keyword">auto</span> ttid = std::this_thread::get_id();</div>
+<div class="line"><a id="l00123" name="l00123"></a><span class="lineno">  123</span>        <span class="keywordflow">if</span>(ttid == std::thread::id())</div>
+<div class="line"><a id="l00124" name="l00124"></a><span class="lineno">  124</span>        {</div>
+<div class="line"><a id="l00125" name="l00125"></a><span class="lineno">  125</span>            <span class="comment">// This forces the value to never be optimized away</span></div>
+<div class="line"><a id="l00126" name="l00126"></a><span class="lineno">  126</span>            <span class="comment">// by taking a reference then using it.</span></div>
+<div class="line"><a id="l00127" name="l00127"></a><span class="lineno">  127</span>            <span class="keyword">const</span> <span class="keyword">auto</span>* p = &amp;foo + &amp;x;</div>
+<div class="line"><a id="l00128" name="l00128"></a><span class="lineno">  128</span>            putchar(*<span class="keyword">reinterpret_cast&lt;</span><span class="keyword">const </span><span class="keywordtype">char</span>*<span class="keyword">&gt;</span>(p));</div>
+<div class="line"><a id="l00129" name="l00129"></a><span class="lineno">  129</span> </div>
+<div class="line"><a id="l00130" name="l00130"></a><span class="lineno">  130</span>            <span class="comment">// If we do get here, kick out because something has gone wrong.</span></div>
+<div class="line"><a id="l00131" name="l00131"></a><span class="lineno">  131</span>            std::abort();</div>
+<div class="line"><a id="l00132" name="l00132"></a><span class="lineno">  132</span>        }</div>
+<div class="line"><a id="l00133" name="l00133"></a><span class="lineno">  133</span>    }</div>
+<div class="line"><a id="l00134" name="l00134"></a><span class="lineno">  134</span> </div>
+<div class="line"><a id="l00136" name="l00136"></a><span class="lineno">  136</span>    <span class="keyword">template</span> &lt;&gt;</div>
+<div class="line"><a id="l00137" name="l00137"></a><span class="lineno"><a class="line" href="namespacecelero.html#a4d3a2500ebe0571bc9cb1f9734653891">  137</a></span>    CELERO_EXPORT <span class="keywordtype">void</span> <a class="code hl_function" href="namespacecelero.html#a9c93f3964683c5988dcef98733621cf9">DoNotOptimizeAway</a>(std::function&lt;<span class="keywordtype">void</span>(<span class="keywordtype">void</span>)&gt;&amp;&amp; x);</div>
+<div class="line"><a id="l00138" name="l00138"></a><span class="lineno">  138</span> </div>
+<div class="line"><a id="l00142" name="l00142"></a><span class="lineno"><a class="line" href="namespacecelero.html#aecd0fba7a1e341b5c47cfb718a6c9d3a">  142</a></span>    <span class="keyword">constexpr</span> uint64_t <a class="code hl_function" href="namespacecelero.html#aecd0fba7a1e341b5c47cfb718a6c9d3a">UsPerSec</a>(1000000);</div>
+<div class="line"><a id="l00143" name="l00143"></a><span class="lineno">  143</span> </div>
+<div class="line"><a id="l00147" name="l00147"></a><span class="lineno"><a class="line" href="namespacecelero.html#ab114b3998e1d5f4812e2636d5f16948c">  147</a></span>    <span class="keyword">constexpr</span> <span class="keywordtype">double</span> <a class="code hl_variable" href="namespacecelero.html#ab114b3998e1d5f4812e2636d5f16948c">UsToSec</a>{1.0e-6};</div>
+<div class="line"><a id="l00148" name="l00148"></a><span class="lineno">  148</span> </div>
+<div class="line"><a id="l00152" name="l00152"></a><span class="lineno"><a class="line" href="namespacecelero.html#a52bc0cac3b55b2d71a0058d59106dc86">  152</a></span>    CELERO_EXPORT <span class="keywordtype">int</span> <a class="code hl_function" href="namespacecelero.html#a52bc0cac3b55b2d71a0058d59106dc86">Random</a>();</div>
+<div class="line"><a id="l00153" name="l00153"></a><span class="lineno">  153</span>} <span class="comment">// namespace celero</span></div>
+<div class="line"><a id="l00154" name="l00154"></a><span class="lineno">  154</span> </div>
+<div class="ttc" id="anamespacecelero_html"><div class="ttname"><a href="namespacecelero.html">celero</a></div><div class="ttdef"><b>Definition:</b> Archive.h:26</div></div>
+<div class="ttc" id="anamespacecelero_html_a52bc0cac3b55b2d71a0058d59106dc86"><div class="ttname"><a href="namespacecelero.html#a52bc0cac3b55b2d71a0058d59106dc86">celero::Random</a></div><div class="ttdeci">CELERO_EXPORT int Random()</div></div>
+<div class="ttc" id="anamespacecelero_html_a9c93f3964683c5988dcef98733621cf9"><div class="ttname"><a href="namespacecelero.html#a9c93f3964683c5988dcef98733621cf9">celero::DoNotOptimizeAway</a></div><div class="ttdeci">void DoNotOptimizeAway(T &amp;&amp;x)</div><div class="ttdef"><b>Definition:</b> Utilities.h:101</div></div>
+<div class="ttc" id="anamespacecelero_html_ab114b3998e1d5f4812e2636d5f16948c"><div class="ttname"><a href="namespacecelero.html#ab114b3998e1d5f4812e2636d5f16948c">celero::UsToSec</a></div><div class="ttdeci">constexpr double UsToSec</div><div class="ttdef"><b>Definition:</b> Utilities.h:147</div></div>
+<div class="ttc" id="anamespacecelero_html_aecd0fba7a1e341b5c47cfb718a6c9d3a"><div class="ttname"><a href="namespacecelero.html#aecd0fba7a1e341b5c47cfb718a6c9d3a">celero::UsPerSec</a></div><div class="ttdeci">constexpr uint64_t UsPerSec(1000000)</div></div>
+</div><!-- fragment --></div><!-- contents -->
+<!-- start footer part -->
+<hr class="footer"/><address class="footer"><small>
+Создано системой&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.2
+</small></address>
+</body>
+</html>

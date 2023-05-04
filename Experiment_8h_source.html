@@ -1,0 +1,172 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.9.2"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Learning Boost: Исходный файл 3rdparty/celero/include/celero/Experiment.h</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">Learning Boost
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Создано системой Doxygen 1.9.2 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+var searchBox = new SearchBox("searchBox", "search",'Поиск','.html');
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() {
+  initMenu('',true,false,'search.php','Поиск');
+  $(document).ready(function() { init_search(); });
+});
+/* @license-end */
+</script>
+<div id="main-nav"></div>
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<iframe src="javascript:void(0)" frameborder="0" 
+        name="MSearchResults" id="MSearchResults">
+</iframe>
+</div>
+
+<div id="nav-path" class="navpath">
+  <ul>
+<li class="navelem"><a class="el" href="dir_8cab8f464681f7cc51cee77e79a434cd.html">3rdparty</a></li><li class="navelem"><a class="el" href="dir_5dad5da5fa07e7a8893aad699b2a3a0d.html">celero</a></li><li class="navelem"><a class="el" href="dir_6d4089616196ee0a1f6b36bc2cabca01.html">include</a></li><li class="navelem"><a class="el" href="dir_42889b5e0da8a74394c81514984f1309.html">celero</a></li>  </ul>
+</div>
+</div><!-- top -->
+<div class="header">
+  <div class="headertitle"><div class="title">Experiment.h</div></div>
+</div><!--header-->
+<div class="contents">
+<div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="preprocessor">#pragma once</span></div>
+<div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span> </div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span> </div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span><span class="preprocessor">#include &lt;celero/ExperimentResult.h&gt;</span></div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span><span class="preprocessor">#include &lt;celero/Factory.h&gt;</span></div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span><span class="preprocessor">#include &lt;celero/Statistics.h&gt;</span></div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span> </div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span><span class="preprocessor">#include &lt;string&gt;</span></div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span> </div>
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespacecelero.html">celero</a></div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span>{</div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span>    <span class="keyword">class </span>Benchmark;</div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span> </div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno"><a class="line" href="classcelero_1_1Experiment.html">   36</a></span>    <span class="keyword">class </span>CELERO_EXPORT <a class="code hl_class" href="classcelero_1_1Experiment.html">Experiment</a></div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span>    {</div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span>    <span class="keyword">public</span>:</div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>        <span class="keyword">explicit</span> <a class="code hl_class" href="classcelero_1_1Experiment.html">Experiment</a>(std::weak_ptr&lt;celero::Benchmark&gt; benchmark);</div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span> </div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>        <span class="keyword">explicit</span> <a class="code hl_class" href="classcelero_1_1Experiment.html">Experiment</a>(std::weak_ptr&lt;celero::Benchmark&gt; benchmark, <span class="keyword">const</span> std::string&amp; name, uint64_t samples, uint64_t iterations,</div>
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>                            uint64_t threads, <span class="keywordtype">double</span> baselineTarget);</div>
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span> </div>
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno"><a class="line" href="classcelero_1_1Experiment.html#a10f32fcea151639b800e8d1b27cd5bef">   53</a></span>        <a class="code hl_function" href="classcelero_1_1Experiment.html#a10f32fcea151639b800e8d1b27cd5bef">~Experiment</a>();</div>
+<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span> </div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>        <a class="code hl_class" href="classcelero_1_1Experiment.html">Experiment</a>(<span class="keyword">const</span> <a class="code hl_class" href="classcelero_1_1Experiment.html">Experiment</a>&amp;) = <span class="keyword">delete</span>;</div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>        <a class="code hl_class" href="classcelero_1_1Experiment.html">Experiment</a>&amp; operator=(<a class="code hl_class" href="classcelero_1_1Experiment.html">Experiment</a> <span class="keyword">const</span>&amp; other) = <span class="keyword">delete</span>;</div>
+<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span> </div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno"><a class="line" href="classcelero_1_1Experiment.html#ae9c0a9a2ec8ac8fe6a44528495e77811">   61</a></span>        std::shared_ptr&lt;celero::Benchmark&gt; <a class="code hl_function" href="classcelero_1_1Experiment.html#ae9c0a9a2ec8ac8fe6a44528495e77811">getBenchmark</a>();</div>
+<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span> </div>
+<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span>        <span class="keywordtype">void</span> setName(<span class="keyword">const</span> std::string&amp; x);</div>
+<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span> </div>
+<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span>        std::string getName() <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span> </div>
+<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span>        <span class="keywordtype">void</span> setSamples(uint64_t x);</div>
+<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span> </div>
+<div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span>        uint64_t getSamples() <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span> </div>
+<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span>        <span class="keywordtype">void</span> setIterations(uint64_t x);</div>
+<div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span> </div>
+<div class="line"><a id="l00091" name="l00091"></a><span class="lineno">   91</span>        uint64_t getIterations() <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span> </div>
+<div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span>        <span class="keywordtype">void</span> setThreads(uint64_t x);</div>
+<div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span> </div>
+<div class="line"><a id="l00101" name="l00101"></a><span class="lineno">  101</span>        uint64_t getThreads() <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00102" name="l00102"></a><span class="lineno">  102</span> </div>
+<div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span>        <span class="keyword">operator</span> std::string() <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00107" name="l00107"></a><span class="lineno">  107</span> </div>
+<div class="line"><a id="l00111" name="l00111"></a><span class="lineno">  111</span>        std::string getShort() <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00112" name="l00112"></a><span class="lineno">  112</span> </div>
+<div class="line"><a id="l00116" name="l00116"></a><span class="lineno">  116</span>        <span class="keywordtype">void</span> setBaselineTarget(<span class="keywordtype">double</span> x);</div>
+<div class="line"><a id="l00117" name="l00117"></a><span class="lineno">  117</span> </div>
+<div class="line"><a id="l00121" name="l00121"></a><span class="lineno">  121</span>        <span class="keywordtype">double</span> getBaselineTarget() <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00122" name="l00122"></a><span class="lineno">  122</span> </div>
+<div class="line"><a id="l00126" name="l00126"></a><span class="lineno">  126</span>        <span class="keywordtype">void</span> incrementTotalRunTime(<span class="keyword">const</span> uint64_t x);</div>
+<div class="line"><a id="l00127" name="l00127"></a><span class="lineno">  127</span> </div>
+<div class="line"><a id="l00131" name="l00131"></a><span class="lineno">  131</span>        uint64_t getTotalRunTime() <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00132" name="l00132"></a><span class="lineno">  132</span> </div>
+<div class="line"><a id="l00136" name="l00136"></a><span class="lineno"><a class="line" href="classcelero_1_1Experiment.html#a8f52a4dbd12ec1eb16b295236c2b3379">  136</a></span>        <span class="keywordtype">void</span> <a class="code hl_function" href="classcelero_1_1Experiment.html#a8f52a4dbd12ec1eb16b295236c2b3379">setIsBaselineCase</a>(<span class="keywordtype">bool</span> x);</div>
+<div class="line"><a id="l00137" name="l00137"></a><span class="lineno">  137</span> </div>
+<div class="line"><a id="l00141" name="l00141"></a><span class="lineno"><a class="line" href="classcelero_1_1Experiment.html#ad6806ac8bfb48441b7a9db6c6892f70e">  141</a></span>        <span class="keywordtype">bool</span> <a class="code hl_function" href="classcelero_1_1Experiment.html#ad6806ac8bfb48441b7a9db6c6892f70e">getIsBaselineCase</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00142" name="l00142"></a><span class="lineno">  142</span> </div>
+<div class="line"><a id="l00146" name="l00146"></a><span class="lineno"><a class="line" href="classcelero_1_1Experiment.html#ac1407159cb4ee1befc8a0e29bceb3dd7">  146</a></span>        <span class="keywordtype">void</span> <a class="code hl_function" href="classcelero_1_1Experiment.html#ac1407159cb4ee1befc8a0e29bceb3dd7">setFactory</a>(std::shared_ptr&lt;celero::Factory&gt; x);</div>
+<div class="line"><a id="l00147" name="l00147"></a><span class="lineno">  147</span> </div>
+<div class="line"><a id="l00151" name="l00151"></a><span class="lineno"><a class="line" href="classcelero_1_1Experiment.html#a88970fdff42ef594814ed9c6bb08a922">  151</a></span>        std::shared_ptr&lt;celero::Factory&gt; <a class="code hl_function" href="classcelero_1_1Experiment.html#a88970fdff42ef594814ed9c6bb08a922">getFactory</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00152" name="l00152"></a><span class="lineno">  152</span> </div>
+<div class="line"><a id="l00158" name="l00158"></a><span class="lineno"><a class="line" href="classcelero_1_1Experiment.html#ae0ee1ab119a6eed0088bed41b4ade34b">  158</a></span>        <span class="keywordtype">void</span> <a class="code hl_function" href="classcelero_1_1Experiment.html#ae0ee1ab119a6eed0088bed41b4ade34b">addProblemSpace</a>(int64_t x, <span class="keywordtype">double</span> scale = 1.0, uint64_t iterations = 0);</div>
+<div class="line"><a id="l00159" name="l00159"></a><span class="lineno">  159</span> </div>
+<div class="line"><a id="l00163" name="l00163"></a><span class="lineno"><a class="line" href="classcelero_1_1Experiment.html#a7be8741a0596ae21e77df6d858a462c0">  163</a></span>        <span class="keywordtype">size_t</span> <a class="code hl_function" href="classcelero_1_1Experiment.html#a7be8741a0596ae21e77df6d858a462c0">getResultSize</a>();</div>
+<div class="line"><a id="l00164" name="l00164"></a><span class="lineno">  164</span> </div>
+<div class="line"><a id="l00168" name="l00168"></a><span class="lineno"><a class="line" href="classcelero_1_1Experiment.html#a1e3d92ecf585dc423e76c4d5d677910d">  168</a></span>        std::shared_ptr&lt;celero::ExperimentResult&gt; <a class="code hl_function" href="classcelero_1_1Experiment.html#a1e3d92ecf585dc423e76c4d5d677910d">getResult</a>(<span class="keywordtype">size_t</span> x);</div>
+<div class="line"><a id="l00169" name="l00169"></a><span class="lineno">  169</span> </div>
+<div class="line"><a id="l00173" name="l00173"></a><span class="lineno"><a class="line" href="classcelero_1_1Experiment.html#a3c1fbfa8186d314f1d9b33702279e118">  173</a></span>        std::shared_ptr&lt;celero::ExperimentResult&gt; <a class="code hl_function" href="classcelero_1_1Experiment.html#a3c1fbfa8186d314f1d9b33702279e118">getResultByValue</a>(int64_t x);</div>
+<div class="line"><a id="l00174" name="l00174"></a><span class="lineno">  174</span> </div>
+<div class="line"><a id="l00175" name="l00175"></a><span class="lineno">  175</span>    <span class="keyword">private</span>:</div>
+<div class="line"><a id="l00179" name="l00179"></a><span class="lineno">  179</span>        <a class="code hl_class" href="classcelero_1_1Experiment.html">Experiment</a>();</div>
+<div class="line"><a id="l00180" name="l00180"></a><span class="lineno">  180</span> </div>
+<div class="line"><a id="l00185" name="l00185"></a><span class="lineno">  185</span>        <span class="keyword">class </span>Impl;</div>
+<div class="line"><a id="l00186" name="l00186"></a><span class="lineno">  186</span> </div>
+<div class="line"><a id="l00190" name="l00190"></a><span class="lineno">  190</span>        <a class="code hl_class" href="classcelero_1_1Pimpl.html">Pimpl&lt;Impl&gt;</a> pimpl;</div>
+<div class="line"><a id="l00191" name="l00191"></a><span class="lineno">  191</span>    };</div>
+<div class="line"><a id="l00192" name="l00192"></a><span class="lineno">  192</span>} <span class="comment">// namespace celero</span></div>
+<div class="line"><a id="l00193" name="l00193"></a><span class="lineno">  193</span> </div>
+<div class="ttc" id="aclasscelero_1_1Experiment_html"><div class="ttname"><a href="classcelero_1_1Experiment.html">celero::Experiment</a></div><div class="ttdef"><b>Definition:</b> Experiment.h:37</div></div>
+<div class="ttc" id="aclasscelero_1_1Experiment_html_a10f32fcea151639b800e8d1b27cd5bef"><div class="ttname"><a href="classcelero_1_1Experiment.html#a10f32fcea151639b800e8d1b27cd5bef">celero::Experiment::~Experiment</a></div><div class="ttdeci">~Experiment()</div><div class="ttdoc">Default destructor.</div></div>
+<div class="ttc" id="aclasscelero_1_1Experiment_html_a1e3d92ecf585dc423e76c4d5d677910d"><div class="ttname"><a href="classcelero_1_1Experiment.html#a1e3d92ecf585dc423e76c4d5d677910d">celero::Experiment::getResult</a></div><div class="ttdeci">std::shared_ptr&lt; celero::ExperimentResult &gt; getResult(size_t x)</div></div>
+<div class="ttc" id="aclasscelero_1_1Experiment_html_a3c1fbfa8186d314f1d9b33702279e118"><div class="ttname"><a href="classcelero_1_1Experiment.html#a3c1fbfa8186d314f1d9b33702279e118">celero::Experiment::getResultByValue</a></div><div class="ttdeci">std::shared_ptr&lt; celero::ExperimentResult &gt; getResultByValue(int64_t x)</div></div>
+<div class="ttc" id="aclasscelero_1_1Experiment_html_a7be8741a0596ae21e77df6d858a462c0"><div class="ttname"><a href="classcelero_1_1Experiment.html#a7be8741a0596ae21e77df6d858a462c0">celero::Experiment::getResultSize</a></div><div class="ttdeci">size_t getResultSize()</div></div>
+<div class="ttc" id="aclasscelero_1_1Experiment_html_a88970fdff42ef594814ed9c6bb08a922"><div class="ttname"><a href="classcelero_1_1Experiment.html#a88970fdff42ef594814ed9c6bb08a922">celero::Experiment::getFactory</a></div><div class="ttdeci">std::shared_ptr&lt; celero::Factory &gt; getFactory() const</div></div>
+<div class="ttc" id="aclasscelero_1_1Experiment_html_a8f52a4dbd12ec1eb16b295236c2b3379"><div class="ttname"><a href="classcelero_1_1Experiment.html#a8f52a4dbd12ec1eb16b295236c2b3379">celero::Experiment::setIsBaselineCase</a></div><div class="ttdeci">void setIsBaselineCase(bool x)</div></div>
+<div class="ttc" id="aclasscelero_1_1Experiment_html_ac1407159cb4ee1befc8a0e29bceb3dd7"><div class="ttname"><a href="classcelero_1_1Experiment.html#ac1407159cb4ee1befc8a0e29bceb3dd7">celero::Experiment::setFactory</a></div><div class="ttdeci">void setFactory(std::shared_ptr&lt; celero::Factory &gt; x)</div></div>
+<div class="ttc" id="aclasscelero_1_1Experiment_html_ad6806ac8bfb48441b7a9db6c6892f70e"><div class="ttname"><a href="classcelero_1_1Experiment.html#ad6806ac8bfb48441b7a9db6c6892f70e">celero::Experiment::getIsBaselineCase</a></div><div class="ttdeci">bool getIsBaselineCase() const</div></div>
+<div class="ttc" id="aclasscelero_1_1Experiment_html_ae0ee1ab119a6eed0088bed41b4ade34b"><div class="ttname"><a href="classcelero_1_1Experiment.html#ae0ee1ab119a6eed0088bed41b4ade34b">celero::Experiment::addProblemSpace</a></div><div class="ttdeci">void addProblemSpace(int64_t x, double scale=1.0, uint64_t iterations=0)</div></div>
+<div class="ttc" id="aclasscelero_1_1Experiment_html_ae9c0a9a2ec8ac8fe6a44528495e77811"><div class="ttname"><a href="classcelero_1_1Experiment.html#ae9c0a9a2ec8ac8fe6a44528495e77811">celero::Experiment::getBenchmark</a></div><div class="ttdeci">std::shared_ptr&lt; celero::Benchmark &gt; getBenchmark()</div></div>
+<div class="ttc" id="aclasscelero_1_1Pimpl_html"><div class="ttname"><a href="classcelero_1_1Pimpl.html">celero::Pimpl</a></div><div class="ttdef"><b>Definition:</b> Pimpl.h:38</div></div>
+<div class="ttc" id="anamespacecelero_html"><div class="ttname"><a href="namespacecelero.html">celero</a></div><div class="ttdef"><b>Definition:</b> Archive.h:26</div></div>
+</div><!-- fragment --></div><!-- contents -->
+<!-- start footer part -->
+<hr class="footer"/><address class="footer"><small>
+Создано системой&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.2
+</small></address>
+</body>
+</html>
