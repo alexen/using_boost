@@ -53,29 +53,6 @@ add_subdirectory(3rdparty)
 include_directories(${CMAKE_SOURCE_DIR}/src)
 add_subdirectory(src)
 
+include(MakeSrcTgz)
 include(MakeSfx)
-
-set(SRC_TAR_NAME "${PROJECT_NAME}.tar.bz2")
-add_custom_command(
-     OUTPUT ${SRC_TAR_NAME}
-     COMMAND tar ARGS --exclude='./.*' --exclude='./celero' -cjf ${CMAKE_BINARY_DIR}/${SRC_TAR_NAME} .
-     WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/src
-)
-add_custom_target(srctgz DEPENDS ${CMAKE_BINARY_DIR}/${SRC_TAR_NAME})
-
-set(CPACK_GENERATOR "DEB")
-set(CPACK_PACKAGE_NAME "${PROJECT_NAME}")
-set(CPACK_PACKAGE_CONTACT "enakaev.aleksey@yandex.ru")
-set(CPACK_PACKAGE_VENDOR "Enakaev Aleksey")
-set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_SOURCE_DIR}/LICENSE.txt")
-set(CPACK_RESOURCE_FILE_README "${CMAKE_SOURCE_DIR}/README.md")
-set(CPACK_PACKAGING_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
-set(CPACK_PACKAGE_CHECKSUM SHA512)
-set(CPACK_DEBIAN_FILE_NAME DEB-DEFAULT)
-set(CPACK_DEBIAN_PACKAGE_SHLIBDEPS ON)
-set(CPACK_DEBIAN_PACKAGE_CONTROL_EXTRA
-     ${PROJECT_SOURCE_DIR}/package/deb/scripts/preinst
-     ${PROJECT_SOURCE_DIR}/LICENSE.txt
-     )
-
-include(CPack)
+include(MakePackage)
