@@ -1,0 +1,102 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.9.2"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Learning Boost: Исходный файл 3rdparty/celero/include/celero/Callbacks.h</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">Learning Boost
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Создано системой Doxygen 1.9.2 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+var searchBox = new SearchBox("searchBox", "search",'Поиск','.html');
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() {
+  initMenu('',true,false,'search.php','Поиск');
+  $(document).ready(function() { init_search(); });
+});
+/* @license-end */
+</script>
+<div id="main-nav"></div>
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<iframe src="javascript:void(0)" frameborder="0" 
+        name="MSearchResults" id="MSearchResults">
+</iframe>
+</div>
+
+<div id="nav-path" class="navpath">
+  <ul>
+<li class="navelem"><a class="el" href="dir_8cab8f464681f7cc51cee77e79a434cd.html">3rdparty</a></li><li class="navelem"><a class="el" href="dir_5dad5da5fa07e7a8893aad699b2a3a0d.html">celero</a></li><li class="navelem"><a class="el" href="dir_6d4089616196ee0a1f6b36bc2cabca01.html">include</a></li><li class="navelem"><a class="el" href="dir_42889b5e0da8a74394c81514984f1309.html">celero</a></li>  </ul>
+</div>
+</div><!-- top -->
+<div class="header">
+  <div class="headertitle"><div class="title">Callbacks.h</div></div>
+</div><!--header-->
+<div class="contents">
+<div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="preprocessor">#pragma once</span></div>
+<div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span> </div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span> </div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span><span class="preprocessor">#include &lt;celero/Experiment.h&gt;</span></div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span><span class="preprocessor">#include &lt;celero/Export.h&gt;</span></div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span><span class="preprocessor">#include &lt;functional&gt;</span></div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span><span class="preprocessor">#include &lt;memory&gt;</span></div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span> </div>
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespacecelero.html">celero</a></div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>{</div>
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno"><a class="line" href="namespacecelero.html#aedf5c01c8034c40e8fe64ef403101fd1">   48</a></span>    CELERO_EXPORT <span class="keywordtype">void</span> <a class="code hl_function" href="namespacecelero.html#aedf5c01c8034c40e8fe64ef403101fd1">AddExperimentCompleteFunction</a>(std::function&lt;<span class="keywordtype">void</span>(std::shared_ptr&lt;celero::Experiment&gt;)&gt; x);</div>
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span> </div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno"><a class="line" href="namespacecelero.html#a7bdb7ec73fbb852ed96a9a23cb47ee25">   55</a></span>    CELERO_EXPORT <span class="keywordtype">void</span> <a class="code hl_function" href="namespacecelero.html#a7bdb7ec73fbb852ed96a9a23cb47ee25">AddExperimentResultCompleteFunction</a>(std::function&lt;<span class="keywordtype">void</span>(std::shared_ptr&lt;celero::ExperimentResult&gt;)&gt; x);</div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span> </div>
+<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>    <span class="keyword">namespace </span>impl</div>
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span>    {</div>
+<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span>        CELERO_EXPORT <span class="keywordtype">void</span> ExperimentComplete(std::shared_ptr&lt;Experiment&gt; x);</div>
+<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span>        CELERO_EXPORT <span class="keywordtype">void</span> ExperimentResultComplete(std::shared_ptr&lt;celero::ExperimentResult&gt; x);</div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span>    } <span class="comment">// namespace impl</span></div>
+<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span>} <span class="comment">// namespace celero</span></div>
+<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span> </div>
+<div class="ttc" id="anamespacecelero_html"><div class="ttname"><a href="namespacecelero.html">celero</a></div><div class="ttdef"><b>Definition:</b> Archive.h:26</div></div>
+<div class="ttc" id="anamespacecelero_html_a7bdb7ec73fbb852ed96a9a23cb47ee25"><div class="ttname"><a href="namespacecelero.html#a7bdb7ec73fbb852ed96a9a23cb47ee25">celero::AddExperimentResultCompleteFunction</a></div><div class="ttdeci">CELERO_EXPORT void AddExperimentResultCompleteFunction(std::function&lt; void(std::shared_ptr&lt; celero::ExperimentResult &gt;)&gt; x)</div><div class="ttdoc">Add a function to call when a experiment is completed.</div></div>
+<div class="ttc" id="anamespacecelero_html_aedf5c01c8034c40e8fe64ef403101fd1"><div class="ttname"><a href="namespacecelero.html#aedf5c01c8034c40e8fe64ef403101fd1">celero::AddExperimentCompleteFunction</a></div><div class="ttdeci">CELERO_EXPORT void AddExperimentCompleteFunction(std::function&lt; void(std::shared_ptr&lt; celero::Experiment &gt;)&gt; x)</div><div class="ttdoc">Add a function to call when a experiment is completed.</div></div>
+</div><!-- fragment --></div><!-- contents -->
+<!-- start footer part -->
+<hr class="footer"/><address class="footer"><small>
+Создано системой&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.2
+</small></address>
+</body>
+</html>
