@@ -53,6 +53,8 @@ add_subdirectory(3rdparty)
 include_directories(${CMAKE_SOURCE_DIR}/src)
 add_subdirectory(src)
 
+include(MakeSfx)
+
 set(SRC_TAR_NAME "${PROJECT_NAME}.tar.bz2")
 add_custom_command(
      OUTPUT ${SRC_TAR_NAME}
@@ -77,5 +79,3 @@ set(CPACK_DEBIAN_PACKAGE_CONTROL_EXTRA
      )
 
 include(CPack)
-
-include(MakeSfx)
