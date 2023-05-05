@@ -1,0 +1,16 @@
+#!/bin/bash
+
+TEMP_DEB_PATH="$(mktemp).deb"
+
+function install_payload() {
+  payload_offset=$(grep --text --line-number '^PAYLOAD:$' $0 | cut -d: -f1)
+  tail -n +$((payload_offset + 1)) $0 > "$TEMP_DEB_PATH"
+  sudo dpkg --install "$TEMP_DEB_PATH"
+  rm -f "$TEMP_DEB_PATH"
+}
+
+install_payload
+
+exit 0
+
+PAYLOAD:
