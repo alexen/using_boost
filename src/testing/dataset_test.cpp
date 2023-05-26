@@ -4,6 +4,7 @@
 
 #include <ostream>
 #include <vector>
+#include <tuple>
 #include <boost/bind/bind.hpp>
 #include <boost/lexical_cast.hpp>
 #include <boost/test/unit_test.hpp>
@@ -251,6 +252,46 @@ BOOST_DATA_TEST_CASE(
 {
      BOOST_TEST( (0 <= step && step < 5) );
      BOOST_TEST( (1 <= dice && dice <= 6) );
+}
+
+struct Point {
+     int x, y, z;
+};
+std::ostream& boost_test_print_type( std::ostream& os, const Point& ) { return os; }
+
+
+BOOST_DATA_TEST_CASE(
+     TestDatasetStructSequence
+     , boost::unit_test::data::make< Point >({
+          { 1, 2, 3 },
+          { 1, 2, 3 },
+          { 1, 2, 3 }
+     })
+     , input
+)
+{
+     boost::ignore_unused( input );
+}
+
+using Tuple = std::tuple< int, int, int >;
+std::ostream& boost_test_print_type( std::ostream& os, const Tuple& ) { return os; }
+
+BOOST_DATA_TEST_CASE(
+     TestDatasetTupleSequence
+     , boost::unit_test::data::make< Tuple >({
+          { 1, 2, 3 },
+          { 4, 5, 6 },
+          { 7, 8, 9 }
+     })
+     ^ boost::unit_test::data::make({
+          "First",
+          "Second",
+          "Third"
+     })
+     , a, b, c, d
+)
+{
+     boost::ignore_unused( a, b, c, d );
 }
 
 BOOST_AUTO_TEST_SUITE_END()
