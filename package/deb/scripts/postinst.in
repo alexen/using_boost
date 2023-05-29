@@ -1,0 +1,8 @@
+#!/bin/sh -e
+
+LOG_DIR="@CMAKE_INSTALL_PREFIX@/log"
+LOG_DIR_MODE="0777"
+
+mkdir --parents --mode $LOG_DIR_MODE "$LOG_DIR"
+
+exit 0
