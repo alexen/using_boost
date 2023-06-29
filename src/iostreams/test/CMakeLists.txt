@@ -10,5 +10,5 @@ target_link_libraries(${TEST_NAME}
      ${OPENSSL_LIBRARIES}
      ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY}
      )
-add_test(${PROJECT_NAME} ${TEST_NAME})
+add_test(${PROJECT_NAME} ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${TEST_NAME})
 add_dependencies(${PROJECT_NAME} ${TEST_NAME})

@@ -34,7 +34,7 @@ if(BUILD_TESTING)
           ${PROJECT_NAME}
           ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY}
           )
-     add_test(${PROJECT_NAME} ${TEST_NAME})
+     add_test(${PROJECT_NAME} ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${TEST_NAME})
 endif()
 
 install(TARGETS ${PROJECT_NAME})

@@ -9,5 +9,5 @@ if(BUILD_TESTING)
      target_link_libraries(${TEST_NAME}
           ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY}
           )
-     add_test(${PROJECT_NAME} ${TEST_NAME})
+     add_test(${PROJECT_NAME} ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${TEST_NAME})
 endif()
