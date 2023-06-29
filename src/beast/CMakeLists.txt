@@ -1,4 +1,4 @@
-project(first)
+project(beast)
 add_executable(${PROJECT_NAME} first.cpp)
 target_link_libraries(${PROJECT_NAME}
      ${OPENSSL_LIBRARIES}

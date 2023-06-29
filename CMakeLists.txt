@@ -51,6 +51,10 @@ find_package(Boost 1.69 REQUIRED
 include_directories(SYSTEM ${Boost_INCLUDE_DIRS})
 link_directories(${Boost_LIBRARY_DIRS})
 
+if(NOT BUILD_SHARED_LIBS)
+     set(OPENSSL_USE_STATIC_LIBS ON)
+     message(STATUS "Use OpenSSL in static: ${OPENSSL_USE_STATIC_LIBS}")
+endif()
 find_package(OpenSSL REQUIRED)
 include_directories(${OPENSSL_INCLUDE_DIR})
 
