@@ -29,6 +29,11 @@ set(CMAKE_CXX_FLAGS_DEBUG "-ggdb3 -O0 -fno-inline")
 option(BUILD_SHARED_LIBS "Build shared libs" ON)
 option(BUILD_BENCHMARKS "Disable benchmarks build" OFF)
 
+if(NOT BUILD_SHARED_LIBS)
+     set(Boost_USE_STATIC_LIBS ON)
+     message(STATUS "Use Boost in static: ${Boost_USE_STATIC_LIBS}")
+endif()
+
 find_package(Boost 1.69 REQUIRED
      unit_test_framework
      serialization
