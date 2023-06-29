@@ -9,3 +9,4 @@ libboost-serialization-dev
 libboost-stacktrace-dev
 libboost-test-dev
 libssl-dev
+makeself
