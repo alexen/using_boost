@@ -14,6 +14,15 @@ list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
 
 message(STATUS "Install prefix: ${CMAKE_INSTALL_PREFIX}")
 
+set(CMAKE_INSTALL_RPATH ${CMAKE_INSTALL_PREFIX}/lib)
+
+include(GNUInstallDirs)
+
+set(RESULT_BINARY_DIR ${CMAKE_CURRENT_BINARY_DIR}/stage)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${RESULT_BINARY_DIR}/${CMAKE_INSTALL_BINDIR})
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${RESULT_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR})
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${RESULT_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR})
+
 add_definitions(-Wall -Werror -Wpedantic -Wextra)
 
 set(CMAKE_CXX_FLAGS_DEBUG "-ggdb3 -O0 -fno-inline")
@@ -43,10 +52,7 @@ include_directories(${OPENSSL_INCLUDE_DIR})
 include(CTest)
 enable_testing()
 message(STATUS "Build testing: ${BUILD_TESTING}")
-
 message(STATUS "Build benchmarks: ${BUILD_BENCHMARKS}")
-
-set(CMAKE_INSTALL_RPATH ${CMAKE_INSTALL_PREFIX}/lib)
 
 add_subdirectory(3rdparty)
 
