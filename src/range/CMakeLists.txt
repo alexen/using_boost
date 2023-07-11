@@ -1,4 +1,7 @@
-project(range)
-add_executable(${PROJECT_NAME} main.cpp)
-target_link_libraries(${PROJECT_NAME} ${Boost_RANGE_LIBRARY})
-install(TARGETS ${PROJECT_NAME})
+set(COMPONENT_NAME "range")
+
+add_executable(${COMPONENT_NAME} main.cpp)
+
+target_link_libraries(${COMPONENT_NAME} ${Boost_RANGE_LIBRARY})
+
+install(TARGETS ${COMPONENT_NAME})

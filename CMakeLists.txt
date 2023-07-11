@@ -47,7 +47,7 @@ find_package(Boost 1.69 REQUIRED
      stacktrace_basic
      log
      log_setup
-     )
+)
 include_directories(SYSTEM ${Boost_INCLUDE_DIRS})
 link_directories(${Boost_LIBRARY_DIRS})
 

@@ -1,5 +1,5 @@
-project(property_tree)
-add_executable(${PROJECT_NAME}
-     main.cpp
-     )
-install(TARGETS ${PROJECT_NAME})
+set(COMPONENT_NAME "property_tree")
+
+add_executable(${COMPONENT_NAME} main.cpp)
+
+install(TARGETS ${COMPONENT_NAME})

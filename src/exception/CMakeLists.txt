@@ -1,10 +1,10 @@
-project(exception)
+set(COMPONENT_NAME "exception")
 
-set(INNER_LIB_NAME tools)
+set(LIBRARY_NAME "tools")
+add_library(${LIBRARY_NAME} tools.cpp)
 
-add_library(${INNER_LIB_NAME} tools.cpp)
+add_executable(${COMPONENT_NAME} main.cpp)
 
-add_executable(${PROJECT_NAME} main.cpp)
-target_link_libraries(${PROJECT_NAME} ${INNER_LIB_NAME})
+target_link_libraries(${COMPONENT_NAME} ${LIBRARY_NAME})
 
-install(TARGETS ${PROJECT_NAME})
+install(TARGETS ${COMPONENT_NAME})

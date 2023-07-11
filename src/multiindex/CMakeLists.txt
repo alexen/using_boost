@@ -1,6 +1,8 @@
-project(multiindex)
-add_executable(${PROJECT_NAME}
+set(COMPONENT_NAME "multiindex")
+
+add_executable(${COMPONENT_NAME}
      main.cpp
      document.cpp
-     )
-install(TARGETS ${PROJECT_NAME})
+)
+
+install(TARGETS ${COMPONENT_NAME})

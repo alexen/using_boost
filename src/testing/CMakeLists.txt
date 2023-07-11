@@ -1,6 +1,6 @@
-project(testing)
+set(COMPONENT_NAME "testing")
 
-add_executable(${PROJECT_NAME}
+add_executable(${COMPONENT_NAME}
      initialize.cpp
      dataset_test.cpp
      template_test.cpp
@@ -13,7 +13,9 @@ add_executable(${PROJECT_NAME}
      ostream_test.cpp
      custom_output_test.cpp
 )
-target_link_libraries(${PROJECT_NAME}
+
+target_link_libraries(${COMPONENT_NAME}
      ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY}
-     )
-install(TARGETS ${PROJECT_NAME})
+)
+
+install(TARGETS ${COMPONENT_NAME})

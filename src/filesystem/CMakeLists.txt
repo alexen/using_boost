@@ -1,8 +1,9 @@
-project(filesystem)
-add_executable(${PROJECT_NAME}
-     main.cpp
-     )
-target_link_libraries(${PROJECT_NAME}
+set(COMPONENT_NAME "filesystem")
+
+add_executable(${COMPONENT_NAME} main.cpp)
+
+target_link_libraries(${COMPONENT_NAME}
      ${Boost_FILESYSTEM_LIBRARY}
-     )
-install(TARGETS ${PROJECT_NAME})
+)
+
+install(TARGETS ${COMPONENT_NAME})

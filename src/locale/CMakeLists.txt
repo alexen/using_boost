@@ -1,6 +1,6 @@
-project(locale)
+set(COMPONENT_NAME "locale")
 
-add_library(${PROJECT_NAME}
+add_library(${COMPONENT_NAME}
      src/charset_utils.cpp
 )
 
@@ -19,22 +19,22 @@ set(ICU_STATIC_LIBS
      libicutu.a
 )
 
-target_link_libraries(${PROJECT_NAME}
+target_link_libraries(${COMPONENT_NAME}
      ${Boost_LOCALE_LIBRARY}
      "$<${IF_STATIC_BUILD}:${ICU_STATIC_LIBS}>"
 )
 
 if(BUILD_TESTING)
-     set(TEST_NAME ${PROJECT_NAME}-test)
+     set(TEST_NAME ${COMPONENT_NAME}-test)
      add_definitions(-DBOOST_TEST_MAIN)
      add_executable(${TEST_NAME}
           test/charset_utils_test.cpp
-          )
+     )
      target_link_libraries(${TEST_NAME}
-          ${PROJECT_NAME}
+          ${COMPONENT_NAME}
           ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY}
-          )
-     add_test(${PROJECT_NAME} ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${TEST_NAME})
+     )
+     add_test(${COMPONENT_NAME} ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${TEST_NAME})
 endif()
 
-install(TARGETS ${PROJECT_NAME})
+install(TARGETS ${COMPONENT_NAME})
