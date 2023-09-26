@@ -11,6 +11,7 @@
 #include <boost/log/sinks/syslog_backend.hpp>
 #include <boost/log/sinks/sync_frontend.hpp>
 #include <boost/log/sinks/syslog_constants.hpp>
+#include <boost/log/sinks/text_file_backend.hpp>
 #include <boost/log/sinks/text_ostream_backend.hpp>
 #include <boost/log/utility/setup/common_attributes.hpp>
 #include <boost/log/support/date_time.hpp>
@@ -18,6 +19,8 @@
 #include <boost/make_shared.hpp>
 #include <boost/core/null_deleter.hpp>
 #include <boost/thread/thread.hpp>
+
+#include <boost/lambda/lambda.hpp>
 
 
 BOOST_LOG_ATTRIBUTE_KEYWORD( TimeStamp, "TimeStamp", boost::log::attributes::local_clock::value_type )
@@ -115,6 +118,57 @@ OstreamSinkPtr makeOstreamSink( std::ostream& os )
      return sink;
 }
 
+
+void initFileCollecting( const FileSinkPtr& file, const boost::filesystem::path& logDir )
+{
+     file->locked_backend()->set_file_collector(
+          boost::log::sinks::file::make_collector(
+               boost::log::keywords::target = logDir,
+               boost::log::keywords::max_files = 25
+               )
+          );
+}
+
+
+FileSinkPtr makeFileSink( const LogFileOptions& options )
+{
+     static const auto limiterFor = []( boost::string_view eventName ){
+          return [ eventName ]( std::ostream& ostr ){
+               ostr
+                    << "=====[ " << eventName << ": "
+                    << boost::posix_time::second_clock::local_time()
+                    << " ]====================\n";
+          };
+     };
+
+     const auto sink = boost::make_shared< FileSink >(
+          boost::log::keywords::file_name = options.logDir() / options.logFilePattern(),
+          boost::log::keywords::rotation_size = options.logRotateSize(),
+          boost::log::keywords::open_mode = std::ios_base::out | std::ios_base::app
+          );
+
+     initFileCollecting( sink, options.logDir() );
+
+     sink->set_formatter(
+          boost::log::expressions::stream
+               << TimeStamp
+               << " [" << Pid
+               << '.' << Tid
+               << "] (" << FilePath
+               << ':' << FileLine
+               << ") <" << boost::log::trivial::severity
+               << "> " << boost::log::expressions::message
+          );
+
+     sink->locked_backend()->set_open_handler( limiterFor( "log started" ) );
+     sink->locked_backend()->set_close_handler( limiterFor( "log finished" ) );
+     sink->locked_backend()->auto_flush( true );
+
+     boost::log::add_common_attributes();
+     aux::addCustomAttributes();
+
+     return sink;
+}
 
 } // namespace sinks
 } // namespace logger
