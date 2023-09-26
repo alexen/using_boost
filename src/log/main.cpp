@@ -61,6 +61,17 @@ void worker()
 }
 
 
+void testMtLogging()
+{
+     boost::thread_group tg;
+     tg.create_thread( worker );
+     tg.create_thread( worker );
+     tg.create_thread( worker );
+     tg.create_thread( worker );
+     tg.join_all();
+}
+
+
 int main( int argc, char** argv )
 {
      boost::ignore_unused( argc, argv );
@@ -71,12 +82,6 @@ int main( int argc, char** argv )
 //          boost::log::core::get()->add_sink( using_boost::log::logger::sinks::makeOstreamSink( std::cout ) );
           boost::log::core::get()->add_sink( using_boost::log::logger::sinks::makeFileSink( using_boost::log::logger::sinks::LogFileOptions{}.logRotateSize( 10u * 1024u ) ) );
 
-          boost::thread_group tg;
-          tg.create_thread( worker );
-          tg.create_thread( worker );
-          tg.create_thread( worker );
-          tg.create_thread( worker );
-          tg.join_all();
      }
      catch( const std::exception& e )
      {
