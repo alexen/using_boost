@@ -67,6 +67,7 @@ $(function() {
 </div><!-- top -->
 <div class="header">
   <div class="summary">
+<a href="#nested-classes">Классы</a> &#124;
 <a href="#define-members">Макросы</a> &#124;
 <a href="#typedef-members">Определения типов</a> &#124;
 <a href="#func-members">Функции</a>  </div>
@@ -78,24 +79,31 @@ $(function() {
 <code>#include &lt;boost/log/sinks/sync_frontend.hpp&gt;</code><br />
 <code>#include &lt;boost/log/sinks/syslog_backend.hpp&gt;</code><br />
 <code>#include &lt;boost/log/sinks/text_ostream_backend.hpp&gt;</code><br />
+<code>#include &lt;boost/log/sinks/text_file_backend.hpp&gt;</code><br />
 <code>#include &lt;boost/utility/string_view.hpp&gt;</code><br />
 </div><div class="textblock"><div class="dynheader">
 Граф включаемых заголовочных файлов для logger.h:</div>
 <div class="dyncontent">
 <div class="center"><img src="logger_8h__incl.png" border="0" usemap="#asrc_2log_2logger_2logger_8h" alt=""/></div>
 <map name="asrc_2log_2logger_2logger_8h" id="asrc_2log_2logger_2logger_8h">
-<area shape="rect" title=" " alt="" coords="457,5,606,32"/>
+<area shape="rect" title=" " alt="" coords="542,5,691,32"/>
 <area shape="rect" title=" " alt="" coords="5,87,140,114"/>
 <area shape="rect" title=" " alt="" coords="165,80,351,121"/>
 <area shape="rect" title=" " alt="" coords="375,80,517,121"/>
 <area shape="rect" title=" " alt="" coords="541,80,692,121"/>
 <area shape="rect" title=" " alt="" coords="716,80,872,121"/>
-<area shape="rect" title=" " alt="" coords="896,80,1020,121"/>
+<area shape="rect" title=" " alt="" coords="896,80,1031,121"/>
+<area shape="rect" title=" " alt="" coords="1055,80,1179,121"/>
 </map>
 </div>
 </div>
 <p><a href="logger_8h_source.html">См. исходные тексты.</a></p>
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="nested-classes" name="nested-classes"></a>
+Классы</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classusing__boost_1_1log_1_1logger_1_1sinks_1_1LogFileOptions.html">using_boost::log::logger::sinks::LogFileOptions</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="define-members" name="define-members"></a>
 Макросы</h2></td></tr>
 <tr class="memitem:a1477ea76540a08d450c5b0e8dfef772c"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="logger_8h.html#a1477ea76540a08d450c5b0e8dfef772c">LOGGER_SEV</a>(lvl)</td></tr>
@@ -124,6 +132,15 @@ using&#160;</td><td class="memItemRight" valign="bottom"><b>using_boost::log::lo
 <tr class="memitem:ae0d587ca707c9e1971a18a2e24d6515b"><td class="memItemLeft" align="right" valign="top"><a id="ae0d587ca707c9e1971a18a2e24d6515b" name="ae0d587ca707c9e1971a18a2e24d6515b"></a>
 using&#160;</td><td class="memItemRight" valign="bottom"><b>using_boost::log::logger::sinks::OstreamSinkPtr</b> = boost::shared_ptr&lt; OstreamSink &gt;</td></tr>
 <tr class="separator:ae0d587ca707c9e1971a18a2e24d6515b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a10834e65c8e8d2b5506640c009ceaf98"><td class="memItemLeft" align="right" valign="top"><a id="a10834e65c8e8d2b5506640c009ceaf98" name="a10834e65c8e8d2b5506640c009ceaf98"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>using_boost::log::logger::sinks::FileBackend</b> = boost::log::sinks::text_file_backend</td></tr>
+<tr class="separator:a10834e65c8e8d2b5506640c009ceaf98"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aad62dcfc695694d8d5b56789f324df0b"><td class="memItemLeft" align="right" valign="top"><a id="aad62dcfc695694d8d5b56789f324df0b" name="aad62dcfc695694d8d5b56789f324df0b"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>using_boost::log::logger::sinks::FileSink</b> = boost::log::sinks::synchronous_sink&lt; FileBackend &gt;</td></tr>
+<tr class="separator:aad62dcfc695694d8d5b56789f324df0b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adf17d4a3e4b42caa75fee23c6ab5cedc"><td class="memItemLeft" align="right" valign="top"><a id="adf17d4a3e4b42caa75fee23c6ab5cedc" name="adf17d4a3e4b42caa75fee23c6ab5cedc"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>using_boost::log::logger::sinks::FileSinkPtr</b> = boost::shared_ptr&lt; FileSink &gt;</td></tr>
+<tr class="separator:adf17d4a3e4b42caa75fee23c6ab5cedc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Функции</h2></td></tr>
@@ -133,6 +150,9 @@ SyslogSinkPtr&#160;</td><td class="memItemRight" valign="bottom"><b>using_boost:
 <tr class="memitem:ae4360faf61644a04eca6b12384099510"><td class="memItemLeft" align="right" valign="top"><a id="ae4360faf61644a04eca6b12384099510" name="ae4360faf61644a04eca6b12384099510"></a>
 OstreamSinkPtr&#160;</td><td class="memItemRight" valign="bottom"><b>using_boost::log::logger::sinks::makeOstreamSink</b> (std::ostream &amp;)</td></tr>
 <tr class="separator:ae4360faf61644a04eca6b12384099510"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad5d1bdc82cd17a650af66ca815586890"><td class="memItemLeft" align="right" valign="top"><a id="ad5d1bdc82cd17a650af66ca815586890" name="ad5d1bdc82cd17a650af66ca815586890"></a>
+FileSinkPtr&#160;</td><td class="memItemRight" valign="bottom"><b>using_boost::log::logger::sinks::makeFileSink</b> (const LogFileOptions &amp;options={})</td></tr>
+<tr class="separator:ad5d1bdc82cd17a650af66ca815586890"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Макросы</h2>
 <a id="a1477ea76540a08d450c5b0e8dfef772c" name="a1477ea76540a08d450c5b0e8dfef772c"></a>
