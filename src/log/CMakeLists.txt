@@ -17,3 +17,5 @@ if(BUILD_BENCHMARKS)
 endif()
 
 install(TARGETS ${COMPONENT_NAME})
+
+add_subdirectory(modules)
