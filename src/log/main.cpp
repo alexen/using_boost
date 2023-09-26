@@ -7,6 +7,7 @@
 
 #include <boost/core/ignore_unused.hpp>
 #include <boost/exception/diagnostic_information.hpp>
+#include <boost/thread.hpp>
 
 #include <log/application.h>
 #include <log/handlers.h>
@@ -45,32 +46,37 @@ struct Certificate : ICertificate {};
 } // namespace impl
 
 
+void worker()
+{
+     LOGGER( info ) << "Start working...";
+
+     auto n = 250u;
+     while( n-- )
+     {
+          LOGGER( info ) << "Iteration #" << n << ": here we are!";
+          boost::this_thread::sleep( boost::posix_time::milliseconds{ 150 } );
+     }
+
+     LOGGER( info ) << "Work done.";
+}
+
+
 int main( int argc, char** argv )
 {
      boost::ignore_unused( argc, argv );
      try
      {
           boost::log::core::get()->remove_all_sinks();
-          boost::log::core::get()->add_sink( using_boost::log::logger::sinks::makeSyslogSink() );
-          boost::log::core::get()->add_sink( using_boost::log::logger::sinks::makeOstreamSink( std::cout ) );
+//          boost::log::core::get()->add_sink( using_boost::log::logger::sinks::makeSyslogSink() );
+//          boost::log::core::get()->add_sink( using_boost::log::logger::sinks::makeOstreamSink( std::cout ) );
+          boost::log::core::get()->add_sink( using_boost::log::logger::sinks::makeFileSink( using_boost::log::logger::sinks::LogFileOptions{}.logRotateSize( 10u * 1024u ) ) );
 
-          LOGGER( info ) << "This is simple logger";
-          LOGGER( trace ) << "Tracing message";
-
-          const auto severity = boost::log::trivial::debug;
-
-          LOGGER_SEV( severity ) << "Hello!";
-
-          ICertificateUptr cp;
-
-          LOGGER( info ) << "We have certificate: " << cp;
-
-//          using_boost::log::app::Application app;
-//          app.run();
-//
-//          using_boost::log::handler::starter::run();
-//
-//          BOOST_THROW_EXCEPTION( std::runtime_error{ "error" } );
+          boost::thread_group tg;
+          tg.create_thread( worker );
+          tg.create_thread( worker );
+          tg.create_thread( worker );
+          tg.create_thread( worker );
+          tg.join_all();
      }
      catch( const std::exception& e )
      {
