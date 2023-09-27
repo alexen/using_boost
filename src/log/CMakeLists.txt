@@ -7,6 +7,7 @@ add_executable(${COMPONENT_NAME}
 )
 target_link_libraries(${COMPONENT_NAME}
      logger
+     dynlib
      ${Boost_LOG_LIBRARY}
 )
 
@@ -17,3 +18,5 @@ if(BUILD_BENCHMARKS)
 endif()
 
 install(TARGETS ${COMPONENT_NAME})
+
+add_subdirectory(modules)
