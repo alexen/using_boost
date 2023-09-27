@@ -1,0 +1,120 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.9.2"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Learning Boost: Файл src/log/modules/dynlib/loader.h</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">Learning Boost
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Создано системой Doxygen 1.9.2 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+var searchBox = new SearchBox("searchBox", "search",'Поиск','.html');
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() {
+  initMenu('',true,false,'search.php','Поиск');
+  $(document).ready(function() { init_search(); });
+});
+/* @license-end */
+</script>
+<div id="main-nav"></div>
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<iframe src="javascript:void(0)" frameborder="0" 
+        name="MSearchResults" id="MSearchResults">
+</iframe>
+</div>
+
+<div id="nav-path" class="navpath">
+  <ul>
+<li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="dir_2241064965c8d9ca993f08b926076f7d.html">log</a></li><li class="navelem"><a class="el" href="dir_2123e723696507c461e14431df2cac04.html">modules</a></li><li class="navelem"><a class="el" href="dir_d1341208cfafc2e9ef59e900d8411485.html">dynlib</a></li>  </ul>
+</div>
+</div><!-- top -->
+<div class="header">
+  <div class="summary">
+<a href="#func-members">Функции</a>  </div>
+  <div class="headertitle"><div class="title">Файл loader.h</div></div>
+</div><!--header-->
+<div class="contents">
+<div class="textblock"><code>#include &lt;boost/filesystem/path.hpp&gt;</code><br />
+<code>#include &lt;boost/utility/string_view.hpp&gt;</code><br />
+<code>#include &lt;<a class="el" href="types_8h_source.html">log/modules/dynlib/types.h</a>&gt;</code><br />
+</div><div class="textblock"><div class="dynheader">
+Граф включаемых заголовочных файлов для loader.h:</div>
+<div class="dyncontent">
+<div class="center"><img src="loader_8h__incl.png" border="0" usemap="#asrc_2log_2modules_2dynlib_2loader_8h" alt=""/></div>
+<map name="asrc_2log_2modules_2dynlib_2loader_8h" id="asrc_2log_2modules_2dynlib_2loader_8h">
+<area shape="rect" title=" " alt="" coords="185,5,336,47"/>
+<area shape="rect" title=" " alt="" coords="5,102,175,129"/>
+<area shape="rect" title=" " alt="" coords="199,95,323,136"/>
+<area shape="rect" href="types_8h.html" title=" " alt="" coords="347,95,476,136"/>
+<area shape="rect" title=" " alt="" coords="199,191,267,218"/>
+<area shape="rect" title=" " alt="" coords="291,191,369,218"/>
+<area shape="rect" title=" " alt="" coords="393,191,589,218"/>
+<area shape="rect" title=" " alt="" coords="613,184,756,225"/>
+</map>
+</div>
+</div>
+<p><a href="loader_8h_source.html">См. исходные тексты.</a></p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
+Функции</h2></td></tr>
+<tr class="memitem:aea1fe7f00b033149f975c906e130ccb9"><td class="memItemLeft" align="right" valign="top"><a id="aea1fe7f00b033149f975c906e130ccb9" name="aea1fe7f00b033149f975c906e130ccb9"></a>
+DynLibUptr&#160;</td><td class="memItemRight" valign="bottom"><b>using_boost::modules::dynlib::load</b> (const boost::filesystem::path &amp;dynlib)</td></tr>
+<tr class="separator:aea1fe7f00b033149f975c906e130ccb9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4a915b95f3def5440a3e987956267235"><td class="memItemLeft" align="right" valign="top"><a id="a4a915b95f3def5440a3e987956267235" name="a4a915b95f3def5440a3e987956267235"></a>
+void *&#160;</td><td class="memItemRight" valign="bottom"><b>using_boost::modules::dynlib::exportFn</b> (const DynLibUptr &amp;handler, boost::string_view name)</td></tr>
+<tr class="separator:a4a915b95f3def5440a3e987956267235"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af2cb9dd92a8b0f05b2838cfbb4790edc"><td class="memTemplParams" colspan="2"><a id="af2cb9dd92a8b0f05b2838cfbb4790edc" name="af2cb9dd92a8b0f05b2838cfbb4790edc"></a>
+template&lt;typename Res &gt; </td></tr>
+<tr class="memitem:af2cb9dd92a8b0f05b2838cfbb4790edc"><td class="memTemplItemLeft" align="right" valign="top">Res&#160;</td><td class="memTemplItemRight" valign="bottom"><b>using_boost::modules::dynlib::get</b> (const DynLibUptr &amp;handler, boost::string_view name)</td></tr>
+<tr class="separator:af2cb9dd92a8b0f05b2838cfbb4790edc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaf18161db411cff189eadb5f8f2ff327"><td class="memTemplParams" colspan="2"><a id="aaf18161db411cff189eadb5f8f2ff327" name="aaf18161db411cff189eadb5f8f2ff327"></a>
+template&lt;typename Fn &gt; </td></tr>
+<tr class="memitem:aaf18161db411cff189eadb5f8f2ff327"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><b>using_boost::modules::dynlib::call</b> (const DynLibUptr &amp;handler, boost::string_view name)</td></tr>
+<tr class="separator:aaf18161db411cff189eadb5f8f2ff327"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">Подробное описание</h2>
+<div class="textblock"><dl class="section copyright"><dt>Авторство</dt><dd>Copyright 2023 InfoTeCS Internet Trust </dd></dl>
+</div></div><!-- contents -->
+<!-- start footer part -->
+<hr class="footer"/><address class="footer"><small>
+Создано системой&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.2
+</small></address>
+</body>
+</html>
