@@ -8,10 +8,10 @@
 
 
 namespace using_boost {
-namespace module {
+namespace modules {
 
 
-class Clark: public log::module::IModule
+class Clark: public IModule
 {
 public:
      const char* name() const noexcept override;
@@ -21,5 +21,14 @@ public:
 };
 
 
-} // namespace module
+} // namespace modules
 } // namespace using_boost
+
+
+extern "C" {
+
+
+using_boost::modules::IModule* create();
+
+
+}

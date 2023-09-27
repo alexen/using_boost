@@ -7,8 +7,18 @@
 #include <log/logger/logger.h>
 
 
+extern "C" {
+
+using_boost::modules::IModule* create()
+{
+     return new using_boost::modules::Alice{};
+}
+
+}
+
+
 namespace using_boost {
-namespace module {
+namespace modules {
 
 
 const char* Alice::name() const noexcept
@@ -28,5 +38,5 @@ void Alice::run()
 }
 
 
-} // namespace module
+} // namespace modules
 } // namespace using_boost
