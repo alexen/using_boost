@@ -1,11 +1,9 @@
 /// @file
 /// @brief
 
-#include <log/logger/logger.h>
+#include <log/logger/sinks.h>
 
-#include <unistd.h>
-#include <cstring> // basename( const char* )
-
+#include <boost/log/trivial.hpp>
 #include <boost/log/attributes.hpp>
 #include <boost/log/expressions.hpp>
 #include <boost/log/sinks/syslog_backend.hpp>
@@ -18,15 +16,15 @@
 
 #include <boost/make_shared.hpp>
 #include <boost/core/null_deleter.hpp>
+#include <boost/filesystem/path.hpp>
 #include <boost/thread/thread.hpp>
+#include <boost/utility/string_view.hpp>
 
 #include <boost/lambda/lambda.hpp>
 
 
 BOOST_LOG_ATTRIBUTE_KEYWORD( TimeStamp, "TimeStamp", boost::log::attributes::local_clock::value_type )
-BOOST_LOG_ATTRIBUTE_KEYWORD( Pid, "Pid", pid_t )
-BOOST_LOG_ATTRIBUTE_KEYWORD( Ppid, "Ppid", pid_t )
-BOOST_LOG_ATTRIBUTE_KEYWORD( Tid, "Tid", boost::thread::id )
+BOOST_LOG_ATTRIBUTE_KEYWORD( ThreadId, "ThreadId", boost::thread::id )
 BOOST_LOG_ATTRIBUTE_KEYWORD( FilePath, "File", boost::string_view )
 BOOST_LOG_ATTRIBUTE_KEYWORD( FileLine, "Line", unsigned )
 BOOST_LOG_ATTRIBUTE_KEYWORD( FuncName, "Function", boost::string_view )
@@ -41,7 +39,12 @@ boost::log::formatting_ostream& operator<<(
      , const boost::log::to_log_manip< boost::string_view, tag::FilePath >& file
 )
 {
-     return os << basename( file.get().data() );
+     static constexpr auto filename =
+          []( boost::log::formatting_ostream& os, const boost::filesystem::path& file ) -> boost::log::formatting_ostream&
+          {
+               return os << file.filename().string();
+          };
+     return filename( os, file.get().to_string() );
 }
 
 
@@ -62,9 +65,7 @@ void addCustomAttributes()
 {
      const auto core = boost::log::core::get();
 
-     core->add_global_attribute( "Pid", boost::log::attributes::make_function( &getpid ) );
-     core->add_global_attribute( "Ppid", boost::log::attributes::make_function( &getppid ) );
-     core->add_global_attribute( "Tid", boost::log::attributes::make_function( &boost::this_thread::get_id ) );
+     core->add_global_attribute( "ThreadId", boost::log::attributes::make_function( &boost::this_thread::get_id ) );
 }
 
 
@@ -84,8 +85,7 @@ SyslogSinkPtr makeSyslogSink()
      auto sink = boost::make_shared< SyslogSink >( syslogBackend );
      sink->set_formatter(
           boost::log::expressions::stream
-               << '{' << Pid
-               << '.' << Tid
+               << '{' << ThreadId
                << "} (" << FilePath
                << ':' << FileLine
                << ") <" << boost::log::trivial::severity
@@ -106,8 +106,7 @@ OstreamSinkPtr makeOstreamSink( std::ostream& os )
      sink->set_formatter(
           boost::log::expressions::stream
                << '[' << TimeStamp
-               << "] {" << Pid
-               << '.' << Tid
+               << "] {" << ThreadId
                << "} (" << FilePath
                << ':' << FileLine
                << ") <" << boost::log::trivial::severity
@@ -152,8 +151,7 @@ FileSinkPtr makeFileSink( const LogFileOptions& options )
      sink->set_formatter(
           boost::log::expressions::stream
                << TimeStamp
-               << " [" << Pid
-               << '.' << Tid
+               << " [" << ThreadId
                << "] (" << FilePath
                << ':' << FileLine
                << ") <" << boost::log::trivial::severity

@@ -19,6 +19,7 @@
 #include <log/application.h>
 #include <log/handlers.h>
 #include <log/logger/logger.h>
+#include <log/logger/sinks.h>
 #include <log/modules/imodule.h>
 #include <log/modules/dynlib/types.h>
 #include <log/modules/dynlib/loader.h>
@@ -100,7 +101,7 @@ int main( int argc, char** argv )
      {
           boost::log::core::get()->remove_all_sinks();
 //          boost::log::core::get()->add_sink( using_boost::log::logger::sinks::makeSyslogSink() );
-//          boost::log::core::get()->add_sink( using_boost::log::logger::sinks::makeOstreamSink( std::cout ) );
+          boost::log::core::get()->add_sink( using_boost::log::logger::sinks::makeOstreamSink( std::cerr ) );
           boost::log::core::get()->add_sink(
                using_boost::log::logger::sinks::makeFileSink(
                     using_boost::log::logger::sinks::LogFileOptions{}
