@@ -4,9 +4,12 @@
 
 #pragma once
 
+#include <list>
+#include <memory>
+
+
 namespace using_boost {
-namespace log {
-namespace module {
+namespace modules {
 
 
 class IModule {
@@ -20,6 +23,9 @@ public:
 };
 
 
-} // namespace module
-} // namespace log
+using IModuleUptr = std::unique_ptr< IModule >;
+using ModuleCreatorFn = IModule*(*)();
+
+
+} // namespace modules
 } // namespace using_boost
