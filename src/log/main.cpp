@@ -107,6 +107,14 @@ int main( int argc, char** argv )
                     using_boost::log::logger::sinks::LogFileOptions{}
                          .logRotateSize( 10u * 1024u ) ) );
 
+          LOGGER( info ) << "Start program!";
+          if( argc > 1 )
+          {
+               throw std::runtime_error { "Check!" };
+          }
+          LOGGER( info ) << "Done program!";
+          return 0;
+
           DynLibList dynlibs;
 
           std::transform(
