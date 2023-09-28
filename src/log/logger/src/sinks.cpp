@@ -148,6 +148,8 @@ FileSinkPtr makeFileSink( const LogFileOptions& options )
 
      initFileCollecting( sink, options.logDir() );
 
+     sink->locked_backend()->scan_for_files();
+
      sink->set_formatter(
           boost::log::expressions::stream
                << TimeStamp
