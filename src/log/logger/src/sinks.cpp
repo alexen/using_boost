@@ -64,7 +64,6 @@ namespace aux {
 void addCustomAttributes()
 {
      const auto core = boost::log::core::get();
-
      core->add_global_attribute( "ThreadId", boost::log::attributes::make_function( &boost::this_thread::get_id ) );
 }
 
@@ -118,12 +117,12 @@ OstreamSinkPtr makeOstreamSink( std::ostream& os )
 }
 
 
-void initFileCollecting( const FileSinkPtr& file, const boost::filesystem::path& logDir )
+void initFileCollecting( const FileSinkPtr& sink, const boost::filesystem::path& logDir, const std::uint32_t maxFiles )
 {
-     file->locked_backend()->set_file_collector(
+     sink->locked_backend()->set_file_collector(
           boost::log::sinks::file::make_collector(
                boost::log::keywords::target = logDir,
-               boost::log::keywords::max_files = 25
+               boost::log::keywords::max_files = maxFiles
                )
           );
 }
@@ -146,7 +145,7 @@ FileSinkPtr makeFileSink( const LogFileOptions& options )
           boost::log::keywords::open_mode = std::ios_base::out | std::ios_base::app
           );
 
-     initFileCollecting( sink, options.logDir() );
+     initFileCollecting( sink, options.logDir(), 25 );
 
      sink->locked_backend()->scan_for_files();
 
