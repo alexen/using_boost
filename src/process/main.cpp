@@ -8,7 +8,7 @@
 #include <boost/core/ignore_unused.hpp>
 #include <boost/exception/diagnostic_information.hpp>
 
-#include <boost/process/env.hpp>
+#include <boost/process/environment.hpp>
 
 
 int main( int argc, char** argv )
@@ -16,8 +16,6 @@ int main( int argc, char** argv )
      boost::ignore_unused( argc, argv );
      try
      {
-          const auto env = boost::this_process::environment();
-          std::cout << env[ "SOME_VAR" ] << '\n';
      }
      catch( const std::exception& e )
      {
