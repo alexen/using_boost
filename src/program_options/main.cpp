@@ -23,29 +23,78 @@ int main( int argc, char** argv )
           ///   <program_name> --implicit-value       [Enter] => Implicit value: "IMPLICIT"
           ///   <program_name> --implicit-value Hello [Enter] => Implicit value: "Hello"
           ///
-          boost::program_options::options_description description { "Options" };
-          description.add_options()
+          using PositionalOptions = std::vector< std::string >;
+          PositionalOptions posOpts;
+
+          /// Общие параметры для всей программы
+          boost::program_options::options_description generic{ "Generic options" };
+          generic.add_options()
                ( "help", "show this help and quit" )
-               ( "implicit-value", boost::program_options::value< std::string >( &implicitValue )->implicit_value( "IMPLICIT" ), "some implicit value" );
-          boost::program_options::variables_map options;
+               ( "version", "show version and quit" )
+               ;
+
+          /// Параметры из некоторой другой категории, назовем их "контролирующими"
+          boost::program_options::options_description control{ "Control options" };
+          control.add_options()
+               ( "implicit-value", boost::program_options::value< std::string >( &implicitValue )->implicit_value( "IMPLICIT" ), "some implicit value" )
+               ;
+
+          /// Параметры, которые должны обрабатываться, но не должны отображаться при печати справочной информации
+          boost::program_options::options_description invisible{ "Invisible options" };
+          invisible.add_options()
+               ( "pos", boost::program_options::value< PositionalOptions >( &posOpts ), "some positional options (must be hidden!)" )
+               ;
+
+          const auto maxOptions = 3;
+          boost::program_options::positional_options_description positional;
+          positional.add( "pos", maxOptions );
+
+          /// Делаем два набора опций: для отображения (печати справки) и общий набор всех параметров для парсинга
+          ///
+          /// - набор отображаемых параметров: "printable" = "generic" + "control"
+          ///
+          boost::program_options::options_description printable{ "Application options" };
+          printable.add( generic ).add( control );
+          ///
+          /// - общий набор (всех!) параметров для парсинга: "printable" += "invisible"
+          ///
+          boost::program_options::options_description total{ "Total options" };
+          total.add( printable ).add( invisible );
+
+          /// Обрабатываем все имеющиеся параметры - "total"
+          boost::program_options::variables_map vm;
           boost::program_options::store(
-               boost::program_options::parse_command_line(
-                    argc,
-                    argv,
-                    description
-                    ),
-               options
+               boost::program_options::command_line_parser{ argc, argv }
+                    .options( total )
+                    .positional( positional )
+                    .run()
+               , vm
                );
-          if( options.count( "help" ) )
+
+          if( vm.count( "help" ) )
           {
-               std::cout << description << '\n';
+               /// А вот отображаем на экран только "printable" параметры!
+               std::cout << printable << '\n';
                return EXIT_SUCCESS;
           }
-          boost::program_options::notify( options );
-
-          if( options.count( "implicit-value" ) )
+          if( vm.count( "version" ) )
           {
-               std::cout << "Implicit value: " << std::quoted( implicitValue ) << '\n';
+               std::cout << "1.2.3" << '\n';
+               return EXIT_SUCCESS;
+          }
+          boost::program_options::notify( vm );
+
+          if( vm.count( "implicit-value" ) )
+          {
+               std::cout << "* Implicit value: " << std::quoted( implicitValue ) << '\n';
+          }
+          if( vm.count( "pos" ) )
+          {
+               std::cout << "* Positional parameters:\n";
+               for( auto&& each: posOpts )
+               {
+                    std::cout << "  - " << each << '\n';
+               }
           }
      }
      catch( const std::exception& e )
