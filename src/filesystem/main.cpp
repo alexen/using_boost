@@ -1,11 +1,12 @@
 /// @file
 /// @brief
 
-
 #include <stdexcept>
 #include <iostream>
 
 #include <boost/core/ignore_unused.hpp>
+#include <boost/exception/enable_error_info.hpp>
+#include <boost/exception/errinfo_errno.hpp>
 #include <boost/exception/diagnostic_information.hpp>
 #include <boost/filesystem/path.hpp>
 #include <boost/filesystem/fstream.hpp>
@@ -59,10 +60,14 @@ int main( int argc, char** argv )
      boost::ignore_unused( argc, argv );
      try
      {
-          std::cout << "Start!\n";
-          auto tmp = getTmpPath();
-          doSmth( std::move( tmp ) );
-          std::cout << "Done.\n";
+          std::cout << "Enter path: " << std::flush;
+          boost::filesystem::path path;
+          if( !(std::cin >> path) )
+          {
+               BOOST_THROW_EXCEPTION( boost::enable_error_info(std::runtime_error{ "i/o error" } )
+                    << boost::errinfo_errno{ errno } );
+          }
+          std::cout << (!path.is_absolute() ? boost::filesystem::current_path() / path : path) << std::endl;
      }
      catch( const std::exception& e )
      {
