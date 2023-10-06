@@ -36,19 +36,20 @@ if(NOT BUILD_SHARED_LIBS)
 endif()
 
 find_package(Boost 1.69 REQUIRED
-     unit_test_framework
-     serialization
-     iostreams
-     date_time
-     coroutine
-     thread
-     locale
-     regex
-     filesystem
-     stacktrace_basic
-     log
-     log_setup
-     program_options
+     COMPONENTS
+          unit_test_framework
+          serialization
+          iostreams
+          date_time
+          coroutine
+          thread
+          locale
+          regex
+          filesystem
+          stacktrace_basic
+          log
+          log_setup
+          program_options
 )
 include_directories(SYSTEM ${Boost_INCLUDE_DIRS})
 link_directories(${Boost_LIBRARY_DIRS})
