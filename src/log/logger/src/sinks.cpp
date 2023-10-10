@@ -117,35 +117,22 @@ OstreamSinkPtr makeOstreamSink( std::ostream& os )
 }
 
 
-void initFileCollecting( const FileSinkPtr& sink, const boost::filesystem::path& logDir, const std::uint32_t maxFiles )
-{
-     sink->locked_backend()->set_file_collector(
-          boost::log::sinks::file::make_collector(
-               boost::log::keywords::target = logDir,
-               boost::log::keywords::max_files = maxFiles
-               )
-          );
-}
-
-
 FileSinkPtr makeFileSink( const LogFileOptions& options )
 {
-     static const auto limiterFor = []( boost::string_view eventName ){
-          return [ eventName ]( std::ostream& ostr ){
-               ostr
-                    << "=====[ " << eventName << ": "
-                    << boost::posix_time::second_clock::local_time()
-                    << " ]====================\n";
-          };
-     };
-
      const auto sink = boost::make_shared< FileSink >(
-          boost::log::keywords::file_name = options.logDir() / options.logFilePattern(),
-          boost::log::keywords::rotation_size = options.logRotateSize(),
-          boost::log::keywords::open_mode = std::ios_base::out | std::ios_base::app
+          boost::log::keywords::rotation_size = options.logRotateSize()
+          , boost::log::keywords::file_name = options.logDir() / options.logFilePattern()
+          , boost::log::keywords::open_mode = std::ios_base::out | std::ios_base::app
+          , boost::log::keywords::auto_flush = true
           );
 
-     initFileCollecting( sink, options.logDir(), 25 );
+     sink->locked_backend()->set_file_collector(
+          boost::log::sinks::file::make_collector(
+               boost::log::keywords::target = options.logDir()
+               , boost::log::keywords::max_files = options.maxLogFiles()
+               , boost::log::keywords::max_size = options.logRotateSize()
+               )
+          );
 
      sink->locked_backend()->scan_for_files();
 
@@ -158,10 +145,6 @@ FileSinkPtr makeFileSink( const LogFileOptions& options )
                << ") <" << boost::log::trivial::severity
                << "> " << boost::log::expressions::message
           );
-
-     sink->locked_backend()->set_open_handler( limiterFor( "log started" ) );
-     sink->locked_backend()->set_close_handler( limiterFor( "log finished" ) );
-     sink->locked_backend()->auto_flush( true );
 
      boost::log::add_common_attributes();
      aux::addCustomAttributes();
