@@ -14,10 +14,15 @@ namespace modules {
 class Alice : public IModule
 {
 public:
+     explicit Alice( log::logger::LoggerSource& );
+
      const char* name() const noexcept override;
 
      void init() override;
      void run() override;
+
+private:
+     log::logger::LoggerSource& log_;
 };
 
 
@@ -28,7 +33,7 @@ public:
 extern "C" {
 
 
-using_boost::modules::IModule* create();
+using_boost::modules::IModule* create( using_boost::log::logger::LoggerSource& );
 
 
 }

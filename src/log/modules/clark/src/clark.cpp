@@ -4,14 +4,14 @@
 
 #include <log/modules/clark/clark.h>
 
-#include <log/logger/logger.h>
+#include <log/logger/log_source.h>
 
 
 extern "C" {
 
-using_boost::modules::IModule* create()
+using_boost::modules::IModule* create( using_boost::log::logger::LoggerSource& log )
 {
-     return new using_boost::modules::Clark{};
+     return new using_boost::modules::Clark{ log };
 }
 
 }
@@ -19,6 +19,12 @@ using_boost::modules::IModule* create()
 
 namespace using_boost {
 namespace modules {
+
+Clark::Clark( log::logger::LoggerSource& log )
+     : log_{ log }
+{
+     LOGGER_INFO( log_ ) << "Clark object initialization";
+}
 
 
 const char* Clark::name() const noexcept
@@ -28,13 +34,13 @@ const char* Clark::name() const noexcept
 
 void Clark::init()
 {
-     LOGGER( info ) << "Hello, I am " << name() << " module, and I am initializing...";
+     LOGGER_INFO( log_ ) << "Hello, I am " << name() << " module, and I am initializing...";
 }
 
 
 void Clark::run()
 {
-     LOGGER( info ) << "Hi, I'm still " << name() << " and now I am running!";
+     LOGGER_INFO( log_ ) << "Hi, I'm still " << name() << " and now I am running!";
 }
 
 
