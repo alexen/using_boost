@@ -7,6 +7,8 @@
 #include <list>
 #include <memory>
 
+#include <log/logger/log_source.h>
+
 
 namespace using_boost {
 namespace modules {
@@ -24,7 +26,7 @@ public:
 
 
 using IModuleUptr = std::unique_ptr< IModule >;
-using ModuleCreatorFn = IModule*(*)();
+using ModuleCreatorFn = IModule*(*)( log::logger::LoggerSource& );
 
 
 } // namespace modules
