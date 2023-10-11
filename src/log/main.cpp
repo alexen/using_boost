@@ -20,6 +20,7 @@
 #include <log/handlers.h>
 #include <log/logger/logger.h>
 #include <log/logger/sinks.h>
+#include <log/logger/log_source.h>
 #include <log/modules/imodule.h>
 #include <log/modules/dynlib/types.h>
 #include <log/modules/dynlib/loader.h>
@@ -97,25 +98,16 @@ using ModulesUptrList = std::list< using_boost::modules::IModuleUptr >;
 int main( int argc, char** argv )
 {
      boost::ignore_unused( argc, argv );
+
+     using_boost::log::logger::LoggerSource log;
+
      try
      {
-          boost::log::core::get()->remove_all_sinks();
-//          boost::log::core::get()->add_sink( using_boost::log::logger::sinks::makeSyslogSink() );
-          boost::log::core::get()->add_sink( using_boost::log::logger::sinks::makeOstreamSink( std::cerr ) );
-          boost::log::core::get()->add_sink(
-               using_boost::log::logger::sinks::makeFileSink(
-                    using_boost::log::logger::sinks::LogFileOptions{}
-                         .logRotateSize( 10u * 1024u ) ) );
-
-          LOGGER( info ) << "Start program!";
-          if( argc > 1 )
-          {
-               throw std::runtime_error { "Check!" };
-          }
-          LOGGER( info ) << "Done program!";
-          return 0;
+          LOGGER_INFO( log ) << "Severity log";
 
           DynLibList dynlibs;
+
+          LOGGER_INFO( log ) << "Loading dynamic libs";
 
           std::transform(
                argv + 1,
@@ -124,12 +116,17 @@ int main( int argc, char** argv )
                using_boost::modules::dynlib::load
                );
 
-          ModulesUptrList modules;
+          LOGGER_INFO( log ) << "Get dynamic modules creation function";
 
+          using namespace using_boost::modules;
+
+          ModulesUptrList modules;
           for( auto&& each: dynlibs )
           {
-               modules.emplace_back( using_boost::modules::dynlib::call< using_boost::modules::ModuleCreatorFn >( each, "create" ) );
+               modules.emplace_back( dynlib::call< ModuleCreatorFn >( each, "create", boost::ref( log ) ) );
           }
+
+          LOGGER_INFO( log ) << "Run modules";
 
           for( auto&& each: modules )
           {
@@ -140,7 +137,8 @@ int main( int argc, char** argv )
      }
      catch( const std::exception& e )
      {
-          LOGGER( error ) << "exception: " << boost::diagnostic_information( e );
+          LOGGER_ERROR( log )
+               << "exception: " << boost::diagnostic_information( e );
           return 1;
      }
      return 0;
