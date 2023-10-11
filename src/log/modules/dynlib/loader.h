@@ -27,10 +27,10 @@ inline Res get( const DynLibUptr& handler, boost::string_view name )
 }
 
 
-template< typename Fn >
-inline auto call( const DynLibUptr& handler, boost::string_view name )
+template< typename Fn, typename ...Args >
+inline auto call( const DynLibUptr& handler, boost::string_view name, Args&& ...args )
 {
-     return get< Fn >( handler, name )();
+     return get< Fn >( handler, name )( std::forward< Args >( args )... );
 }
 
 
