@@ -23,7 +23,7 @@ namespace modules {
 Clark::Clark( log::logger::LoggerSource& log )
      : log_{ log }
 {
-     LOGGER_INFO( log_ ) << "Clark object initialization";
+     LOG_INFO( log_ ) << "Clark object initialization";
 }
 
 
@@ -34,13 +34,13 @@ const char* Clark::name() const noexcept
 
 void Clark::init()
 {
-     LOGGER_INFO( log_ ) << "Hello, I am " << name() << " module, and I am initializing...";
+     LOG_INFO( log_ ) << "Hello, I am " << name() << " module, and I am initializing...";
 }
 
 
 void Clark::run()
 {
-     LOGGER_INFO( log_ ) << "Hi, I'm still " << name() << " and now I am running!";
+     LOG_INFO( log_ ) << "Hi, I'm still " << name() << " and now I am running!";
 }
 
 

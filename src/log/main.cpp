@@ -103,11 +103,11 @@ int main( int argc, char** argv )
 
      try
      {
-          LOGGER_INFO( log ) << "Severity log";
+          LOG_INFO( log ) << "Severity log";
 
           DynLibList dynlibs;
 
-          LOGGER_INFO( log ) << "Loading dynamic libs";
+          LOG_INFO( log ) << "Loading dynamic libs";
 
           std::transform(
                argv + 1,
@@ -116,7 +116,7 @@ int main( int argc, char** argv )
                using_boost::modules::dynlib::load
                );
 
-          LOGGER_INFO( log ) << "Get dynamic modules creation function";
+          LOG_INFO( log ) << "Get dynamic modules creation function";
 
           using namespace using_boost::modules;
 
@@ -126,7 +126,7 @@ int main( int argc, char** argv )
                modules.emplace_back( dynlib::call< ModuleCreatorFn >( each, "create", boost::ref( log ) ) );
           }
 
-          LOGGER_INFO( log ) << "Run modules";
+          LOG_INFO( log ) << "Run modules";
 
           for( auto&& each: modules )
           {
@@ -137,7 +137,7 @@ int main( int argc, char** argv )
      }
      catch( const std::exception& e )
      {
-          LOGGER_ERROR( log )
+          LOG_ERROR( log )
                << "exception: " << boost::diagnostic_information( e );
           return 1;
      }

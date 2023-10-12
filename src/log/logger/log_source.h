@@ -8,15 +8,15 @@
 #include <boost/log/sources/logger.hpp>
 
 
-#define LOGGER_SRC_SEV( logger, severity ) \
+#define LOG_SEV_( logger, severity ) \
      BOOST_LOG_SEV( logger, boost::log::trivial::severity )
 
-#define LOGGER_TRACE( logger ) LOGGER_SRC_SEV( logger, trace )
-#define LOGGER_DEBUG( logger ) LOGGER_SRC_SEV( logger, debug )
-#define LOGGER_INFO( logger )  LOGGER_SRC_SEV( logger, info )
-#define LOGGER_WARN( logger )  LOGGER_SRC_SEV( logger, warning )
-#define LOGGER_ERROR( logger ) LOGGER_SRC_SEV( logger, error )
-#define LOGGER_FATAL( logger ) LOGGER_SRC_SEV( logger, fatal )
+#define LOG_TRACE( logger ) LOG_SEV_( logger, trace )
+#define LOG_DEBUG( logger ) LOG_SEV_( logger, debug )
+#define LOG_INFO( logger )  LOG_SEV_( logger, info )
+#define LOG_WARN( logger )  LOG_SEV_( logger, warning )
+#define LOG_ERROR( logger ) LOG_SEV_( logger, error )
+#define LOG_FATAL( logger ) LOG_SEV_( logger, fatal )
 
 
 namespace using_boost {

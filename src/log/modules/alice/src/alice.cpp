@@ -24,7 +24,7 @@ namespace modules {
 Alice::Alice( log::logger::LoggerSource& lg )
      : log_{ lg }
 {
-     LOGGER_INFO( log_ ) << "Alice object creation";
+     LOG_INFO( log_ ) << "Alice object creation";
 }
 
 
@@ -35,13 +35,13 @@ const char* Alice::name() const noexcept
 
 void Alice::init()
 {
-     LOGGER_INFO( log_ ) << "Hello, I am " << name() << " module, and I am initializing...";
+     LOG_INFO( log_ ) << "Hello, I am " << name() << " module, and I am initializing...";
 }
 
 
 void Alice::run()
 {
-     LOGGER_INFO( log_ ) << "Hi, I'm still " << name() << " and now I am running!";
+     LOG_INFO( log_ ) << "Hi, I'm still " << name() << " and now I am running!";
 }
 
 
