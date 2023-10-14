@@ -8,9 +8,9 @@ add_executable(${COMPONENT_NAME} main.cpp)
 set(IF_STATIC_BUILD "$<NOT:$<BOOL:${BUILD_SHARED_LIBS}>>")
 
 target_link_libraries(${COMPONENT_NAME}
-     ${Boost_DATE_TIME_LIBRARY}
-     ${Boost_SERIALIZATION_LIBRARY}
-     ${Boost_IOSTREAMS_LIBRARY}
+     Boost::date_time
+     Boost::serialization
+     Boost::iostreams
      "$<${IF_STATIC_BUILD}:libz.a>"
 )
 

@@ -6,7 +6,7 @@ add_executable(${COMPONENT_NAME}
 )
 
 target_link_libraries(${COMPONENT_NAME}
-     ${Boost_IOSTREAMS_LIBRARY}
+     Boost::iostreams
 )
 
 if(BUILD_TESTING)
@@ -18,9 +18,9 @@ if(BUILD_TESTING)
           test/filters_test.cpp
      )
      target_link_libraries(${TEST_NAME}
-          ${Boost_IOSTREAMS_LIBRARY}
+          Boost::iostreams
           ${OPENSSL_LIBRARIES}
-          ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY}
+          Boost::unit_test_framework
      )
      add_test(${COMPONENT_NAME} ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${TEST_NAME})
      add_dependencies(${COMPONENT_NAME} ${TEST_NAME})

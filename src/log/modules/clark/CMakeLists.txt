@@ -1,11 +1,12 @@
 set(MODULE_NAME clark)
 
-add_library(${MODULE_NAME} MODULE
+add_library(${MODULE_NAME}
      src/clark.cpp
 )
 
 target_link_libraries(${MODULE_NAME}
-     ${Boost_LOG_LIBRARY}
+     PRIVATE
+          Boost::log
 )
 
 set_target_properties(${MODULE_NAME}

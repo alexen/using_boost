@@ -7,7 +7,7 @@ if(BUILD_TESTING)
           test/core_test.cpp
      )
      target_link_libraries(${TEST_NAME}
-          ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY}
+          Boost::unit_test_framework
      )
      add_test(${COMPONENT_NAME} ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${TEST_NAME})
 endif()

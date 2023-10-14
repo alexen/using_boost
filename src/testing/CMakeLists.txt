@@ -15,7 +15,8 @@ add_executable(${COMPONENT_NAME}
 )
 
 target_link_libraries(${COMPONENT_NAME}
-     ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY}
+     PRIVATE
+          Boost::unit_test_framework
 )
 
 install(TARGETS ${COMPONENT_NAME})

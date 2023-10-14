@@ -8,7 +8,7 @@ add_executable(${COMPONENT_NAME}
 target_link_libraries(${COMPONENT_NAME}
      logger
      dynlib
-     ${Boost_LOG_LIBRARY}
+     Boost::log
 )
 
 add_subdirectory(logger)

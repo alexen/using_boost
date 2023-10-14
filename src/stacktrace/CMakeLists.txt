@@ -6,8 +6,8 @@ add_executable(${COMPONENT_NAME} main.cpp)
 
 target_link_libraries(${COMPONENT_NAME}
      funcs
+     Boost::stacktrace_basic
      ${CMAKE_DL_LIBS}
-     ${Boost_STACKTRACE_BASIC_LIBRARY}
 )
 
 install(TARGETS ${COMPONENT_NAME})

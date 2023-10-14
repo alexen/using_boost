@@ -5,7 +5,7 @@ add_library(${LIBRARY_NAME}
 )
 
 target_link_libraries(${LIBRARY_NAME}
-     ${Boost_LOG_LIBRARY}
+     Boost::log
 )
 
 target_compile_definitions(${LIBRARY_NAME}

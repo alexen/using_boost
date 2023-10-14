@@ -20,7 +20,7 @@ set(ICU_STATIC_LIBS
 )
 
 target_link_libraries(${COMPONENT_NAME}
-     ${Boost_LOCALE_LIBRARY}
+     Boost::locale
      "$<${IF_STATIC_BUILD}:${ICU_STATIC_LIBS}>"
 )
 
@@ -32,7 +32,7 @@ if(BUILD_TESTING)
      )
      target_link_libraries(${TEST_NAME}
           ${COMPONENT_NAME}
-          ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY}
+          Boost::unit_test_framework
      )
      add_test(${COMPONENT_NAME} ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${TEST_NAME})
 endif()

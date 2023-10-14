@@ -6,5 +6,5 @@ add_executable(${COMPONENT_NAME}
 
 target_link_libraries(${COMPONENT_NAME}
      PRIVATE
-          ${Boost_PROGRAM_OPTIONS_LIBRARY}
+          Boost::program_options
 )
