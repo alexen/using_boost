@@ -1,6 +1,9 @@
 <map id="src/log/modules/alice/alice.h" name="src/log/modules/alice/alice.h">
-<area shape="rect" id="node1" title=" " alt="" coords="8,5,153,47"/>
-<area shape="rect" id="node2" href="$imodule_8h.html" title=" " alt="" coords="5,95,156,121"/>
-<area shape="rect" id="node3" title=" " alt="" coords="23,169,61,196"/>
-<area shape="rect" id="node4" title=" " alt="" coords="85,169,153,196"/>
+<area shape="rect" id="node1" title=" " alt="" coords="155,5,300,47"/>
+<area shape="rect" id="node2" href="$imodule_8h.html" title=" " alt="" coords="152,95,303,121"/>
+<area shape="rect" id="node3" title=" " alt="" coords="5,177,44,203"/>
+<area shape="rect" id="node4" title=" " alt="" coords="68,177,136,203"/>
+<area shape="rect" id="node5" title=" " alt="" coords="160,177,295,203"/>
+<area shape="rect" id="node6" title=" " alt="" coords="319,177,507,203"/>
+<area shape="rect" id="node7" title=" " alt="" coords="531,169,705,211"/>
 </map>

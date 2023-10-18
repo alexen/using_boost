@@ -68,20 +68,27 @@ $(function() {
 <div class="header">
   <div class="summary">
 <a href="#nested-classes">Классы</a> &#124;
+<a href="#define-members">Макросы</a> &#124;
 <a href="#typedef-members">Определения типов</a>  </div>
   <div class="headertitle"><div class="title">Файл imodule.h</div></div>
 </div><!--header-->
 <div class="contents">
 <div class="textblock"><code>#include &lt;list&gt;</code><br />
 <code>#include &lt;memory&gt;</code><br />
+<code>#include &lt;boost/log/trivial.hpp&gt;</code><br />
+<code>#include &lt;boost/log/sources/logger.hpp&gt;</code><br />
+<code>#include &lt;boost/log/sources/severity_logger.hpp&gt;</code><br />
 </div><div class="textblock"><div class="dynheader">
 Граф включаемых заголовочных файлов для imodule.h:</div>
 <div class="dyncontent">
 <div class="center"><img src="imodule_8h__incl.png" border="0" usemap="#asrc_2log_2modules_2imodule_8h" alt=""/></div>
 <map name="asrc_2log_2modules_2imodule_8h" id="asrc_2log_2modules_2imodule_8h">
-<area shape="rect" title=" " alt="" coords="5,5,179,32"/>
-<area shape="rect" title=" " alt="" coords="34,80,73,107"/>
-<area shape="rect" title=" " alt="" coords="97,80,165,107"/>
+<area shape="rect" title=" " alt="" coords="141,5,314,32"/>
+<area shape="rect" title=" " alt="" coords="5,87,44,114"/>
+<area shape="rect" title=" " alt="" coords="68,87,136,114"/>
+<area shape="rect" title=" " alt="" coords="160,87,295,114"/>
+<area shape="rect" title=" " alt="" coords="319,87,507,114"/>
+<area shape="rect" title=" " alt="" coords="531,80,705,121"/>
 </map>
 </div>
 </div><div class="textblock"><div class="dynheader">
@@ -102,8 +109,35 @@ $(function() {
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classusing__boost_1_1modules_1_1IModule.html">using_boost::modules::IModule</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="define-members" name="define-members"></a>
+Макросы</h2></td></tr>
+<tr class="memitem:a25da43b7ae55a9a7f4b20c3f1d39abee"><td class="memItemLeft" align="right" valign="top"><a id="a25da43b7ae55a9a7f4b20c3f1d39abee" name="a25da43b7ae55a9a7f4b20c3f1d39abee"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>LOGGER_SRC_SEV</b>(logger,  severity)&#160;&#160;&#160;     BOOST_LOG_SEV( logger, boost::log::trivial::severity )</td></tr>
+<tr class="separator:a25da43b7ae55a9a7f4b20c3f1d39abee"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1607ba428fd6eaf9007b0b5078254f4e"><td class="memItemLeft" align="right" valign="top"><a id="a1607ba428fd6eaf9007b0b5078254f4e" name="a1607ba428fd6eaf9007b0b5078254f4e"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>LOGGER_TRACE</b>(logger)&#160;&#160;&#160;LOGGER_SRC_SEV( logger, trace )</td></tr>
+<tr class="separator:a1607ba428fd6eaf9007b0b5078254f4e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a23cf457cf8fead0e364ab2c6b90c1b5d"><td class="memItemLeft" align="right" valign="top"><a id="a23cf457cf8fead0e364ab2c6b90c1b5d" name="a23cf457cf8fead0e364ab2c6b90c1b5d"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>LOGGER_DEBUG</b>(logger)&#160;&#160;&#160;LOGGER_SRC_SEV( logger, debug )</td></tr>
+<tr class="separator:a23cf457cf8fead0e364ab2c6b90c1b5d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a50b99b6730f62bdd3cda30fe1e32bc09"><td class="memItemLeft" align="right" valign="top"><a id="a50b99b6730f62bdd3cda30fe1e32bc09" name="a50b99b6730f62bdd3cda30fe1e32bc09"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>LOGGER_INFO</b>(logger)&#160;&#160;&#160;LOGGER_SRC_SEV( logger, info )</td></tr>
+<tr class="separator:a50b99b6730f62bdd3cda30fe1e32bc09"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acaaeca32582de6b66b65f741e88d6313"><td class="memItemLeft" align="right" valign="top"><a id="acaaeca32582de6b66b65f741e88d6313" name="acaaeca32582de6b66b65f741e88d6313"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>LOGGER_WARN</b>(logger)&#160;&#160;&#160;LOGGER_SRC_SEV( logger, warning )</td></tr>
+<tr class="separator:acaaeca32582de6b66b65f741e88d6313"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3dddea544839c929bc95bd6fb70dc3ac"><td class="memItemLeft" align="right" valign="top"><a id="a3dddea544839c929bc95bd6fb70dc3ac" name="a3dddea544839c929bc95bd6fb70dc3ac"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>LOGGER_ERROR</b>(logger)&#160;&#160;&#160;LOGGER_SRC_SEV( logger, error )</td></tr>
+<tr class="separator:a3dddea544839c929bc95bd6fb70dc3ac"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a318aa753211665b036b52992fe4e244c"><td class="memItemLeft" align="right" valign="top"><a id="a318aa753211665b036b52992fe4e244c" name="a318aa753211665b036b52992fe4e244c"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>LOGGER_FATAL</b>(logger)&#160;&#160;&#160;LOGGER_SRC_SEV( logger, fatal )</td></tr>
+<tr class="separator:a318aa753211665b036b52992fe4e244c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="typedef-members" name="typedef-members"></a>
 Определения типов</h2></td></tr>
+<tr class="memitem:a6badc36ed7313caf450d66bf42625698"><td class="memItemLeft" align="right" valign="top"><a id="a6badc36ed7313caf450d66bf42625698" name="a6badc36ed7313caf450d66bf42625698"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>using_boost::modules::LoggerSource</b> = boost::log::sources::severity_logger&lt; boost::log::trivial::severity_level &gt;</td></tr>
+<tr class="separator:a6badc36ed7313caf450d66bf42625698"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a44b7c1df9e397c08da34d2dea5d44500"><td class="memItemLeft" align="right" valign="top"><a id="a44b7c1df9e397c08da34d2dea5d44500" name="a44b7c1df9e397c08da34d2dea5d44500"></a>
 using&#160;</td><td class="memItemRight" valign="bottom"><b>using_boost::modules::IModuleUptr</b> = std::unique_ptr&lt; IModule &gt;</td></tr>
 <tr class="separator:a44b7c1df9e397c08da34d2dea5d44500"><td class="memSeparator" colspan="2">&#160;</td></tr>
