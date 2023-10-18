@@ -9,6 +9,7 @@
 #include <stdexcept>
 
 #include <boost/thread.hpp>
+#include <boost/bind/bind.hpp>
 #include <boost/core/ignore_unused.hpp>
 #include <boost/exception/error_info.hpp>
 #include <boost/exception/diagnostic_information.hpp>
@@ -55,28 +56,29 @@ struct Certificate : ICertificate {};
 } // namespace impl
 
 
-void worker()
+void worker( using_boost::modules::LoggerSource& logger )
 {
-     BOOST_LOG_TRIVIAL( info ) << "Start working...";
+     LOGGER_INFO( logger ) << "Start working...";
 
      auto n = 250u;
      while( n-- )
      {
-          BOOST_LOG_TRIVIAL( info ) << "Iteration #" << n << ": here we are!";
+          LOGGER_INFO( logger ) << "Iteration #" << n << ": here we are!";
           boost::this_thread::sleep( boost::posix_time::milliseconds{ 150 } );
      }
 
-     BOOST_LOG_TRIVIAL( info ) << "Work done.";
+     LOGGER_INFO( logger ) << "Work done.";
 }
 
 
-void testMtLogging()
+void testMtLogging( using_boost::modules::LoggerSource& logger )
 {
      boost::thread_group tg;
-     tg.create_thread( worker );
-     tg.create_thread( worker );
-     tg.create_thread( worker );
-     tg.create_thread( worker );
+     const auto fn = boost::bind( worker, boost::ref( logger ) );
+     tg.create_thread( fn );
+     tg.create_thread( fn );
+     tg.create_thread( fn );
+     tg.create_thread( fn );
      tg.join_all();
 }
 
@@ -91,6 +93,7 @@ void unload( void* handle )
 int main( int argc, char** argv )
 {
      boost::ignore_unused( argc, argv );
+     using_boost::modules::LoggerSource logger;
      try
      {
           boost::log::core::get()->remove_all_sinks();
@@ -98,28 +101,28 @@ int main( int argc, char** argv )
           boost::log::add_console_log( std::cerr,
                boost::log::keywords::format = "%ThreadID% >> %TimeStamp% (%Severity%): %Message%" );
 
-          BOOST_LOG_TRIVIAL( info ) << "Start testing Boost.Log with modules";
+          LOGGER_INFO( logger ) << "Start testing Boost.Log with modules";
 
-          BOOST_LOG_TRIVIAL( info ) << "Create modules Alice and Clark";
+          LOGGER_INFO( logger ) << "Create modules Alice and Clark";
 
           using_boost::modules::Alice alice;
           using_boost::modules::Clark clark;
 
-          BOOST_LOG_TRIVIAL( info ) << "Run Alice methods";
+          LOGGER_INFO( logger ) << "Run Alice methods";
 
           alice.init();
           alice.run();
 
-          BOOST_LOG_TRIVIAL( info ) << "Run Clark methods";
+          LOGGER_INFO( logger ) << "Run Clark methods";
 
           clark.init();
           clark.run();
 
-          BOOST_LOG_TRIVIAL( info ) << "Now, we are finished!";
+          LOGGER_INFO( logger ) << "Now, we are finished!";
      }
      catch( const std::exception& e )
      {
-          BOOST_LOG_TRIVIAL( error ) << "exception: " << boost::diagnostic_information( e );
+          LOGGER_ERROR( logger ) << "exception: " << boost::diagnostic_information( e );
           return 1;
      }
      return 0;
