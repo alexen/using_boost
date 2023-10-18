@@ -6,10 +6,12 @@ add_library(${MODULE_NAME}
 
 target_link_libraries(${MODULE_NAME}
      PRIVATE
-          Boost::log
-)
-
-set_target_properties(${MODULE_NAME}
-     PROPERTIES
-          LIBRARY_OUTPUT_DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
+          /home/alexen/.skel/build/current/boost_1_72_0/stage/lib/libboost_chrono.a
+          /home/alexen/.skel/build/current/boost_1_72_0/stage/lib/libboost_regex.a
+          /home/alexen/.skel/build/current/boost_1_72_0/stage/lib/libboost_atomic.a
+          /home/alexen/.skel/build/current/boost_1_72_0/stage/lib/libboost_log_setup.a
+          /home/alexen/.skel/build/current/boost_1_72_0/stage/lib/libboost_filesystem.a
+          /home/alexen/.skel/build/current/boost_1_72_0/stage/lib/libboost_date_time.a
+          /home/alexen/.skel/build/current/boost_1_72_0/stage/lib/libboost_thread.a
+          /home/alexen/.skel/build/current/boost_1_72_0/stage/lib/libboost_log.a
 )

@@ -23,12 +23,3 @@ public:
 
 } // namespace modules
 } // namespace using_boost
-
-
-extern "C" {
-
-
-using_boost::modules::IModule* create();
-
-
-}

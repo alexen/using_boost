@@ -6,9 +6,9 @@ add_executable(${COMPONENT_NAME}
      application.cpp
 )
 target_link_libraries(${COMPONENT_NAME}
-     logger
-     dynlib
-     Boost::log
+     alice
+     clark
+     Boost::log_setup
 )
 
 add_subdirectory(logger)

@@ -15,14 +15,12 @@
 #include <boost/exception/enable_error_info.hpp>
 #include <boost/filesystem/operations.hpp>
 #include <boost/exception/errinfo_file_name.hpp>
+#include <boost/log/trivial.hpp>
+#include <boost/log/utility/setup/common_attributes.hpp>
+#include <boost/log/utility/setup/console.hpp>
 
-#include <log/application.h>
-#include <log/handlers.h>
-#include <log/logger/logger.h>
-#include <log/logger/sinks.h>
-#include <log/modules/imodule.h>
-#include <log/modules/dynlib/types.h>
-#include <log/modules/dynlib/loader.h>
+#include <log/modules/alice/alice.h>
+#include <log/modules/clark/clark.h>
 
 
 struct ICertificate {};
@@ -59,16 +57,16 @@ struct Certificate : ICertificate {};
 
 void worker()
 {
-     LOGGER( info ) << "Start working...";
+     BOOST_LOG_TRIVIAL( info ) << "Start working...";
 
      auto n = 250u;
      while( n-- )
      {
-          LOGGER( info ) << "Iteration #" << n << ": here we are!";
+          BOOST_LOG_TRIVIAL( info ) << "Iteration #" << n << ": here we are!";
           boost::this_thread::sleep( boost::posix_time::milliseconds{ 150 } );
      }
 
-     LOGGER( info ) << "Work done.";
+     BOOST_LOG_TRIVIAL( info ) << "Work done.";
 }
 
 
@@ -90,49 +88,38 @@ void unload( void* handle )
 }
 
 
-using DynLibList = std::list< using_boost::modules::dynlib::DynLibUptr >;
-using ModulesUptrList = std::list< using_boost::modules::IModuleUptr >;
-
-
 int main( int argc, char** argv )
 {
      boost::ignore_unused( argc, argv );
      try
      {
           boost::log::core::get()->remove_all_sinks();
-//          boost::log::core::get()->add_sink( using_boost::log::logger::sinks::makeSyslogSink() );
-          boost::log::core::get()->add_sink( using_boost::log::logger::sinks::makeOstreamSink( std::cerr ) );
-          boost::log::core::get()->add_sink(
-               using_boost::log::logger::sinks::makeFileSink(
-                    using_boost::log::logger::sinks::LogFileOptions{}
-                         .logRotateSize( 10u * 1024u ) ) );
+          boost::log::add_common_attributes();
+          boost::log::add_console_log( std::cerr,
+               boost::log::keywords::format = "%ThreadID% >> %TimeStamp% (%Severity%): %Message%" );
 
-          DynLibList dynlibs;
+          BOOST_LOG_TRIVIAL( info ) << "Start testing Boost.Log with modules";
 
-          std::transform(
-               argv + 1,
-               argv + argc,
-               std::back_inserter( dynlibs ),
-               using_boost::modules::dynlib::load
-               );
+          BOOST_LOG_TRIVIAL( info ) << "Create modules Alice and Clark";
 
-          ModulesUptrList modules;
+          using_boost::modules::Alice alice;
+          using_boost::modules::Clark clark;
 
-          for( auto&& each: dynlibs )
-          {
-               modules.emplace_back( using_boost::modules::dynlib::call< using_boost::modules::ModuleCreatorFn >( each, "create" ) );
-          }
+          BOOST_LOG_TRIVIAL( info ) << "Run Alice methods";
 
-          for( auto&& each: modules )
-          {
-               std::cout << "Working with " << each->name() << '\n';
-               each->init();
-               each->run();
-          }
+          alice.init();
+          alice.run();
+
+          BOOST_LOG_TRIVIAL( info ) << "Run Clark methods";
+
+          clark.init();
+          clark.run();
+
+          BOOST_LOG_TRIVIAL( info ) << "Now, we are finished!";
      }
      catch( const std::exception& e )
      {
-          LOGGER( error ) << "exception: " << boost::diagnostic_information( e );
+          BOOST_LOG_TRIVIAL( error ) << "exception: " << boost::diagnostic_information( e );
           return 1;
      }
      return 0;
