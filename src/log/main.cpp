@@ -56,19 +56,18 @@ int main( int argc, char** argv )
                std::cout << "Working with " << each->name() << '\n';
                each->init();
           }
-          for( auto _: boost::irange( 5 ) )
+          auto ms = 10u;
+          for( auto idx: boost::irange( 5 ) )
           {
-               boost::ignore_unused( _ );
+               BOOST_LOG_TRIVIAL( debug ) << "Iteration #" << idx << " STARTS...";
                std::for_each(
                     std::begin( modules )
                     , std::end( modules )
                     , std::mem_fn( &using_boost::modules::IModule::run )
                     );
-               for( auto&& each: modules )
-               {
-                    each->run();
-                    boost::this_thread::sleep( boost::posix_time::milliseconds{ 10 } );
-               }
+               BOOST_LOG_TRIVIAL( trace ) << "Timeout: " << ms << " ms";
+               boost::this_thread::sleep( boost::posix_time::milliseconds{ ms } );
+               BOOST_LOG_TRIVIAL( debug ) << "Iteration #" << idx << " DONE!";
           }
      }
      catch( const std::exception& e )
