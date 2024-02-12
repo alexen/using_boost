@@ -15,6 +15,7 @@
 #include <boost/exception/enable_error_info.hpp>
 #include <boost/filesystem/operations.hpp>
 #include <boost/exception/errinfo_file_name.hpp>
+#include <boost/range/irange.hpp>
 
 #include <log/modules/imodule.h>
 #include <log/modules/dynlib/types.h>
@@ -54,7 +55,19 @@ int main( int argc, char** argv )
           {
                std::cout << "Working with " << each->name() << '\n';
                each->init();
-               each->run();
+          }
+          for( auto _: boost::irange( 500 ) )
+          {
+               boost::ignore_unused( _ );
+               std::for_each(
+                    std::begin( modules )
+                    , std::end( modules )
+                    , std::mem_fn( &using_boost::modules::IModule::run )
+                    );
+               for( auto&& each: modules )
+               {
+                    each->run();
+               }
           }
      }
      catch( const std::exception& e )
