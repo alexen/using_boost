@@ -14,6 +14,8 @@ namespace modules {
 class Clark: public IModule
 {
 public:
+     Clark();
+
      const char* name() const noexcept override;
 
      void init() override;

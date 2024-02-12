@@ -6,6 +6,7 @@
 
 #include <list>
 #include <memory>
+#include <boost/log/trivial.hpp>
 
 
 namespace using_boost {
@@ -14,12 +15,24 @@ namespace modules {
 
 class IModule {
 public:
-     virtual ~IModule() {}
+     explicit IModule( const std::string& name )
+          : name_{ name }
+     {
+          BOOST_LOG_TRIVIAL( info )
+               << "Module created: " << name_;
+     }
+     virtual ~IModule() {
+          BOOST_LOG_TRIVIAL( info )
+               << "Module destroyed: " << name_;
+     }
 
      virtual const char* name() const noexcept = 0;
 
      virtual void init() = 0;
      virtual void run() = 0;
+
+private:
+     const std::string name_;
 };
 
 

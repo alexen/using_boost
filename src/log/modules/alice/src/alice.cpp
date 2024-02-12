@@ -21,6 +21,9 @@ namespace using_boost {
 namespace modules {
 
 
+Alice::Alice() : IModule{ "Alice" }
+{}
+
 const char* Alice::name() const noexcept
 {
      return "Alice";
