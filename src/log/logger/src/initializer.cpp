@@ -8,7 +8,7 @@
 #include <boost/log/utility/setup/file.hpp>
 #include <boost/log/utility/setup/console.hpp>
 #include <boost/log/utility/setup/common_attributes.hpp>
-
+#include <boost/log/sinks/text_file_backend.hpp>
 
 
 namespace using_boost {
@@ -18,7 +18,8 @@ namespace logger {
 
 void initialize(
      const boost::filesystem::path& logDir
-     , std::size_t rotationSize
+     , const std::size_t rotationSize
+     , const unsigned maxFiles
 )
 {
      /// @fixme До тех пор, пока мы не исправим линковку библиотеки Boost.Log под Windows,
@@ -30,12 +31,7 @@ void initialize(
           std::cerr
           , boost::log::keywords::format = "%TimeStamp% {%ThreadID%} <%Severity%>: %Message%"
           );
-     /*
-          boost::log::keywords::rotation_size = options.logRotateSize()
-          , boost::log::keywords::file_name = options.logDir() / options.logFilePattern()
-          , boost::log::keywords::open_mode = std::ios_base::out | std::ios_base::app
-          , boost::log::keywords::auto_flush = true
-      */
+
      auto sink = boost::log::add_file_log(
           boost::log::keywords::file_name = logDir / "using_boost_%Y-%m-%d_%4N.log"
           , boost::log::keywords::format = "[%TimeStamp%]: %Message%"
@@ -44,6 +40,14 @@ void initialize(
           , boost::log::keywords::auto_flush = true
           );
 
+     sink->locked_backend()->set_file_collector(
+          boost::log::sinks::file::make_collector(
+               boost::log::keywords::target = logDir
+               , boost::log::keywords::max_files = maxFiles
+               )
+          );
+
+     sink->locked_backend()->scan_for_files();
 }
 
 

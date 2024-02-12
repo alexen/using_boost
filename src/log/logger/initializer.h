@@ -15,6 +15,7 @@ namespace logger {
 void initialize(
      const boost::filesystem::path& logDir = "./logs"
      , std::size_t rotationSize = 10u * 1024u
+     , unsigned maxFiles = 5u
 );
 
 
