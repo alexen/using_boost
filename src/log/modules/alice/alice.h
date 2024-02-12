@@ -14,6 +14,8 @@ namespace modules {
 class Alice : public IModule
 {
 public:
+     Alice();
+
      const char* name() const noexcept override;
 
      void init() override;

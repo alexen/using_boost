@@ -21,6 +21,10 @@ namespace using_boost {
 namespace modules {
 
 
+Clark::Clark() : IModule{ "Clark" }
+{}
+
+
 const char* Clark::name() const noexcept
 {
      return "Clark";

@@ -15,79 +15,13 @@
 #include <boost/exception/enable_error_info.hpp>
 #include <boost/filesystem/operations.hpp>
 #include <boost/exception/errinfo_file_name.hpp>
+#include <boost/range/irange.hpp>
 
-#include <log/application.h>
-#include <log/handlers.h>
-#include <log/logger/logger.h>
-#include <log/logger/sinks.h>
 #include <log/modules/imodule.h>
 #include <log/modules/dynlib/types.h>
 #include <log/modules/dynlib/loader.h>
 
-
-struct ICertificate {};
-
-using ICertificateUptr = std::unique_ptr< ICertificate >;
-
-
-std::ostream& operator<<( std::ostream& os, const ICertificate& )
-{
-     return os << __PRETTY_FUNCTION__;
-}
-
-
-std::ostream& operator<<( std::ostream& os, const ICertificateUptr& p )
-{
-     if( p )
-     {
-          os << *p;
-     }
-     else
-     {
-          os << __PRETTY_FUNCTION__;
-     }
-     return os;
-}
-
-
-namespace impl {
-
-struct Certificate : ICertificate {};
-
-} // namespace impl
-
-
-void worker()
-{
-     LOGGER( info ) << "Start working...";
-
-     auto n = 250u;
-     while( n-- )
-     {
-          LOGGER( info ) << "Iteration #" << n << ": here we are!";
-          boost::this_thread::sleep( boost::posix_time::milliseconds{ 150 } );
-     }
-
-     LOGGER( info ) << "Work done.";
-}
-
-
-void testMtLogging()
-{
-     boost::thread_group tg;
-     tg.create_thread( worker );
-     tg.create_thread( worker );
-     tg.create_thread( worker );
-     tg.create_thread( worker );
-     tg.join_all();
-}
-
-
-void unload( void* handle )
-{
-     /// @fixme Do not ignore returning value!
-     dlclose( handle );
-}
+#include <log/logger/initializer.h>
 
 
 using DynLibList = std::list< using_boost::modules::dynlib::DynLibUptr >;
@@ -99,13 +33,7 @@ int main( int argc, char** argv )
      boost::ignore_unused( argc, argv );
      try
      {
-          boost::log::core::get()->remove_all_sinks();
-//          boost::log::core::get()->add_sink( using_boost::log::logger::sinks::makeSyslogSink() );
-          boost::log::core::get()->add_sink( using_boost::log::logger::sinks::makeOstreamSink( std::cerr ) );
-          boost::log::core::get()->add_sink(
-               using_boost::log::logger::sinks::makeFileSink(
-                    using_boost::log::logger::sinks::LogFileOptions{}
-                         .logRotateSize( 10u * 1024u ) ) );
+          using_boost::log::logger::initialize();
 
           DynLibList dynlibs;
 
@@ -127,12 +55,25 @@ int main( int argc, char** argv )
           {
                std::cout << "Working with " << each->name() << '\n';
                each->init();
-               each->run();
+          }
+          for( auto _: boost::irange( 5 ) )
+          {
+               boost::ignore_unused( _ );
+               std::for_each(
+                    std::begin( modules )
+                    , std::end( modules )
+                    , std::mem_fn( &using_boost::modules::IModule::run )
+                    );
+               for( auto&& each: modules )
+               {
+                    each->run();
+                    boost::this_thread::sleep( boost::posix_time::milliseconds{ 10 } );
+               }
           }
      }
      catch( const std::exception& e )
      {
-          LOGGER( error ) << "exception: " << boost::diagnostic_information( e );
+          BOOST_LOG_TRIVIAL( error ) << "exception: " << boost::diagnostic_information( e );
           return 1;
      }
      return 0;
