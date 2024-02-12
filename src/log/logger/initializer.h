@@ -5,6 +5,7 @@
 #pragma once
 
 #include <boost/filesystem/path.hpp>
+#include <boost/log/trivial.hpp>
 
 
 namespace using_boost {
@@ -16,6 +17,7 @@ void initialize(
      const boost::filesystem::path& logDir = "./logs"
      , std::size_t rotationSize = 10u * 1024u
      , unsigned maxFiles = 5u
+     , boost::log::trivial::severity_level minLevel = boost::log::trivial::info
 );
 
 
