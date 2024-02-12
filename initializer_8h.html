@@ -72,13 +72,15 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 <div class="textblock"><code>#include &lt;boost/filesystem/path.hpp&gt;</code><br />
+<code>#include &lt;boost/log/trivial.hpp&gt;</code><br />
 </div><div class="textblock"><div class="dynheader">
 Граф включаемых заголовочных файлов для initializer.h:</div>
 <div class="dyncontent">
 <div class="center"><img src="initializer_8h__incl.png" border="0" usemap="#asrc_2log_2logger_2initializer_8h" alt=""/></div>
 <map name="asrc_2log_2logger_2initializer_8h" id="asrc_2log_2logger_2initializer_8h">
-<area shape="rect" title=" " alt="" coords="8,5,172,32"/>
+<area shape="rect" title=" " alt="" coords="96,5,260,32"/>
 <area shape="rect" title=" " alt="" coords="5,80,175,107"/>
+<area shape="rect" title=" " alt="" coords="199,80,333,107"/>
 </map>
 </div>
 </div>
@@ -86,9 +88,9 @@ $(function() {
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Функции</h2></td></tr>
-<tr class="memitem:ac72e060666f93da2b7077e247315d71e"><td class="memItemLeft" align="right" valign="top"><a id="ac72e060666f93da2b7077e247315d71e" name="ac72e060666f93da2b7077e247315d71e"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>using_boost::log::logger::initialize</b> (const boost::filesystem::path &amp;logDir=&quot;./logs&quot;, std::size_t rotationSize=10u *1024u, unsigned maxFiles=5u)</td></tr>
-<tr class="separator:ac72e060666f93da2b7077e247315d71e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5806316f51c0cd525a72a75a89ac9c32"><td class="memItemLeft" align="right" valign="top"><a id="a5806316f51c0cd525a72a75a89ac9c32" name="a5806316f51c0cd525a72a75a89ac9c32"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>using_boost::log::logger::initialize</b> (const boost::filesystem::path &amp;logDir=&quot;./logs&quot;, std::size_t rotationSize=10u *1024u, unsigned maxFiles=5u, boost::log::trivial::severity_level minLevel=boost::log::trivial::info)</td></tr>
+<tr class="separator:a5806316f51c0cd525a72a75a89ac9c32"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Подробное описание</h2>
 <div class="textblock"><dl class="section copyright"><dt>Авторство</dt><dd>Copyright 2024 InfoTeCS Internet Trust </dd></dl>
