@@ -33,7 +33,17 @@ int main( int argc, char** argv )
      boost::ignore_unused( argc, argv );
      try
      {
-          using_boost::log::logger::initialize();
+          const auto logDir = "./logs";
+          const auto rotationSize = 10u * 1024u;
+          const auto maxFiles = 5u;
+          const auto minLevel = boost::log::trivial::debug;
+
+          using_boost::log::logger::initialize(
+               logDir
+               , rotationSize
+               , maxFiles
+               , minLevel
+               );
 
           DynLibList dynlibs;
 
