@@ -56,7 +56,7 @@ int main( int argc, char** argv )
                std::cout << "Working with " << each->name() << '\n';
                each->init();
           }
-          for( auto _: boost::irange( 500 ) )
+          for( auto _: boost::irange( 5 ) )
           {
                boost::ignore_unused( _ );
                std::for_each(
@@ -67,6 +67,7 @@ int main( int argc, char** argv )
                for( auto&& each: modules )
                {
                     each->run();
+                    boost::this_thread::sleep( boost::posix_time::milliseconds{ 10 } );
                }
           }
      }
