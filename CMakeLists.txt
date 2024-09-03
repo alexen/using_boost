@@ -55,6 +55,11 @@ find_package(Boost 1.69 REQUIRED
 include_directories(SYSTEM ${Boost_INCLUDE_DIRS})
 link_directories(${Boost_LIBRARY_DIRS})
 
+find_package(Doxygen QUIET)
+if(DOXYGEN_FOUND)
+     doxygen_add_docs(doxygen)
+endif()
+
 if(NOT BUILD_SHARED_LIBS)
      set(OPENSSL_USE_STATIC_LIBS ON)
      message(STATUS "Use OpenSSL in static: ${OPENSSL_USE_STATIC_LIBS}")
@@ -63,7 +68,6 @@ find_package(OpenSSL REQUIRED)
 include_directories(${OPENSSL_INCLUDE_DIR})
 
 include(CTest)
-enable_testing()
 message(STATUS "Build testing: ${BUILD_TESTING}")
 message(STATUS "Build benchmarks: ${BUILD_BENCHMARKS}")
 
