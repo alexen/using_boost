@@ -27,6 +27,7 @@ void f()
      {
           ptr.reset( new StaticForThread{} );
      }
+     BOOST_LOG_TRIVIAL( info ) << "Called " << __PRETTY_FUNCTION__ << " from thread " << boost::this_thread::get_id();
      boost::this_thread::sleep( boost::posix_time::milliseconds{ 1 } );
 }
 
