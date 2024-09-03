@@ -68,7 +68,6 @@ find_package(OpenSSL REQUIRED)
 include_directories(${OPENSSL_INCLUDE_DIR})
 
 include(CTest)
-enable_testing()
 message(STATUS "Build testing: ${BUILD_TESTING}")
 message(STATUS "Build benchmarks: ${BUILD_BENCHMARKS}")
 
