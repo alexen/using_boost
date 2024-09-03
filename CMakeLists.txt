@@ -50,6 +50,7 @@ find_package(Boost 1.69 REQUIRED
           log
           log_setup
           program_options
+          random
 )
 include_directories(SYSTEM ${Boost_INCLUDE_DIRS})
 link_directories(${Boost_LIBRARY_DIRS})
