@@ -41,17 +41,66 @@ void worker()
 }
 
 
+void longWorker()
+{
+     try
+     {
+          std::cout << "Thread is starting\n";
+          sleep( 600 );
+     }
+     catch( boost::thread_interrupted& )
+     {
+          std::cout << "Thread is finished!\n";
+          throw;
+     }
+}
+
+
+void stopThreadNoLock( boost::thread& th )
+{
+     th.interrupt();
+     th.detach();
+}
+
+void stopThreadNoLock( const boost::shared_ptr< boost::thread >& th )
+{
+     if( th )
+     {
+          stopThreadNoLock( *th );
+     }
+}
+
+
 int main( int argc, char** argv )
 {
      boost::ignore_unused( argc, argv );
      try
      {
-          boost::thread_group tg;
-          tg.create_thread( worker );
-          tg.create_thread( worker );
-          tg.create_thread( worker );
-          tg.create_thread( worker );
-          tg.join_all();
+          boost::shared_ptr< boost::thread > t;
+          while( true )
+          {
+               std::cout << "Enter command (tstart, tstop, exit): " << std::flush;
+               std::string command;
+               std::cin >> command;
+               if( command == "tstart" )
+               {
+                    stopThreadNoLock( t );
+                    t = boost::make_shared< boost::thread >( longWorker );
+               }
+               else if( command == "tstop" )
+               {
+                    stopThreadNoLock( t );
+               }
+               else if( command == "exit" )
+               {
+                    std::cout << "Good bye!\n";
+                    return 0;
+               }
+               else
+               {
+                    std::cout << "Unrecognized command: " << command << ", please repeat enter\n";
+               }
+          }
      }
      catch( const std::exception& e )
      {
