@@ -18,6 +18,7 @@
 #include <boost/filesystem/path.hpp>
 #include <boost/iostreams/filtering_stream.hpp>
 #include <boost/range/iterator_range_core.hpp>
+#include <boost/property_tree/json_parser.hpp>
 
 
 static const std::string data = R"ini(
@@ -150,32 +151,47 @@ std::ostream& operator<<( std::ostream& os, const IniConfigParser& icp )
 }
 
 
+void test_ini()
+{
+     boost::iostreams::filtering_istream istr{ boost::make_iterator_range( data ) };
+
+     IniConfigParser parser{ istr };
+
+     std::cout
+          << "SOURCE INI:\n"
+          << "===========\n"
+          << parser << '\n';
+
+     std::cout
+          << "integer value          : " << parser.getConfigParameter< int >( "general", "number_of_something" ) << '\n'
+          << "string value           : " << parser.getConfigParameter< std::string >( "general", "main_path" ) << '\n'
+          << "time duration          : " << parser.getConfigParameter< boost::posix_time::time_duration >( "specific", "inner_interval" ) << '\n'
+          << "optional time duration : " << parser.getOptionalConfigParameter< boost::posix_time::time_duration >( "specific", "optional_inner_interval" ) << '\n'
+          << "big interval           : " << parser.getConfigParameter< boost::posix_time::time_duration >( "specific", "big_interval" ) << '\n'
+          ;
+
+     std::cout
+          << "RESULT INI:\n"
+          << "===========\n"
+          << parser << '\n';
+}
+
+
 int main( int argc, char** argv )
 {
      boost::ignore_unused( argc, argv );
      try
      {
-          boost::iostreams::filtering_istream istr{ boost::make_iterator_range( data ) };
+          boost::property_tree::ptree root;
+          root.put( "key", "value" );
 
-          IniConfigParser parser{ istr };
+          boost::property_tree::ptree subtree;
+          subtree.put( "key1", "value1" );
+          subtree.put( "key2", "value2" );
 
-          std::cout
-               << "SOURCE INI:\n"
-               << "===========\n"
-               << parser << '\n';
+          root.put_child( "subtree", subtree );
 
-          std::cout
-               << "integer value          : " << parser.getConfigParameter< int >( "general", "number_of_something" ) << '\n'
-               << "string value           : " << parser.getConfigParameter< std::string >( "general", "main_path" ) << '\n'
-               << "time duration          : " << parser.getConfigParameter< boost::posix_time::time_duration >( "specific", "inner_interval" ) << '\n'
-               << "optional time duration : " << parser.getOptionalConfigParameter< boost::posix_time::time_duration >( "specific", "optional_inner_interval" ) << '\n'
-               << "big interval           : " << parser.getConfigParameter< boost::posix_time::time_duration >( "specific", "big_interval" ) << '\n'
-               ;
-
-          std::cout
-               << "RESULT INI:\n"
-               << "===========\n"
-               << parser << '\n';
+          boost::property_tree::write_json( std::cout, root );
      }
      catch( const std::exception& e )
      {
