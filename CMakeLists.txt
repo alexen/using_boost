@@ -1,6 +1,10 @@
 cmake_minimum_required(VERSION 3.15)
 
-project(using_boost VERSION 1.1.0)
+project(using_boost
+     VERSION 1.1.0
+     DESCRIPTION "Learning Boost C++ library"
+     LANGUAGES CXX
+)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -57,7 +61,14 @@ link_directories(${Boost_LIBRARY_DIRS})
 
 find_package(Doxygen QUIET)
 if(DOXYGEN_FOUND)
-     doxygen_add_docs(doxygen)
+     set(DOXYGEN_PROJECT_NAME ${PROJECT_DESCRIPTION})
+     set(DOXYGEN_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/docs)
+#     set(DOXYGEN_INCLUDE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/src)
+     doxygen_add_docs(
+          doxygen
+          ${CMAKE_CURRENT_SOURCE_DIR}/src
+          COMMENT "Generate Doxygen documentation"
+     )
 endif()
 
 if(NOT BUILD_SHARED_LIBS)
