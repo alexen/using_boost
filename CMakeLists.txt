@@ -35,6 +35,8 @@ if(NOT BUILD_SHARED_LIBS)
      message(STATUS "Use Boost in static: ${Boost_USE_STATIC_LIBS}")
 endif()
 
+cmake_policy(SET CMP0167 OLD)
+
 find_package(Boost 1.69 REQUIRED
      COMPONENTS
           unit_test_framework
