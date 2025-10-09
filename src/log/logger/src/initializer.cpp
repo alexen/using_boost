@@ -4,6 +4,11 @@
 
 #include <log/logger/initializer.h>
 
+#include <signal.h>
+#include <unistd.h>
+
+#include <functional>
+
 #include <boost/log/core/core.hpp>
 #include <boost/log/utility/setup/file.hpp>
 #include <boost/log/utility/setup/console.hpp>
@@ -17,6 +22,18 @@ BOOST_LOG_ATTRIBUTE_KEYWORD( Severity, "Severity", boost::log::trivial::severity
 namespace using_boost {
 namespace log {
 namespace logger {
+
+
+namespace {
+
+std::function< void( int ) > logRotator;
+void signalHandler( int signum )
+{
+     logRotator( signum );
+}
+
+
+} // namespace {anonymous}
 
 
 void initialize(
@@ -52,6 +69,26 @@ void initialize(
 
      sink->set_filter( Severity >= minLevel );
      sink->locked_backend()->scan_for_files();
+
+     signal( SIGINT, signalHandler );
+     signal( SIGTERM, signalHandler );
+
+     logRotator = [ sink ]( int n ){
+          std::cout << "Caught signal #" << n << ", do force rotation!\n";
+          sink->locked_backend()->rotate_file();
+          std::cout << "Set default signal handler for #" << n << '\n';
+          signal( n, SIG_DFL );
+          std::cout << "Raise (rethrow) signal #" << n << '\n';
+          raise( n );
+     };
+
+//     std::cout
+//          << "Found logs: " << files
+//          << ", current file: " << sink->locked_backend()->get_current_file_name().string()
+//          << '\n';
+//     //     BOOST_LOG_TRIVIAL( info ) << "Dumb message to initiate log rotation";
+//     sink->locked_backend()->enable_final_rotation( false );
+//     sink->locked_backend()->rotate_file();
 }
 
 

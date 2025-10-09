@@ -3,10 +3,13 @@
 /// @copyright Copyright (c) InfoTeCS. All Rights Reserved.
 
 #include <dlfcn.h>
+#include <signal.h>
+#include <unistd.h>
 
 #include <memory>
 #include <iostream>
 #include <stdexcept>
+#include <chrono>
 
 #include <boost/thread.hpp>
 #include <boost/core/ignore_unused.hpp>
@@ -30,7 +33,6 @@ using ModulesUptrList = std::list< using_boost::modules::IModuleUptr >;
 
 void test_logRotation( int argc, char** argv )
 {
-
      const auto logDir = "./logs";
      const auto rotationSize = 10u * 1024u;
      const auto maxFiles = 5u;
@@ -56,7 +58,8 @@ void test_logRotation( int argc, char** argv )
 
      for( auto&& each: dynlibs )
      {
-          modules.emplace_back( using_boost::modules::dynlib::call< using_boost::modules::ModuleCreatorFn >( each, "create" ) );
+          using namespace using_boost::modules;
+          modules.emplace_back( dynlib::call< ModuleCreatorFn >( each, "create" ) );
      }
 
      for( auto&& each: modules )
@@ -64,8 +67,8 @@ void test_logRotation( int argc, char** argv )
           std::cout << "Working with " << each->name() << '\n';
           each->init();
      }
-     auto ms = 10u;
-     for( auto idx: boost::irange( 5 ) )
+     const auto ms = 10u;
+     for( auto idx: boost::irange( 1 ) )
      {
           BOOST_LOG_TRIVIAL( debug ) << "Iteration #" << idx << " STARTS...";
           std::for_each(
@@ -88,7 +91,7 @@ struct Struct {
 };
 
 
-Struct s;
+//Struct s;
 
 
 int main( int argc, char** argv )
@@ -97,6 +100,8 @@ int main( int argc, char** argv )
      try
      {
           BOOST_LOG_TRIVIAL( info ) << "Start!";
+          test_logRotation( argc, argv );
+          raise( SIGTERM );
      }
      catch( const std::exception& e )
      {
