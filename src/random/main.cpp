@@ -2,6 +2,7 @@
 /// @brief
 /// @copyright Copyright 2024 InfoTeCS Internet Trust
 
+#include <cstdint>
 #include <stdexcept>
 #include <iostream>
 

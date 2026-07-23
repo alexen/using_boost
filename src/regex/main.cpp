@@ -5,9 +5,9 @@
 #include <stdexcept>
 #include <iostream>
 
+#include <boost/regex.hpp>
 #include <boost/core/ignore_unused.hpp>
 #include <boost/exception/diagnostic_information.hpp>
-#include <boost/regex/v4/regex.hpp>
 #include <boost/system/error_code.hpp>
 #include <boost/system/system_error.hpp>
 #include <boost/utility/string_view.hpp>

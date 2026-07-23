@@ -9,6 +9,8 @@
 
 #include <boost/algorithm/algorithm.hpp>
 #include <boost/algorithm/string/join.hpp>
+#include <boost/algorithm/string/case_conv.hpp>
+#include <boost/algorithm/string/predicate.hpp>
 #include <boost/core/ignore_unused.hpp>
 #include <boost/exception/diagnostic_information.hpp>
 #include <boost/utility/string_view.hpp>
@@ -43,6 +45,13 @@ int main( int argc, char** argv )
      boost::ignore_unused( argc, argv );
      try
      {
+          std::string stack = "привет!";
+          std::wstring needle = L"рив";
+
+          std::cout << std::boolalpha << boost::algorithm::icontains( stack, needle, std::locale( "C.UTF-8" ) ) << '\n';
+
+//          return 0;
+
           std::set< Number > nn {
                Number::One,
                Number::Two,
@@ -56,6 +65,11 @@ int main( int argc, char** argv )
                "~~Two~~",
                "~~Three~~"
           };
+
+          std::string str = "HELLO, WORLD!";
+          boost::algorithm::to_lower(str); // modifies str
+
+          std::cout << str << '\n';
 
           for( auto&& each: nn )
           {

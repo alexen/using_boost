@@ -68,6 +68,8 @@ int main( int argc, char** argv )
                     << boost::errinfo_errno{ errno } );
           }
           std::cout << (!path.is_absolute() ? boost::filesystem::current_path() / path : path) << std::endl;
+
+          std::cout << "Extension is: " << path.extension() << '\n';
      }
      catch( const std::exception& e )
      {
