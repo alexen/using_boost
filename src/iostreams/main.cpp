@@ -1,7 +1,7 @@
 /// @file
 /// @brief
 
-
+#include <map>
 #include <vector>
 #include <istream>
 #include <fstream>
@@ -289,5 +289,11 @@ int main( int argc, char** argv )
           std::cerr << "exception: " << boost::diagnostic_information( e ) << '\n';
           return 1;
      }
+     catch( ... )
+     {
+          std::cerr << "exception: " << boost::current_exception_diagnostic_information() << '\n';
+          return 1;
+     }
+
      return 0;
 }

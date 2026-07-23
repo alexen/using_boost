@@ -1,6 +1,7 @@
 /// @file
 /// @brief
 
+#include <cstdint>
 #include <stdexcept>
 #include <iostream>
 

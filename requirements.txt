@@ -4,6 +4,7 @@ libboost-filesystem-dev
 libboost-iostreams-dev
 libboost-locale-dev
 libboost-log-dev
+libboost-random-dev
 libboost-program-options-dev
 libboost-serialization-dev
 libboost-stacktrace-dev

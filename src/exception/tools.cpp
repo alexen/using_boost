@@ -4,7 +4,9 @@
 
 #include "tools.h"
 
+#include <cstdint>
 #include <ostream>
+
 #include <boost/throw_exception.hpp>
 
 #include "error/exception.h"
