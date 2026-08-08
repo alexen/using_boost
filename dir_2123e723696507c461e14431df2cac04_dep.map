@@ -1,9 +1,7 @@
 <map id="src/log/modules" name="src/log/modules">
-<area shape="rect" id="node1" href="dir_9bc723466221de8493e9cdaec70c7398.html" title="logger" alt="" coords="325,159,397,207"/>
-<area shape="rect" id="edge1-headlabel" href="dir_000008_000007.html" title="1" alt="" coords="366,133,374,148"/>
-<area shape="rect" id="node3" href="dir_7bc44540d5c7e08eedc2e1ca0f6ef99a.html" title="alice" alt="" coords="229,63,301,111"/>
-<area shape="rect" id="node4" href="dir_02f2e134950905a78d5a48bca7b940f0.html" title="clark" alt="" coords="133,63,205,111"/>
-<area shape="rect" id="node5" href="dir_d1341208cfafc2e9ef59e900d8411485.html" title="dynlib" alt="" coords="37,63,109,111"/>
+<area shape="rect" id="node2" href="dir_7bc44540d5c7e08eedc2e1ca0f6ef99a.html" title="alice" alt="" coords="229,63,301,111"/>
+<area shape="rect" id="node3" href="dir_02f2e134950905a78d5a48bca7b940f0.html" title="clark" alt="" coords="133,63,205,111"/>
+<area shape="rect" id="node4" href="dir_d1341208cfafc2e9ef59e900d8411485.html" title="dynlib" alt="" coords="37,63,109,111"/>
 <area shape="rect" id="clust2" href="dir_2123e723696507c461e14431df2cac04.html" alt="" coords="27,52,408,121"/>
-<area shape="rect" id="clust1" href="dir_2241064965c8d9ca993f08b926076f7d.html" title="log" alt="" coords="16,16,419,217"/>
+<area shape="rect" id="clust1" href="dir_2241064965c8d9ca993f08b926076f7d.html" title="log" alt="" coords="16,16,419,132"/>
 </map>
