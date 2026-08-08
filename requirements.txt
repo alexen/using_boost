@@ -10,4 +10,7 @@ libboost-serialization-dev
 libboost-stacktrace-dev
 libboost-test-dev
 libssl-dev
+libbz2-dev
+liblzma-dev
+libzstd-dev
 makeself
