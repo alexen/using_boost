@@ -7,4 +7,7 @@ target_link_libraries(${COMPONENT_NAME}
      Boost::context
 )
 
+# Boost 1.83+ генерирует false-positive -Wmaybe-uninitialized в coroutine2/detail/state.hpp
+target_compile_options(${COMPONENT_NAME} PRIVATE -Wno-maybe-uninitialized)
+
 install(TARGETS ${COMPONENT_NAME})
