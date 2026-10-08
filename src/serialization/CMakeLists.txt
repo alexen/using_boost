@@ -11,7 +11,6 @@ target_link_libraries(${COMPONENT_NAME}
      Boost::date_time
      Boost::serialization
      Boost::iostreams
-     "$<${IF_STATIC_BUILD}:libz.a>"
 )
 
 install(TARGETS ${COMPONENT_NAME})

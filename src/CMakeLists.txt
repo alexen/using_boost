@@ -1,3 +1,7 @@
+# Устанавливаем строгие флаги только для таргетов в этой директории (не для _deps)
+#
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Werror")
+
 add_subdirectory("core")
 add_subdirectory("serialization")
 add_subdirectory("iostreams")

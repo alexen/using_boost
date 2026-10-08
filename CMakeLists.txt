@@ -24,52 +24,43 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${RESULT_BINARY_DIR}/${CMAKE_INSTALL_BINDIR})
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${RESULT_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR})
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${RESULT_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR})
 
-add_definitions(-Wall -Werror -Wpedantic -Wextra)
-
+set(CMAKE_CXX_FLAGS_ALL_WARNINGS "-Wall -Wpedantic -Wextra")
 set(CMAKE_CXX_FLAGS_DEBUG "-ggdb3 -O0 -fno-inline")
 option(BUILD_SHARED_LIBS "Build shared libs" ON)
 option(BUILD_BENCHMARKS "Disable benchmarks build" OFF)
 
-if(NOT BUILD_SHARED_LIBS)
-     set(Boost_USE_STATIC_LIBS ON)
-     message(STATUS "Use Boost in static: ${Boost_USE_STATIC_LIBS}")
-endif()
-
-if(CMAKE_VERSION VERSION_GREATER_EQUAL "4.0")
-     cmake_policy(SET CMP0167 OLD)
-endif()
-
-find_package(Boost 1.69 REQUIRED
-     COMPONENTS
-          unit_test_framework
-          serialization
-          iostreams
-          date_time
-          coroutine
-          thread
-          locale
-          regex
-          filesystem
-          stacktrace_basic
-          log
-          log_setup
-          program_options
-          random
+# ---------------------------------------------------------------------------
+# Boost из исходников (FetchContent)
+# ---------------------------------------------------------------------------
+include(FetchContent)
+FetchContent_Declare(Boost
+     URL "https://github.com/boostorg/boost/releases/download/boost-1.85.0/boost-1.85.0-cmake.tar.gz"
+     DOWNLOAD_EXTRACT_TIMESTAMP TRUE
 )
-include_directories(SYSTEM ${Boost_INCLUDE_DIRS})
-link_directories(${Boost_LIBRARY_DIRS})
+set(BOOST_INCLUDE_LIBRARIES
+     test
+     serialization
+     iostreams
+     date_time
+     coroutine
+     thread
+     locale
+     regex
+     filesystem
+     stacktrace
+     log
+     program_options
+     random
+)
+set(BOOST_ENABLE_CMAKE ON)
+FetchContent_MakeAvailable(Boost)
 
 find_package(Doxygen QUIET)
 if(DOXYGEN_FOUND)
      doxygen_add_docs(doxygen)
 endif()
 
-if(NOT BUILD_SHARED_LIBS)
-     set(OPENSSL_USE_STATIC_LIBS ON)
-     message(STATUS "Use OpenSSL in static: ${OPENSSL_USE_STATIC_LIBS}")
-endif()
 find_package(OpenSSL REQUIRED)
-include_directories(${OPENSSL_INCLUDE_DIR})
 
 include(CTest)
 message(STATUS "Build testing: ${BUILD_TESTING}")
