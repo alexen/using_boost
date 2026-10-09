@@ -1,0 +1,131 @@
+{
+     "version": 9,
+     "configurePresets": [
+          {
+               "name": "debug",
+               "displayName": "Debug (shared libs)",
+               "description": "Основная отладочная сборка с разделяемыми библиотеками",
+               "binaryDir": "${sourceDir}/build/debug",
+               "cacheVariables": {
+                    "CMAKE_BUILD_TYPE": "Debug",
+                    "BUILD_SHARED_LIBS": "ON",
+                    "BUILD_BENCHMARKS": "OFF"
+               }
+          },
+          {
+               "name": "debug-static",
+               "displayName": "Debug (static libs)",
+               "description": "Отладочная сборка со статическими библиотеками",
+               "binaryDir": "${sourceDir}/build/debug-static",
+               "cacheVariables": {
+                    "CMAKE_BUILD_TYPE": "Debug",
+                    "BUILD_SHARED_LIBS": "OFF",
+                    "BUILD_BENCHMARKS": "OFF"
+               }
+          },
+          {
+               "name": "release",
+               "displayName": "Release (shared libs)",
+               "description": "Релизная сборка с разделяемыми библиотеками",
+               "binaryDir": "${sourceDir}/build/release",
+               "cacheVariables": {
+                    "CMAKE_BUILD_TYPE": "Release",
+                    "BUILD_SHARED_LIBS": "ON",
+                    "BUILD_BENCHMARKS": "OFF"
+               }
+          },
+          {
+               "name": "release-static",
+               "displayName": "Release (static libs)",
+               "description": "Релизная сборка со статическими библиотеками",
+               "binaryDir": "${sourceDir}/build/release-static",
+               "cacheVariables": {
+                    "CMAKE_BUILD_TYPE": "Release",
+                    "BUILD_SHARED_LIBS": "OFF",
+                    "BUILD_BENCHMARKS": "OFF"
+               }
+          },
+          {
+               "name": "bench",
+               "displayName": "Benchmarks",
+               "description": "Релизная сборка с бенчмарками",
+               "binaryDir": "${sourceDir}/build/bench",
+               "cacheVariables": {
+                    "CMAKE_BUILD_TYPE": "Release",
+                    "BUILD_SHARED_LIBS": "ON",
+                    "BUILD_BENCHMARKS": "ON"
+               }
+          },
+          {
+               "name": "minimal",
+               "displayName": "Minimal (no tests)",
+               "description": "Минимальная быстрая сборка без тестов",
+               "binaryDir": "${sourceDir}/build/minimal",
+               "cacheVariables": {
+                    "CMAKE_BUILD_TYPE": "Debug",
+                    "BUILD_SHARED_LIBS": "ON",
+                    "BUILD_TESTING": "OFF",
+                    "BUILD_BENCHMARKS": "OFF"
+               }
+          },
+          {
+               "name": "clang-debug",
+               "displayName": "Clang Debug (shared libs)",
+               "description": "Отладочная сборка компилятором Clang",
+               "binaryDir": "${sourceDir}/build/clang-debug",
+               "cacheVariables": {
+                    "CMAKE_BUILD_TYPE": "Debug",
+                    "CMAKE_C_COMPILER": "clang",
+                    "CMAKE_CXX_COMPILER": "clang++",
+                    "BUILD_SHARED_LIBS": "ON",
+                    "BUILD_BENCHMARKS": "OFF"
+               }
+          }
+     ],
+     "buildPresets": [
+          {
+               "name": "debug",
+               "configurePreset": "debug"
+          },
+          {
+               "name": "debug-static",
+               "configurePreset": "debug-static"
+          },
+          {
+               "name": "release",
+               "configurePreset": "release"
+          },
+          {
+               "name": "release-static",
+               "configurePreset": "release-static"
+          },
+          {
+               "name": "bench",
+               "configurePreset": "bench"
+          },
+          {
+               "name": "minimal",
+               "configurePreset": "minimal"
+          },
+          {
+               "name": "clang-debug",
+               "configurePreset": "clang-debug"
+          }
+     ],
+     "testPresets": [
+          {
+               "name": "debug",
+               "configurePreset": "debug",
+               "output": {
+                    "outputOnFailure": true
+               }
+          },
+          {
+               "name": "release",
+               "configurePreset": "release",
+               "output": {
+                    "outputOnFailure": true
+               }
+          }
+     ]
+}
