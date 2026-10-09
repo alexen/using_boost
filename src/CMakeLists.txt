@@ -1,6 +1,8 @@
-# Устанавливаем строгие флаги только для таргетов в этой директории (не для _deps)
+# Устанавливаем строгие флаги для всех таргетов в этой директории через
+# add_compile_options (действует на текущую директорию и все поддиректории,
+# НО не на _deps, которые расположены в ${CMAKE_BINARY_DIR}/_deps)
 #
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Werror")
+add_compile_options(-Werror)
 
 add_subdirectory("core")
 add_subdirectory("serialization")

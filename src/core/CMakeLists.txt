@@ -2,9 +2,12 @@ set(COMPONENT_NAME "core")
 
 if(BUILD_TESTING)
      set(TEST_NAME ${COMPONENT_NAME}-test)
-     add_definitions(-DBOOST_TEST_MAIN)
      add_executable(${TEST_NAME}
           test/core_test.cpp
+     )
+     target_compile_definitions(${TEST_NAME}
+          PRIVATE
+               BOOST_TEST_MAIN
      )
      target_link_libraries(${TEST_NAME}
           Boost::unit_test_framework

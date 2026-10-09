@@ -1,10 +1,13 @@
 set(COMPONENT_NAME "beast")
 
+find_package(Threads REQUIRED)
+
 add_executable(${COMPONENT_NAME} first.cpp)
 
 target_link_libraries(${COMPONENT_NAME}
-     ${OPENSSL_LIBRARIES}
-     ${CMAKE_THREAD_LIBS_INIT}
+     OpenSSL::SSL
+     OpenSSL::Crypto
+     Threads::Threads
 )
 
 install(TARGETS ${COMPONENT_NAME})

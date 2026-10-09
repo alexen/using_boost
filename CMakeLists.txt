@@ -43,14 +43,18 @@ set(BOOST_INCLUDE_LIBRARIES
      iostreams
      date_time
      coroutine
+     context
      thread
      locale
      regex
      filesystem
      stacktrace
      log
+     log_setup
      program_options
      random
+     asio
+     beast
 )
 set(BOOST_ENABLE_CMAKE ON)
 FetchContent_MakeAvailable(Boost)
